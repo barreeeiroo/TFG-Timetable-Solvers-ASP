@@ -1,0 +1,48 @@
+Year,Code,Name,Short Name,Semester
+1,G4012101,Fundamentos Matemáticas,FuMat,1SG
+1,G4012102,Álxebra,Alxebra,1SG
+1,G4012103,Matemática Discreta,MatDis,1SG
+1,G4012104,Sistemas Dixitais,SisDix,1SG
+1,G4012105,Programación I,ProgI,1SG
+1,G4012106,Fundamentos Tecnolóxicos e Físicos da Informática,FuTFI,2SG
+1,G4012107,Estatística,Estat,2SG
+1,G4012108,Fundamentos Computadores,FuCom,2SG
+1,G4012109,Programación II,ProgII,2SG
+1,G4012121,Cálculo e Análise Numérica,CAN,2SG
+2,G4012201,Xestión Financeira Empresas,OXE,2SG
+2,G4012221,Bases Datos I,BDI,1SG
+2,G4012222,Algoritmos e Estruturas de Datos,AED,1SG
+2,G4012223,Sistemas Operativos I,SOI,1SG
+2,G4012224,Redes,Redes,1SG
+2,G4012225,Programación Orientada a Obxectos,POO,1SG
+2,G4012226,Bases de Datos II,BDII,2SG
+2,G4012227,Sistemas Operativos II,SOII,2SG
+2,G4012228,Arquitectura Computadores,ArqComp,2SG
+2,G4012229,Computación Gráfica,CoGa,2SG
+2,G4012230,Deseño de Software,DeSo,2SG
+3,G4012321,Teoría Autómatas e Linguaxes Formais,TALF,1SG
+3,G4012322,Administración Sistemas e Redes,ASR,1SG
+3,G4012323,Desenvolvemento de Aplicacións Web,DAW,2SG
+3,G4012324,Xestión de Proxectos Informáticos,XPI,2SG
+3,G4012325,Enxeñaría do Software,EnSo,ANG
+3,G4012326,Computación Distribuída,CoDi,1SG
+3,G4012327,Compiladores e Intérpretes,CompI,2SG
+3,G4012328,Intelixencia Artificial,IA,1SG
+3,G4012329,Seguridade da Información,SegIn,2SG
+3,G4012330,Ciberseguridade,Ciber,2SG
+4,G4012421,Interacción Persoa-Ordenador,IPO,1SG
+4,G4012422,Enxeñaría de Computadores,EnCo,1SG
+4,G4012441,Fundamentos de Sistemas Paralelos,FSP,1SG
+4,G4012442,Visualización Avanzada,VA,1SG
+4,G4012443,Calidade dos Sistemas Información,CSI,1SG
+4,G4012444,Almacéns e Minaría Datos,AMD,1SG
+4,G4012445,Coñecemento e Razoamento Automático,CRA,1SG
+4,G4012446,Sistemas Intelixentes,SisIntel,1SG
+4,G4012447,Deseño e Administración de Redes,DAR,1SG
+4,G4012448,Enxeñaría de Servizos,EnSe,1SG
+4,G4012449,Computación na Nube,CoNu,1SG
+4,G4012451,Computación Ubicua,ComUb,2SG
+4,G4012452,Programación de Arquitecturas Emerxentes,PrArE,2SG
+4,G4012453,Xestión de Información Non Estruturada,XINE,2SG
+4,G4012454,Modelos e Técnicas de Optimización,MTO,2SG
+4,G4012455,Aprendizaxe Automática,AprAu,2SG
