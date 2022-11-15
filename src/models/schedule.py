@@ -4,15 +4,16 @@ from collections import defaultdict
 from functools import partial
 from typing import Dict, List
 
-from models.course import Course
+from models.course import Course, SessionType
 from models.room import Room
 from utils.timeframe import Timeframe
 
 
 class ScheduleUnit:
-    def __init__(self, timeframe: Timeframe, course: Course, room: Room):
+    def __init__(self, timeframe: Timeframe, course: Course, session_type: SessionType, room: Room):
         self.time: Timeframe = timeframe
         self.course: Course = course
+        self.session_type: SessionType = session_type
         self.room: Room = room
 
     def is_overlapping(self, other: ScheduleUnit) -> bool:

@@ -11,13 +11,18 @@ from solvers.asp.rules import Statements
 class AspSolver(Solver):
     @staticmethod
     def __generate_asp_generator(statement_generator: Statements) -> str:
-        return ""
+        statements = [
+            statement_generator.generate_scheduled_units_store(),
+            statement_generator.generate_scheduled_room_type_with_session_type_store(),
+        ]
+        return "\n".join(statements)
 
     @staticmethod
     def __generate_asp_definition(statement_generator: Statements) -> str:
         statements: List[str] = []
 
         statements.extend(statement_generator.generate_constraints())
+        statements.append(statement_generator.generate_penalized_room_types())
         statements.extend(statement_generator.generate_undesirable_slots())
         statements.extend(statement_generator.generate_blocked_slots())
 
@@ -28,6 +33,7 @@ class AspSolver(Solver):
         statements: List[str] = [statement_generator.generate_timeslots()]
 
         statements.extend(statement_generator.generate_rooms())
+        statements.extend(statement_generator.generate_sessions())
 
         return "\n".join(statements)
 
@@ -38,7 +44,7 @@ class AspSolver(Solver):
         definition = self.__generate_asp_definition(statements)
         data = AspSolver.__generate_asp_data(statements)
 
-        return "\n\n".join([generator, definition, data, f"#show {ClC.assigned_slot(name=True)}"])
+        return "\n\n".join([generator, definition, data, f"#show {ClC.ASSIGNED_SLOT}/4."])
 
     def solve(self) -> Schedule:
         asp_problem = self.__generate_asp_problem()
@@ -51,6 +57,9 @@ class AspSolver(Solver):
 
         if solution is None:
             raise RuntimeError("Could not generate schedule; a valid solution could not be returned")
+
+        print("---")
+        print(solution)
 
         schedule = Schedule()
         return schedule

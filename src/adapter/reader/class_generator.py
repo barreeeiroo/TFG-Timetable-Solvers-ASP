@@ -26,7 +26,7 @@ def generate_courses() -> List[Course]:
 def generate_rooms() -> List[Room]:
     source_rooms = read_csv_file("rooms")
     rooms = [
-        Room(name, building, capacity) for name, building, capacity in source_rooms
+        Room(name, building, capacity, session_type) for name, building, capacity, session_type in source_rooms
     ]
     return rooms
 
