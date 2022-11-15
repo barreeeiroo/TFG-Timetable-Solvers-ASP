@@ -1,0 +1,12 @@
+Day,Start,End,Type
+Monday,14:00,15:30,Undesirable
+Monday,20:00,20:30,Undesirable
+Tuesday,14:00,15:30,Undesirable
+Tuesday,20:00,20:30,Undesirable
+Wednesday,14:00,15:30,Undesirable
+Wednesday,20:00,20:30,Undesirable
+Thursday,12:00,14:00,Blocked
+Thursday,14:00,15:30,Undesirable
+Thursday,20:00,20:30,Undesirable
+Friday,14:00,15:30,Undesirable
+Friday,20:00,20:30,Undesirable
