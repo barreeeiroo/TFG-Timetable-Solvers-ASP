@@ -17,6 +17,7 @@ class AspSolver(Solver):
     def __generate_asp_definition(statement_generator: Statements) -> str:
         statements: List[str] = []
 
+        statements.extend(statement_generator.generate_constraints())
         statements.extend(statement_generator.generate_undesirable_slots())
         statements.extend(statement_generator.generate_blocked_slots())
 

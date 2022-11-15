@@ -7,8 +7,19 @@ from solvers.asp.constants import ClingoConstants as ClC, ClingoNaming as ClN
 
 
 class Constraints:
-    ROOM_ALREADY_BOOKED = ":- roomBooked(T,U1,R), roomBooked(T,U2,R), U1 != U2."
-    SESSION_IN_SAME_ROOM = ":- roomBooked(_,U,R1), roomBooked(_,U,R2), R1 != R2."
+    @staticmethod
+    def get_room_already_booked() -> str:
+        assigned_slot_one = ClC.assigned_slot(timeslot=ClC.TIMESLOT, unit=f'{ClC.UNIT}1', room=ClC.ROOM)
+        assigned_slot_two = ClC.assigned_slot(timeslot=ClC.TIMESLOT, unit=f'{ClC.UNIT}2', room=ClC.ROOM)
+        condition = f"{ClC.UNIT}1 != {ClC.UNIT}2"
+        return f":- {assigned_slot_one}, {assigned_slot_two}, {condition}."
+
+    @staticmethod
+    def get_unit_in_same_room() -> str:
+        assigned_slot_one = ClC.assigned_slot(unit=ClC.UNIT, room=f'{ClC.ROOM}1')
+        assigned_slot_two = ClC.assigned_slot(unit=ClC.UNIT, room=f'{ClC.ROOM}2')
+        condition = f"{ClC.ROOM}1 != {ClC.ROOM}2"
+        return f":- {assigned_slot_one}, {assigned_slot_two}, {condition}."
 
 
 class Statements:
@@ -16,6 +27,13 @@ class Statements:
         self.__settings = settings
         self.__courses = courses
         self.__rooms = rooms
+
+    def generate_constraints(self) -> List[str]:
+        assert self.__settings
+        return [
+            Constraints.get_room_already_booked(),
+            Constraints.get_unit_in_same_room(),
+        ]
 
     def generate_timeslots(self) -> str:
         return f"{ClC.timeslot(f'1..{self.__settings.week.get_total_slot_count()}')}."
