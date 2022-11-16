@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-from collections import defaultdict
 from datetime import timedelta
 from enum import Enum
-from typing import Union, Dict, List
+from typing import Union, List
 
 from utils.timeframe import Timeframe
 
@@ -45,6 +44,14 @@ class SessionType(Enum):
         return self.value
 
 
+class Session:
+    def __init__(self, session_type: SessionType, duration: timedelta, per_week: int, num_groups: int):
+        self.session_type: SessionType = session_type
+        self.duration: timedelta = duration
+        self.num_per_week: int = per_week
+        self.num_groups: int = num_groups
+
+
 class Course:
     def __init__(self, year: Union[str, int], code: str, name: str, short_name: str, semester: str):
         self.year: int = int(year)
@@ -53,13 +60,16 @@ class Course:
         self.short_name: str = str(short_name)
         self.semester: Semester = Semester.from_string(semester)
 
-        self.sessions: Dict[SessionType, List[timedelta]] = defaultdict(list)
+        self.sessions: List[Session] = list()
 
-    def add_session_type(self, session_type: str, slot_duration: str, count: int):
-        session = SessionType.parse_from_string(session_type)
-        slot = Timeframe.parse_slot_duration(slot_duration)
-        for _ in range(count):
-            self.sessions[session].append(slot)
+    def add_session(self, session_type: str, slot_duration: str, groups: int, count: int):
+        session = Session(
+            session_type=SessionType.parse_from_string(session_type),
+            duration=Timeframe.parse_slot_duration(slot_duration),
+            per_week=count,
+            num_groups=groups,
+        )
+        self.sessions.append(session)
 
     def __repr__(self):
         return f"Course({self.short_name})"

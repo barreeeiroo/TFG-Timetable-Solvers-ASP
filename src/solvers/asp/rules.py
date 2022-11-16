@@ -1,4 +1,5 @@
-from typing import List
+from datetime import timedelta
+from typing import List, Tuple
 
 from models.course import Course
 from models.room import Room
@@ -116,12 +117,16 @@ class Statements:
 
     def generate_sessions(self) -> List[str]:
         statements: List[str] = []
+
+        sessions: List[Tuple[Course, str, timedelta]] = []
         for course in self.__courses:
-            for session_type, sessions in course.sessions.items():
-                for i, session in enumerate(sessions):
-                    clingo_session = ClC.session(
-                        ClN.course_to_clingo(course, discriminator=i), ClN.session_type_to_clingo(session_type),
-                        self.__settings.week.get_slots_count_for_timedelta(session)
-                    )
-                    statements.append(f"{clingo_session}.")
+            for session in course.sessions:
+                for clingo_session in ClN.session_to_clingo(session):
+                    sessions.append((course, clingo_session, session.duration,))
+        for course, session, duration in sessions:
+            clingo_session = ClC.session(
+                ClN.course_to_clingo(course), session,
+                self.__settings.week.get_slots_count_for_timedelta(duration)
+            )
+            statements.append(f"{clingo_session}.")
         return statements

@@ -15,10 +15,10 @@ def generate_courses() -> List[Course]:
         courses[short_name] = Course(year, code, name, short_name, semester)
 
     source_sessions = read_csv_file("course_sessions")
-    for course, session_type, duration, count in source_sessions:
+    for course, session_type, duration, groups, count in source_sessions:
         if course not in courses:
             raise ValueError(f"Course {course} not found")
-        courses[course].add_session_type(session_type, duration, int(count))
+        courses[course].add_session(session_type, duration, int(groups), int(count))
 
     return list(courses.values())
 

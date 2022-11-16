@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from models.course import SessionType, Course
+from typing import List
+
+from models.course import SessionType, Course, Session
 from models.room import Room
 
 
@@ -43,17 +45,22 @@ class ClingoConstants:
 
 class ClingoNaming:
     @staticmethod
-    def course_to_clingo(course: Course, discriminator: int = None) -> str:
-        s = f"course_{course.short_name}"
-        if discriminator is not None:
-            s += f"_{discriminator}"
-        return s
+    def course_to_clingo(course: Course) -> str:
+        return f"course_{course.short_name}"
 
     @staticmethod
     def room_to_clingo(room: Room) -> str:
         building = room.building.name
         room_name = room.name
         return f"room_{building}_{room_name}"
+
+    @staticmethod
+    def session_to_clingo(session: Session) -> List[str]:
+        clingo_sessions: List[str] = []
+        for group in range(session.num_groups):
+            for session_id in range(session.num_per_week):
+                clingo_sessions.append(f"session_{session.session_type.name}_{group}_{session_id}")
+        return clingo_sessions
 
     @staticmethod
     def session_type_to_clingo(session_type: SessionType) -> str:
