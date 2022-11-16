@@ -1,3 +1,5 @@
+clingo~=5.6.2
 clyngor~=0.4.2
+clyngor-with-clingo~=5.3.post1
 pytest~=7.2.0
 pytest-cov~=4.0.0
