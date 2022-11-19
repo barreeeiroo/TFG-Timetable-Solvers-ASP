@@ -4,7 +4,7 @@ from typing import List, Tuple
 from models.course import Course
 from models.room import Room
 from models.settings import Settings, SlotType
-from solvers.asp.constants import ClingoConstants as ClC, ClingoNaming as ClN
+from adapter.asp.constants import ClingoConstants as ClC, ClingoNaming as ClN
 
 
 class Constraints:

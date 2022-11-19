@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections import defaultdict
+from datetime import timedelta
 from functools import partial
 from typing import Dict, List
 
@@ -18,6 +19,12 @@ class ScheduleUnit:
 
     def is_overlapping(self, other: ScheduleUnit) -> bool:
         return other in self
+
+    def __contains__(self, item):
+        if isinstance(item, ScheduleUnit):
+            start, end = max(item.time.start, self.time.start), min(item.time.end, self.time.end)
+            return (end - start) > timedelta(milliseconds=0)
+        return super().__contains__(item)
 
 
 class Timetable:

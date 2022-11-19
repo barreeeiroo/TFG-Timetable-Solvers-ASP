@@ -4,8 +4,8 @@ from clyngor import ASP
 
 from models.schedule import Schedule
 from models.solver import Solver
-from solvers.asp.constants import ClingoConstants as ClC
-from solvers.asp.rules import Statements
+from adapter.asp.constants import ClingoConstants as ClC
+from adapter.asp.rules import Statements
 
 
 class AspSolver(Solver):

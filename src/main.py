@@ -1,5 +1,5 @@
 from adapter.reader.class_generator import generate_courses, generate_rooms, generate_settings
-from solvers.asp.scheduler import AspSolver
+from adapter.asp.scheduler import AspSolver
 
 
 def main():
