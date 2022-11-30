@@ -1,8 +1,6 @@
-from datetime import timedelta
-from typing import List, Tuple
+from typing import List
 
-from models.course import Course
-from models.room import Room
+from models.dto.input import Room, Session
 from models.settings import Settings, SlotType
 from adapter.asp.constants import ClingoConstants as ClC, ClingoNaming as ClN
 
@@ -10,39 +8,39 @@ from adapter.asp.constants import ClingoConstants as ClC, ClingoNaming as ClN
 class Constraints:
     @staticmethod
     def get_room_already_booked() -> str:
-        assigned_slot_one = ClC.assigned_slot(ClC.TIMESLOT, f'{ClC.COURSE}1', ClC.ANY, ClC.ROOM)
-        assigned_slot_two = ClC.assigned_slot(ClC.TIMESLOT, f'{ClC.COURSE}2', ClC.ANY, ClC.ROOM)
-        condition = f"{ClC.COURSE}1 != {ClC.COURSE}2"
+        assigned_slot_one = ClC.assigned_slot(ClC.TIMESLOT, f'{ClC.SESSION}1', ClC.ANY, ClC.ROOM)
+        assigned_slot_two = ClC.assigned_slot(ClC.TIMESLOT, f'{ClC.SESSION}2', ClC.ANY, ClC.ROOM)
+        condition = f"{ClC.SESSION}1 != {ClC.SESSION}2"
         return f":- {assigned_slot_one}, {assigned_slot_two}, {condition}."
 
     @staticmethod
     def get_unit_in_same_room() -> str:
-        assigned_slot_one = ClC.assigned_slot(ClC.ANY, ClC.COURSE, ClC.SESSION_TYPE, f'{ClC.ROOM}1')
-        assigned_slot_two = ClC.assigned_slot(ClC.ANY, ClC.COURSE, ClC.SESSION_TYPE, f'{ClC.ROOM}2')
+        assigned_slot_one = ClC.assigned_slot(ClC.ANY, ClC.SESSION, ClC.SESSION_TYPE, f'{ClC.ROOM}1')
+        assigned_slot_two = ClC.assigned_slot(ClC.ANY, ClC.SESSION, ClC.SESSION_TYPE, f'{ClC.ROOM}2')
         condition = f"{ClC.ROOM}1 != {ClC.ROOM}2"
         return f":- {assigned_slot_one}, {assigned_slot_two}, {condition}."
 
     @staticmethod
     def get_unit_in_same_timeslot_with_same_session_type() -> str:
-        assigned_slot_one = ClC.assigned_slot(ClC.TIMESLOT, ClC.COURSE, f"{ClC.SESSION_TYPE}1", ClC.ANY)
-        assigned_slot_two = ClC.assigned_slot(ClC.TIMESLOT, ClC.COURSE, f"{ClC.SESSION_TYPE}2", ClC.ANY)
+        assigned_slot_one = ClC.assigned_slot(ClC.TIMESLOT, ClC.SESSION, f"{ClC.SESSION_TYPE}1", ClC.ANY)
+        assigned_slot_two = ClC.assigned_slot(ClC.TIMESLOT, ClC.SESSION, f"{ClC.SESSION_TYPE}2", ClC.ANY)
         condition = f"{ClC.SESSION_TYPE}1 != {ClC.SESSION_TYPE}2"
         return f":- {assigned_slot_one}, {assigned_slot_two}, {condition}."
 
 
 class Statements:
-    def __init__(self, settings: Settings, courses: List[Course], rooms: List[Room]):
+    def __init__(self, settings: Settings, sessions: List[Session], rooms: List[Room]):
         self.__settings = settings
-        self.__courses = courses
+        self.__sessions = sessions
         self.__rooms = rooms
 
     def generate_scheduled_units_store(self):
         assert self
         # Store scheduled units
-        assigned_slot = ClC.assigned_slot(ClC.TIMESLOT, ClC.COURSE, ClC.SESSION_TYPE, ClC.ROOM)
+        assigned_slot = ClC.assigned_slot(ClC.TIMESLOT, ClC.SESSION, ClC.SESSION_TYPE, ClC.ROOM)
         timeslot = ClC.timeslot(ClC.TIMESLOT)
         room = ClC.room(ClC.ROOM, ClC.ANY, ClC.ANY)
-        session = ClC.session(ClC.COURSE, ClC.SESSION_TYPE, ClC.SESSION_DURATION)
+        session = ClC.session(ClC.SESSION, ClC.SESSION_TYPE, ClC.SESSION_DURATION)
 
         head = f"{ClC.SESSION_DURATION} {{ {assigned_slot} : {timeslot} , {room} }} {ClC.SESSION_DURATION}"
         return f"{head} :- {session}."
@@ -52,8 +50,8 @@ class Statements:
         # Store scheduled units
         used_room = ClC.used_room(ClC.TIMESLOT, ClC.ROOM, ClC.ROOM_TYPE, ClC.SESSION_TYPE)
         room = ClC.room(ClC.ROOM, ClC.ROOM_TYPE, ClC.ANY)
-        session = ClC.session(ClC.COURSE, ClC.SESSION_TYPE, ClC.ANY)
-        assigned_slot = ClC.assigned_slot(ClC.TIMESLOT, ClC.COURSE, ClC.SESSION_TYPE, ClC.ROOM)
+        session = ClC.session(ClC.SESSION, ClC.SESSION_TYPE, ClC.ANY)
+        assigned_slot = ClC.assigned_slot(ClC.TIMESLOT, ClC.SESSION, ClC.SESSION_TYPE, ClC.ROOM)
 
         head = f"1 {{ {used_room} : {room} , {session} }} 1"
         return f"{head} :- {assigned_slot}."
@@ -107,7 +105,7 @@ class Statements:
     def generate_rooms(self) -> List[str]:
         statements: List[str] = []
         for room in self.__rooms:
-            for session_type in room.session_types:
+            for session_type in room.preferred_session_types:
                 clingo_room = ClC.room(
                     ClN.room_to_clingo(room), ClN.session_type_to_clingo(session_type),
                     room.capacity
@@ -117,16 +115,10 @@ class Statements:
 
     def generate_sessions(self) -> List[str]:
         statements: List[str] = []
-
-        sessions: List[Tuple[Course, str, timedelta]] = []
-        for course in self.__courses:
-            for session in course.sessions:
-                for clingo_session in ClN.session_to_clingo(session):
-                    sessions.append((course, clingo_session, session.duration,))
-        for course, session, duration in sessions:
+        for session in self.__sessions:
             clingo_session = ClC.session(
-                ClN.course_to_clingo(course), session,
-                self.__settings.week.get_slots_count_for_timedelta(duration)
+                ClN.session_to_clingo(session), session.session_type,
+                self.__settings.week.get_slots_count_for_timedelta(session.duration)
             )
             statements.append(f"{clingo_session}.")
         return statements

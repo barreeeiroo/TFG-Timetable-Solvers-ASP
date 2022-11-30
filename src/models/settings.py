@@ -6,14 +6,13 @@ from datetime import timedelta
 from enum import Enum
 from typing import List, Dict
 
-from models.course import SessionType
-from utils.timeframe import Timeframe
+from utils.timeframe import Timeframe, generate_timeframe, generate_slots, parse_slot_duration
 
 
 class Settings:
     def __init__(self):
         self.week: Week = Week()
-        self.preferred_slots_per_session_type: Dict[SessionType, Timeframe] = dict()
+        self.preferred_slots_per_session_type: Dict[str, Timeframe] = dict()
 
 
 class SlotType(Enum):
@@ -35,22 +34,22 @@ class SlotType(Enum):
 
 class Week:
     def __init__(self):
-        self.__day_slot: Timeframe = Timeframe("08:00", "18:00")
+        self.__day_slot: Timeframe = generate_timeframe("08:00", "18:00")
         self.__slot_duration: timedelta = timedelta(hours=1)
         self.slots: Dict[int, Dict[Timeframe, SlotType]] = defaultdict(dict)
 
     def set_week_settings(self, days: List[int], start: str, end: str, slot_size: str):
-        self.__day_slot = Timeframe(start, end)
-        self.__slot_duration = Timeframe.parse_slot_duration(slot_size)
+        self.__day_slot = generate_timeframe(start, end)
+        self.__slot_duration = parse_slot_duration(slot_size)
 
-        slots = Timeframe.generate_slots(start, end, self.__slot_duration)
+        slots = generate_slots(start, end, self.__slot_duration)
         for day in days:
             self.slots[day] = {slot: SlotType.AVAILABLE for slot in slots}
 
     def modify_slot(self, day: str, start: str, end: str, slot_type: str):
         days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
         calendar_day = days.index(day.lower())
-        slots = Timeframe.generate_slots(start, end, self.__slot_duration)
+        slots = generate_slots(start, end, self.__slot_duration)
         for slot in slots:
             self.slots[calendar_day][slot] = SlotType.parse_from_string(slot_type)
 

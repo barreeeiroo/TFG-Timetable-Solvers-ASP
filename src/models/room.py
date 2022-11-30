@@ -1,30 +1,13 @@
-from typing import List
+from typing import List, Optional, Any
+from uuid import UUID, uuid4
 
-from models.course import SessionType
-
-
-class Building:
-    def __init__(self, name: str):
-        self.name = name
-
-    def __repr__(self):
-        return f"Building({self.name})"
-
-    def __eq__(self, other):
-        return isinstance(other, Building) and other.name == self.name
+from pydantic import BaseModel, Field
 
 
-class Room:
-    def __init__(self, name: str, building: str, capacity: int, session_types: str):
-        self.name: str = str(name)
-        self.building: Building = Building(building)
-        self.capacity: int = int(capacity)
-        self.session_types: List[SessionType] = [
-            SessionType.parse_from_string(session_type) for session_type in session_types.split("-")
-        ]
+class Room(BaseModel):
+    id: UUID = Field(default_factory=uuid4)
 
-    def __repr__(self):
-        return f"Room({self.name})"
+    capacity: int
+    preferred_session_types: List[str]
 
-    def __eq__(self, other):
-        return isinstance(other, Room) and other.building == self.building and other.name == self.name
+    metadata: Optional[Any] = None

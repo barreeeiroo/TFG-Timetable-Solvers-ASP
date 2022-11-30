@@ -2,7 +2,7 @@ from typing import List
 
 from clyngor import ASP
 
-from models.schedule import Schedule
+from models.dto.output import Output
 from models.solver import Solver
 from adapter.asp.constants import ClingoConstants as ClC
 from adapter.asp.rules import Statements
@@ -38,7 +38,7 @@ class AspSolver(Solver):
         return "\n".join(statements)
 
     def __generate_asp_problem(self) -> str:
-        statements = Statements(self._settings, self._courses, self._rooms)
+        statements = Statements(self._settings, self._sessions, self._rooms)
 
         generator = self.__generate_asp_generator(statements)
         definition = self.__generate_asp_definition(statements)
@@ -46,7 +46,7 @@ class AspSolver(Solver):
 
         return "\n\n".join([generator, definition, data, f"#show {ClC.ASSIGNED_SLOT}/4."])
 
-    def solve(self) -> Schedule:
+    def solve(self) -> Output:
         asp_problem = self.__generate_asp_problem()
         print(asp_problem)
 
@@ -61,5 +61,5 @@ class AspSolver(Solver):
         print("---")
         print(solution)
 
-        schedule = Schedule()
-        return schedule
+        timetable = Output()
+        return timetable
