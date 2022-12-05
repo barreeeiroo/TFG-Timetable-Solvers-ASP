@@ -1,8 +1,9 @@
 from typing import List
 
-from models.dto.input import Room, Session
-from models.settings import Settings, SlotType
 from adapter.asp.constants import ClingoConstants as ClC, ClingoNaming as ClN
+from adapter.time.week import Week
+from models.dto.input import Room, Session
+from models.slot import SlotType
 
 
 class Constraints:
@@ -29,8 +30,8 @@ class Constraints:
 
 
 class Statements:
-    def __init__(self, settings: Settings, sessions: List[Session], rooms: List[Room]):
-        self.__settings = settings
+    def __init__(self, week: Week, sessions: List[Session], rooms: List[Room]):
+        self.__week = week
         self.__sessions = sessions
         self.__rooms = rooms
 
@@ -72,10 +73,10 @@ class Statements:
 
     def __get_slot_ids_per_type(self, desired_slot_type: SlotType) -> List[int]:
         slot_ids: List[int] = []
-        for week_day, slots in self.__settings.week.slots.items():
-            offset = week_day * self.__settings.week.get_slots_per_day_count()
-            for slot_id, (slot, slot_type) in enumerate(slots.items()):
-                if slot_type == desired_slot_type:
+        for week_day, slots in self.__week.slots.items():
+            offset = week_day * self.__week.get_slots_per_day_count()
+            for slot_id, slot in enumerate(slots):
+                if slot.slot_type == desired_slot_type:
                     slot_ids.append(offset + slot_id)
         return slot_ids
 
@@ -100,15 +101,15 @@ class Statements:
         return statements
 
     def generate_timeslots(self) -> str:
-        return f"{ClC.timeslot(f'1..{self.__settings.week.get_total_slot_count()}')}."
+        return f"{ClC.timeslot(f'1..{self.__week.get_total_slot_count()}')}."
 
     def generate_rooms(self) -> List[str]:
         statements: List[str] = []
         for room in self.__rooms:
-            for session_type in room.preferred_session_types:
+            for session_type in room.constraints.preferred_session_types:
                 clingo_room = ClC.room(
                     ClN.room_to_clingo(room), ClN.session_type_to_clingo(session_type),
-                    room.capacity
+                    room.constraints.capacity
                 )
                 statements.append(f"{clingo_room}.")
         return statements
@@ -117,8 +118,8 @@ class Statements:
         statements: List[str] = []
         for session in self.__sessions:
             clingo_session = ClC.session(
-                ClN.session_to_clingo(session), session.session_type,
-                self.__settings.week.get_slots_count_for_timedelta(session.duration)
+                ClN.session_to_clingo(session), session.constraints.session_type,
+                self.__week.get_slots_count_for_timedelta(session.constraints.duration)
             )
             statements.append(f"{clingo_session}.")
         return statements

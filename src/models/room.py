@@ -1,13 +1,19 @@
-from typing import List, Optional, Any
-from uuid import UUID, uuid4
+from __future__ import annotations
 
-from pydantic import BaseModel, Field
+from typing import Any, List, Optional
+from uuid import uuid4
+
+from pydantic import BaseModel, Field, UUID4
 
 
 class Room(BaseModel):
-    id: UUID = Field(default_factory=uuid4)
+    id: UUID4 = Field(default_factory=uuid4)
 
-    capacity: int
-    preferred_session_types: List[str]
-
+    constraints: RoomConstraints
     metadata: Optional[Any] = None
+
+
+class RoomConstraints(BaseModel):
+    capacity: int
+
+    preferred_session_types: List[str]

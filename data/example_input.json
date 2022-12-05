@@ -1,0 +1,106 @@
+{
+  "settings": {
+    "day_start": "09:00:00",
+    "day_end": "20:30:00",
+    "week_days": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "slot_duration": 1800,
+    "modified_slots": [
+      {
+        "week_day": 0,
+        "timeframe": {
+          "start": "14:00:00",
+          "end": "15:30:00"
+        },
+        "slot_type": "undesirable"
+      },
+      {
+        "week_day": 0,
+        "timeframe": {
+          "start": "20:00:00",
+          "end": "20:30:00"
+        },
+        "slot_type": "undesirable"
+      },
+      {
+        "week_day": 1,
+        "timeframe": {
+          "start": "14:00:00",
+          "end": "15:30:00"
+        },
+        "slot_type": "undesirable"
+      },
+      {
+        "week_day": 1,
+        "timeframe": {
+          "start": "20:00:00",
+          "end": "20:30:00"
+        },
+        "slot_type": "undesirable"
+      },
+      {
+        "week_day": 2,
+        "timeframe": {
+          "start": "14:00:00",
+          "end": "15:30:00"
+        },
+        "slot_type": "undesirable"
+      },
+      {
+        "week_day": 2,
+        "timeframe": {
+          "start": "20:00:00",
+          "end": "20:30:00"
+        },
+        "slot_type": "undesirable"
+      },
+      {
+        "week_day": 3,
+        "timeframe": {
+          "start": "12:00:00",
+          "end": "14:00:00"
+        },
+        "slot_type": "blocked"
+      },
+      {
+        "week_day": 3,
+        "timeframe": {
+          "start": "14:00:00",
+          "end": "15:30:00"
+        },
+        "slot_type": "undesirable"
+      },
+      {
+        "week_day": 3,
+        "timeframe": {
+          "start": "20:00:00",
+          "end": "20:30:00"
+        },
+        "slot_type": "undesirable"
+      },
+      {
+        "week_day": 4,
+        "timeframe": {
+          "start": "14:00:00",
+          "end": "15:30:00"
+        },
+        "slot_type": "undesirable"
+      },
+      {
+        "week_day": 4,
+        "timeframe": {
+          "start": "20:00:00",
+          "end": "20:30:00"
+        },
+        "slot_type": "undesirable"
+      }
+    ]
+  },
+  "sessions": [],
+  "rooms": []
+}

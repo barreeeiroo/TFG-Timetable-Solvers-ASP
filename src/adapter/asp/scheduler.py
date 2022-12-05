@@ -2,10 +2,11 @@ from typing import List
 
 from clyngor import ASP
 
-from models.dto.output import Output
-from models.solver import Solver
 from adapter.asp.constants import ClingoConstants as ClC
 from adapter.asp.rules import Statements
+from adapter.time.week import Week
+from models.dto.output import Output
+from models.solver import Solver
 
 
 class AspSolver(Solver):
@@ -38,7 +39,7 @@ class AspSolver(Solver):
         return "\n".join(statements)
 
     def __generate_asp_problem(self) -> str:
-        statements = Statements(self._settings, self._sessions, self._rooms)
+        statements = Statements(Week(self._settings), self._sessions, self._rooms)
 
         generator = self.__generate_asp_generator(statements)
         definition = self.__generate_asp_definition(statements)

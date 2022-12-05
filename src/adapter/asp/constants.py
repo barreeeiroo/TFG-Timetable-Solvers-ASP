@@ -1,6 +1,5 @@
-from __future__ import annotations
-
-from models.dto.input import Room, Session
+from models.room import Room
+from models.session import Session
 
 
 class ClingoConstants:
