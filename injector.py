@@ -94,6 +94,7 @@ def create_rooms():
 if __name__ == "__main__":
     # create()
     # set_status()
+    # include()
     # create_areas()
     # create_rooms()
     pass
