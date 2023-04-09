@@ -10,10 +10,11 @@ from models.dto.output import Output
 
 logger = Logger()
 
+s3: S3Client = boto3.client('s3')
+
 
 def get_input_object(execution_uuid: str) -> Input:
-    s3: S3Client = boto3.client('s3')
-    bucket = os.environ.get('S3_SOLVERS_FILES_BUCKET_NAME')
+    bucket = os.environ.get('S3__SOLVERS_FILES__BUCKET_NAME')
     object_key = f"{execution_uuid}/input.json"
     logger.info(f"Fetching object {object_key} from bucket {bucket}")
 
@@ -29,8 +30,7 @@ def get_input_object(execution_uuid: str) -> Input:
 
 
 def save_output_object(execution_uuid: str, output: Output) -> str:
-    s3: S3Client = boto3.client('s3')
-    bucket = os.environ.get('S3_SOLVERS_FILES_BUCKET_NAME')
+    bucket = os.environ.get('S3__SOLVERS_FILES__BUCKET_NAME')
     object_key = f"{execution_uuid}/output.json"
     logger.info(f"Storing object {object_key} in bucket {bucket}")
 
