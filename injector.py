@@ -58,13 +58,30 @@ def include():
 
 
 def create_areas():
-    for floor in ["Enxeñaría Química", "Docencia"]:
-        url = 'https://api.horarios.barreiro.xyz/building/add-sector/2ba481e6-8ddb-4842-b40d-e993024d3298'
-        data = {
-            'sector': floor,
-        }
-        x = requests.post(url, headers=headers, json=data)
-        print(x.text)
+    buildings = {
+        '0adfb5b9-5cbb-472f-82a5-94c7a3b3a404': (["Bloque IV"], [0]),
+        '2ba481e6-8ddb-4842-b40d-e993024d3298': (["Enxeñaría Química", "Docencia"], [-1, 0, 1, 2, 3]),
+        '316e42cf-f6bc-4742-a980-e9d10b7628f1': ([], [-1, 0, 1]),
+    }
+
+    for building_code, data in buildings.items():
+        sectors, floors = data
+
+        for sector in sectors:
+            url = f'https://api.horarios.barreiro.xyz/building/add-sector/{building_code}'
+            data = {
+                'sector': sector,
+            }
+            x = requests.post(url, headers=headers, json=data)
+            print(x.text)
+
+        for floor in floors:
+            url = f'https://api.horarios.barreiro.xyz/building/add-floor/{building_code}'
+            data = {
+                'floor': floor,
+            }
+            x = requests.post(url, headers=headers, json=data)
+            print(x.text)
 
 
 def create_rooms():
