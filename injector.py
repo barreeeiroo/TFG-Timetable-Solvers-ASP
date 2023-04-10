@@ -10,6 +10,8 @@ maps = {
     '1SG': '1P',
     '2SG': '2P',
     'ANG': 'AP',
+    'TFG': 'TF',
+    'PEG': 'PE',
 }
 
 
