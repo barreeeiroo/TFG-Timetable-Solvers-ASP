@@ -43,6 +43,33 @@ def set_status():
             print(x.text)
 
 
+def add_staff():
+    with open('data/courses.csv', encoding="utf8") as csvfile:
+        reader = csv.reader(csvfile, delimiter=',')
+        next(reader)
+        for row in reader:
+            url = 'https://api.horarios.barreiro.xyz/course/add-staff/etse'
+            course = {
+                'code': row[1],
+                'user': 'diego.barreiro.perez@rai.usc.es',
+            }
+            x = requests.post(url, headers=headers, json=course)
+            print(x.text)
+
+
+def create_editions():
+    with open('data/courses.csv', encoding="utf8") as csvfile:
+        reader = csv.reader(csvfile, delimiter=',')
+        next(reader)
+        for row in reader:
+            url = f'https://api.horarios.barreiro.xyz/course/create-edition/{row[1]}'
+            course = {
+                'edition': '2023-2024',
+            }
+            x = requests.post(url, headers=headers, json=course)
+            print(x.text)
+
+
 def include():
     with open('data/courses.csv', encoding="utf8") as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
@@ -111,6 +138,8 @@ def create_rooms():
 if __name__ == "__main__":
     # create()
     # set_status()
+    # add_staff()
+    # create_editions()
     # include()
     # create_areas()
     # create_rooms()
