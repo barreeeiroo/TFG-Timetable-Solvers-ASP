@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from models.timeframe import Timeframe
 
@@ -14,9 +14,12 @@ class SlotType(str, Enum):
 
 
 class Slot(BaseModel):
-    week_day: int
+    class Config:
+        allow_population_by_field_name = True
+
+    week_day: int = Field(alias="weekDay")
     timeframe: Timeframe
-    slot_type: Optional[SlotType]
+    slot_type: Optional[SlotType] = Field(alias="slotType")
 
     def __hash__(self):
         return hash((self.week_day, self.timeframe,))

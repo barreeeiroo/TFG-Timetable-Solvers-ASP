@@ -16,7 +16,8 @@ class SessionConstraints(BaseModel):
     session_type: str = Field(alias="sessionType")
     duration: timedelta
 
-    cannot_conflict_in_time: Optional[List[UUID4]] = Field(alias="cannotConflictInTime", default=None)
+    cannot_conflict_in_time: List[UUID4] = Field(alias="cannotConflictInTime", default_factory=list)
+    # TODO: This is not yet available...
     preferred_slots: Optional[List[Timeframe]] = Field(alias="preferredSlots", default=None)
 
 

@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from models.dto.input import Room, Session
 from models.dto.output import Output
+from models.room import Room
+from models.session import Session
 from models.settings import Settings
 
 

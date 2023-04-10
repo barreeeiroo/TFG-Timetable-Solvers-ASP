@@ -7,7 +7,10 @@ from models.session import Session
 from models.settings import Settings
 
 
-class Input(BaseModel):
+class SolverInput(BaseModel):
+    class Config:
+        allow_population_by_field_name = True
+
     settings: Settings
     sessions: List[Session]
     rooms: List[Room]

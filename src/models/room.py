@@ -10,10 +10,10 @@ class RoomConstraints(BaseModel):
     class Config:
         allow_population_by_field_name = True
 
-    capacity: Optional[int] = Field(default=None)
+    capacity: Optional[int] = None
     preferred_session_types: Optional[List[str]] = Field(alias="preferredSessionTypes", default=None)
 
-    distances_in_minutes: Optional[Dict[str, float]] = Field(alias="distancesInMinutes", default=None)
+    distances_in_minutes: Dict[str, float] = Field(alias="distancesInMinutes", default_factory=dict)
 
 
 class Room(BaseModel):
@@ -22,5 +22,5 @@ class Room(BaseModel):
 
     id: UUID4 = Field(default_factory=uuid4)
 
-    constraints: RoomConstraints = Field(default=RoomConstraints())
-    metadata: Optional[Any] = Field(default=None)
+    constraints: RoomConstraints
+    metadata: Optional[Any] = None
