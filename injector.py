@@ -72,6 +72,23 @@ def create_editions():
             print(x.text)
 
 
+def create_session_groups():
+    with open('data/session_groups.csv', encoding="utf8") as csvfile:
+        reader = csv.reader(csvfile, delimiter=',')
+        next(reader)
+        for row in reader:
+            url = f'https://api.horarios.barreiro.xyz/course/create-session-group/{row[0]}'
+            course = {
+                'edition': '2023-2024',
+                'sessionType': row[1],
+                'duration': int(row[2]) * 60,
+                'numPerWeek': int(row[3]),
+                'numGroups': int(row[4]),
+            }
+            x = requests.post(url, headers=headers, json=course)
+            print(x.text)
+
+
 def include():
     with open('data/courses.csv', encoding="utf8") as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
@@ -142,6 +159,7 @@ if __name__ == "__main__":
     # set_status()
     # add_staff()
     # create_editions()
+    # create_session_groups()
     # include()
     # create_areas()
     # create_rooms()
