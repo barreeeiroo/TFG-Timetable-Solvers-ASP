@@ -11,8 +11,9 @@ class RoomConstraints(BaseModel):
         allow_population_by_field_name = True
 
     capacity: Optional[int] = None
-    preferred_session_types: Optional[List[str]] = Field(alias="preferredSessionTypes", default=None)
+    session_types: List[str] = Field(alias="sessionTypes")
 
+    preferred_session_types: Optional[List[str]] = Field(alias="preferredSessionTypes", default=None)
     distances_in_minutes: Dict[str, float] = Field(alias="distancesInMinutes", default_factory=dict)
 
 

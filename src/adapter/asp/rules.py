@@ -106,7 +106,7 @@ class Statements:
     def generate_rooms(self) -> List[str]:
         statements: List[str] = []
         for room in self.__rooms:
-            for session_type in room.constraints.preferred_session_types:
+            for session_type in room.constraints.session_types:
                 clingo_room = ClC.room(
                     ClN.room_to_clingo(room), ClN.session_type_to_clingo(session_type),
                     room.constraints.capacity
