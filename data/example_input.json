@@ -1,106 +1,3310 @@
 {
   "settings": {
-    "day_start": "09:00:00",
-    "day_end": "20:30:00",
-    "week_days": [
+    "dayStart": "08:00:00",
+    "dayEnd": "20:00:00",
+    "weekDays": [
       0,
       1,
       2,
       3,
       4
     ],
-    "slot_duration": 1800,
-    "modified_slots": [
-      {
-        "week_day": 0,
-        "timeframe": {
-          "start": "14:00:00",
-          "end": "15:30:00"
-        },
-        "slot_type": "undesirable"
-      },
-      {
-        "week_day": 0,
-        "timeframe": {
-          "start": "20:00:00",
-          "end": "20:30:00"
-        },
-        "slot_type": "undesirable"
-      },
-      {
-        "week_day": 1,
-        "timeframe": {
-          "start": "14:00:00",
-          "end": "15:30:00"
-        },
-        "slot_type": "undesirable"
-      },
-      {
-        "week_day": 1,
-        "timeframe": {
-          "start": "20:00:00",
-          "end": "20:30:00"
-        },
-        "slot_type": "undesirable"
-      },
-      {
-        "week_day": 2,
-        "timeframe": {
-          "start": "14:00:00",
-          "end": "15:30:00"
-        },
-        "slot_type": "undesirable"
-      },
-      {
-        "week_day": 2,
-        "timeframe": {
-          "start": "20:00:00",
-          "end": "20:30:00"
-        },
-        "slot_type": "undesirable"
-      },
-      {
-        "week_day": 3,
-        "timeframe": {
-          "start": "12:00:00",
-          "end": "14:00:00"
-        },
-        "slot_type": "blocked"
-      },
-      {
-        "week_day": 3,
-        "timeframe": {
-          "start": "14:00:00",
-          "end": "15:30:00"
-        },
-        "slot_type": "undesirable"
-      },
-      {
-        "week_day": 3,
-        "timeframe": {
-          "start": "20:00:00",
-          "end": "20:30:00"
-        },
-        "slot_type": "undesirable"
-      },
-      {
-        "week_day": 4,
-        "timeframe": {
-          "start": "14:00:00",
-          "end": "15:30:00"
-        },
-        "slot_type": "undesirable"
-      },
-      {
-        "week_day": 4,
-        "timeframe": {
-          "start": "20:00:00",
-          "end": "20:30:00"
-        },
-        "slot_type": "undesirable"
-      }
-    ]
+    "slotDuration": 900.0,
+    "modifiedSlots": []
   },
-  "sessions": [],
-  "rooms": []
+  "sessions": [
+    {
+      "id": "e65b71f9-06e7-4b48-b29d-0472d671be8b",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "c8493659-adb5-43c8-a7be-03762229a4d1",
+          "8e3d3b57-5dc3-4a40-aad4-f41f1d3fca7f",
+          "f97bfea0-befe-4e56-aff6-5f5e59b1e856",
+          "3f8c7ea3-33fc-44ab-ba96-b44addb0d5b0",
+          "fb7d0d09-4289-46e0-9801-e5251b09f39b"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "1000b702e85b48dc8fa76a3418bdf64e",
+        "course": "G4012422",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "c8493659-adb5-43c8-a7be-03762229a4d1",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "e65b71f9-06e7-4b48-b29d-0472d671be8b",
+          "8e3d3b57-5dc3-4a40-aad4-f41f1d3fca7f",
+          "f97bfea0-befe-4e56-aff6-5f5e59b1e856",
+          "3f8c7ea3-33fc-44ab-ba96-b44addb0d5b0",
+          "fb7d0d09-4289-46e0-9801-e5251b09f39b"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "1000b702e85b48dc8fa76a3418bdf64e",
+        "course": "G4012422",
+        "nGroup": 0,
+        "nWeek": 1,
+        "numGroups": 1,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "8e3d3b57-5dc3-4a40-aad4-f41f1d3fca7f",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "e65b71f9-06e7-4b48-b29d-0472d671be8b",
+          "c8493659-adb5-43c8-a7be-03762229a4d1"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "7709b3e50c28441bb6052145b178580e",
+        "course": "G4012422",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "f97bfea0-befe-4e56-aff6-5f5e59b1e856",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "e65b71f9-06e7-4b48-b29d-0472d671be8b",
+          "c8493659-adb5-43c8-a7be-03762229a4d1"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "7709b3e50c28441bb6052145b178580e",
+        "course": "G4012422",
+        "nGroup": 1,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "3f8c7ea3-33fc-44ab-ba96-b44addb0d5b0",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "e65b71f9-06e7-4b48-b29d-0472d671be8b",
+          "c8493659-adb5-43c8-a7be-03762229a4d1"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "7709b3e50c28441bb6052145b178580e",
+        "course": "G4012422",
+        "nGroup": 2,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "fb7d0d09-4289-46e0-9801-e5251b09f39b",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "e65b71f9-06e7-4b48-b29d-0472d671be8b",
+          "c8493659-adb5-43c8-a7be-03762229a4d1"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "7709b3e50c28441bb6052145b178580e",
+        "course": "G4012422",
+        "nGroup": 3,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "8431970f-0cfc-4d09-a712-e39b88a9bd11",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "4461e425-0873-486c-8ed8-5f2a820743cc",
+          "25c1433c-80ef-49c3-a7ff-a2dbdd3dad92",
+          "8b8d418b-becd-48cb-acb6-442697b66c29",
+          "ccb26099-f192-4bb0-bae4-86a8c4fa0237",
+          "c8e8cf93-957a-4a56-af73-cd861cbc22b0"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "eb21b04848bf4d7fb15ae5d39359ffbf",
+        "course": "G4012222",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "4461e425-0873-486c-8ed8-5f2a820743cc",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "8431970f-0cfc-4d09-a712-e39b88a9bd11",
+          "25c1433c-80ef-49c3-a7ff-a2dbdd3dad92",
+          "8b8d418b-becd-48cb-acb6-442697b66c29",
+          "ccb26099-f192-4bb0-bae4-86a8c4fa0237",
+          "c8e8cf93-957a-4a56-af73-cd861cbc22b0"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "eb21b04848bf4d7fb15ae5d39359ffbf",
+        "course": "G4012222",
+        "nGroup": 0,
+        "nWeek": 1,
+        "numGroups": 1,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "25c1433c-80ef-49c3-a7ff-a2dbdd3dad92",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "8431970f-0cfc-4d09-a712-e39b88a9bd11",
+          "4461e425-0873-486c-8ed8-5f2a820743cc"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "bc39451d00ef427cbd6445753934bd6d",
+        "course": "G4012222",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "8b8d418b-becd-48cb-acb6-442697b66c29",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "8431970f-0cfc-4d09-a712-e39b88a9bd11",
+          "4461e425-0873-486c-8ed8-5f2a820743cc"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "bc39451d00ef427cbd6445753934bd6d",
+        "course": "G4012222",
+        "nGroup": 1,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "ccb26099-f192-4bb0-bae4-86a8c4fa0237",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "8431970f-0cfc-4d09-a712-e39b88a9bd11",
+          "4461e425-0873-486c-8ed8-5f2a820743cc"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "bc39451d00ef427cbd6445753934bd6d",
+        "course": "G4012222",
+        "nGroup": 2,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "c8e8cf93-957a-4a56-af73-cd861cbc22b0",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "8431970f-0cfc-4d09-a712-e39b88a9bd11",
+          "4461e425-0873-486c-8ed8-5f2a820743cc"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "bc39451d00ef427cbd6445753934bd6d",
+        "course": "G4012222",
+        "nGroup": 3,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "a8ca23f6-a493-451f-9707-eb48fdb6062a",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "31454491-d58a-4b18-b1b5-2be24ed0575b"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "32e2649035f04ad1b4b5cf5bca282e03",
+        "course": "G4012448",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "31454491-d58a-4b18-b1b5-2be24ed0575b",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "a8ca23f6-a493-451f-9707-eb48fdb6062a"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "8ee0265953f94d858b12c0250416900a",
+        "course": "G4012448",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "3cd21274-81a1-48bd-a757-83a809b47d30",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 10800.0,
+        "cannotConflictInTime": []
+      },
+      "metadata": {
+        "sessionGroup": "d76154bdf39e4817a5a118c9a04d4d4d",
+        "course": "G4012443",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "77bfc71e-c870-4288-b25e-615fdde3868b",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "deb849e0-d74e-4c79-9892-e4ef1998efcc",
+          "dc41f167-f530-4621-be53-a273f7df6f81",
+          "bdb18128-9c62-4a74-a224-443b57f656c4",
+          "31163bbd-b271-419f-9c8a-cb4a6c452ade",
+          "9375c34e-a003-4551-b045-9cd25c8cb6b5",
+          "def35716-3f57-4a60-a858-1d2465d78a05",
+          "bc94fdd6-7503-453a-a611-9bca52b10e34",
+          "12aa4d5c-8a39-474b-acb8-82c427570a95"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "ef26822677ca4a2d902c4956a20a639a",
+        "course": "G4012421",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "deb849e0-d74e-4c79-9892-e4ef1998efcc",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "dc41f167-f530-4621-be53-a273f7df6f81",
+          "77bfc71e-c870-4288-b25e-615fdde3868b"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "b55c521a1e64411cb10b91c0637b7bff",
+        "course": "G4012421",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "dc41f167-f530-4621-be53-a273f7df6f81",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "deb849e0-d74e-4c79-9892-e4ef1998efcc",
+          "77bfc71e-c870-4288-b25e-615fdde3868b"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "b55c521a1e64411cb10b91c0637b7bff",
+        "course": "G4012421",
+        "nGroup": 0,
+        "nWeek": 1,
+        "numGroups": 4,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "bdb18128-9c62-4a74-a224-443b57f656c4",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "31163bbd-b271-419f-9c8a-cb4a6c452ade",
+          "77bfc71e-c870-4288-b25e-615fdde3868b"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "b55c521a1e64411cb10b91c0637b7bff",
+        "course": "G4012421",
+        "nGroup": 1,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "31163bbd-b271-419f-9c8a-cb4a6c452ade",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "bdb18128-9c62-4a74-a224-443b57f656c4",
+          "77bfc71e-c870-4288-b25e-615fdde3868b"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "b55c521a1e64411cb10b91c0637b7bff",
+        "course": "G4012421",
+        "nGroup": 1,
+        "nWeek": 1,
+        "numGroups": 4,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "9375c34e-a003-4551-b045-9cd25c8cb6b5",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "def35716-3f57-4a60-a858-1d2465d78a05",
+          "77bfc71e-c870-4288-b25e-615fdde3868b"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "b55c521a1e64411cb10b91c0637b7bff",
+        "course": "G4012421",
+        "nGroup": 2,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "def35716-3f57-4a60-a858-1d2465d78a05",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "9375c34e-a003-4551-b045-9cd25c8cb6b5",
+          "77bfc71e-c870-4288-b25e-615fdde3868b"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "b55c521a1e64411cb10b91c0637b7bff",
+        "course": "G4012421",
+        "nGroup": 2,
+        "nWeek": 1,
+        "numGroups": 4,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "bc94fdd6-7503-453a-a611-9bca52b10e34",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "12aa4d5c-8a39-474b-acb8-82c427570a95",
+          "77bfc71e-c870-4288-b25e-615fdde3868b"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "b55c521a1e64411cb10b91c0637b7bff",
+        "course": "G4012421",
+        "nGroup": 3,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "12aa4d5c-8a39-474b-acb8-82c427570a95",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "bc94fdd6-7503-453a-a611-9bca52b10e34",
+          "77bfc71e-c870-4288-b25e-615fdde3868b"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "b55c521a1e64411cb10b91c0637b7bff",
+        "course": "G4012421",
+        "nGroup": 3,
+        "nWeek": 1,
+        "numGroups": 4,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "252123fb-3c87-4a2d-8fe8-384aa2b4a682",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "76cc4a83-5276-490d-97a7-380a94835bf0",
+          "22f8ec78-8c48-47f7-ae2c-914a8a355c72",
+          "97c1b0e1-52b8-4be8-8347-13ca2cc3ccda",
+          "58279991-1e99-48d7-aecb-90d2dd71f879",
+          "bb873791-f3e1-4a15-a7dd-5233bd234dcb"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "0ad9b1d606f043b795548022d95b2bf9",
+        "course": "G4012325",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "76cc4a83-5276-490d-97a7-380a94835bf0",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "252123fb-3c87-4a2d-8fe8-384aa2b4a682",
+          "22f8ec78-8c48-47f7-ae2c-914a8a355c72",
+          "97c1b0e1-52b8-4be8-8347-13ca2cc3ccda",
+          "58279991-1e99-48d7-aecb-90d2dd71f879",
+          "bb873791-f3e1-4a15-a7dd-5233bd234dcb"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "0ad9b1d606f043b795548022d95b2bf9",
+        "course": "G4012325",
+        "nGroup": 0,
+        "nWeek": 1,
+        "numGroups": 1,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "22f8ec78-8c48-47f7-ae2c-914a8a355c72",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "252123fb-3c87-4a2d-8fe8-384aa2b4a682",
+          "76cc4a83-5276-490d-97a7-380a94835bf0"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "b9e22d8bd811481987f873d3b3202485",
+        "course": "G4012325",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "97c1b0e1-52b8-4be8-8347-13ca2cc3ccda",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "252123fb-3c87-4a2d-8fe8-384aa2b4a682",
+          "76cc4a83-5276-490d-97a7-380a94835bf0"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "b9e22d8bd811481987f873d3b3202485",
+        "course": "G4012325",
+        "nGroup": 1,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "58279991-1e99-48d7-aecb-90d2dd71f879",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "252123fb-3c87-4a2d-8fe8-384aa2b4a682",
+          "76cc4a83-5276-490d-97a7-380a94835bf0"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "b9e22d8bd811481987f873d3b3202485",
+        "course": "G4012325",
+        "nGroup": 2,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "bb873791-f3e1-4a15-a7dd-5233bd234dcb",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "252123fb-3c87-4a2d-8fe8-384aa2b4a682",
+          "76cc4a83-5276-490d-97a7-380a94835bf0"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "b9e22d8bd811481987f873d3b3202485",
+        "course": "G4012325",
+        "nGroup": 3,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "31f3b7a5-5f04-4312-b7a8-7067f2a0b48c",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "ad4d7dbe-5f53-4970-8990-b1cdef6201c5",
+          "925cf4c3-f569-43a7-981f-4b4a637a30c3",
+          "479e2a1f-054b-4067-a1fe-05612e9fc8b3",
+          "1324e183-c447-4270-943a-f3ed4b9f1af0",
+          "67518087-877c-4841-9664-fcd3ba881497"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "dbdb9d7f7f5d484db478455e0441a310",
+        "course": "G4012101",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "ad4d7dbe-5f53-4970-8990-b1cdef6201c5",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "31f3b7a5-5f04-4312-b7a8-7067f2a0b48c",
+          "925cf4c3-f569-43a7-981f-4b4a637a30c3",
+          "479e2a1f-054b-4067-a1fe-05612e9fc8b3",
+          "1324e183-c447-4270-943a-f3ed4b9f1af0",
+          "67518087-877c-4841-9664-fcd3ba881497"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "dbdb9d7f7f5d484db478455e0441a310",
+        "course": "G4012101",
+        "nGroup": 0,
+        "nWeek": 1,
+        "numGroups": 1,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "925cf4c3-f569-43a7-981f-4b4a637a30c3",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "31f3b7a5-5f04-4312-b7a8-7067f2a0b48c",
+          "ad4d7dbe-5f53-4970-8990-b1cdef6201c5"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "36f7806c53224823a43b0fe62c6f7b73",
+        "course": "G4012101",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "479e2a1f-054b-4067-a1fe-05612e9fc8b3",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "31f3b7a5-5f04-4312-b7a8-7067f2a0b48c",
+          "ad4d7dbe-5f53-4970-8990-b1cdef6201c5"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "36f7806c53224823a43b0fe62c6f7b73",
+        "course": "G4012101",
+        "nGroup": 1,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "1324e183-c447-4270-943a-f3ed4b9f1af0",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "31f3b7a5-5f04-4312-b7a8-7067f2a0b48c",
+          "ad4d7dbe-5f53-4970-8990-b1cdef6201c5"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "36f7806c53224823a43b0fe62c6f7b73",
+        "course": "G4012101",
+        "nGroup": 2,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "67518087-877c-4841-9664-fcd3ba881497",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "31f3b7a5-5f04-4312-b7a8-7067f2a0b48c",
+          "ad4d7dbe-5f53-4970-8990-b1cdef6201c5"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "36f7806c53224823a43b0fe62c6f7b73",
+        "course": "G4012101",
+        "nGroup": 3,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "6bf5b047-0251-4962-8487-e3be9b3278c7",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "7ee2c0ec-5a5b-4503-869a-9c88e2e8fc46",
+          "060bdc62-c7a0-4092-93ac-2afcc229410f"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "9c6580e016f94f26bf6d4786dceef653",
+        "course": "G4012444",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "7ee2c0ec-5a5b-4503-869a-9c88e2e8fc46",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "6bf5b047-0251-4962-8487-e3be9b3278c7"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "ea7a3611eb6e479ab523fa09b8a61d58",
+        "course": "G4012444",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 2,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "060bdc62-c7a0-4092-93ac-2afcc229410f",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "6bf5b047-0251-4962-8487-e3be9b3278c7"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "ea7a3611eb6e479ab523fa09b8a61d58",
+        "course": "G4012444",
+        "nGroup": 1,
+        "nWeek": 0,
+        "numGroups": 2,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "4fd839ff-97b7-43e9-abfc-be63bee9c802",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "cb71d30d-2296-4361-aef6-2d7f9143e6e0",
+          "ff4693ad-8ce4-450a-8e16-2a6d4e511823",
+          "29763174-0b35-4230-9bf5-6d1f9f67bceb",
+          "6bbc4a4b-9b00-4689-a024-5d332e1d7bf0",
+          "fd9bbdc1-7c19-463c-aaac-00fd69ed5c16",
+          "1059a6cc-70d1-4563-9918-df8038637fdf",
+          "fc38b928-2f50-41ff-9276-b64fae1aba73",
+          "f3c63a35-9ea0-4630-bf92-97828d525590"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "fe76ed446c344fc88a71553d91ce3642",
+        "course": "G4012103",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "cb71d30d-2296-4361-aef6-2d7f9143e6e0",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "4fd839ff-97b7-43e9-abfc-be63bee9c802",
+          "ff4693ad-8ce4-450a-8e16-2a6d4e511823",
+          "29763174-0b35-4230-9bf5-6d1f9f67bceb",
+          "6bbc4a4b-9b00-4689-a024-5d332e1d7bf0",
+          "fd9bbdc1-7c19-463c-aaac-00fd69ed5c16",
+          "1059a6cc-70d1-4563-9918-df8038637fdf",
+          "fc38b928-2f50-41ff-9276-b64fae1aba73",
+          "f3c63a35-9ea0-4630-bf92-97828d525590"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "fe76ed446c344fc88a71553d91ce3642",
+        "course": "G4012103",
+        "nGroup": 0,
+        "nWeek": 1,
+        "numGroups": 1,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "ff4693ad-8ce4-450a-8e16-2a6d4e511823",
+      "constraints": {
+        "sessionType": "CLIS",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "4fd839ff-97b7-43e9-abfc-be63bee9c802",
+          "cb71d30d-2296-4361-aef6-2d7f9143e6e0",
+          "fd9bbdc1-7c19-463c-aaac-00fd69ed5c16",
+          "1059a6cc-70d1-4563-9918-df8038637fdf"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "492b4079ecb547c28f091d298ed435ea",
+        "course": "G4012103",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 3,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "29763174-0b35-4230-9bf5-6d1f9f67bceb",
+      "constraints": {
+        "sessionType": "CLIS",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "4fd839ff-97b7-43e9-abfc-be63bee9c802",
+          "cb71d30d-2296-4361-aef6-2d7f9143e6e0",
+          "1059a6cc-70d1-4563-9918-df8038637fdf",
+          "fc38b928-2f50-41ff-9276-b64fae1aba73"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "492b4079ecb547c28f091d298ed435ea",
+        "course": "G4012103",
+        "nGroup": 1,
+        "nWeek": 0,
+        "numGroups": 3,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "6bbc4a4b-9b00-4689-a024-5d332e1d7bf0",
+      "constraints": {
+        "sessionType": "CLIS",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "4fd839ff-97b7-43e9-abfc-be63bee9c802",
+          "cb71d30d-2296-4361-aef6-2d7f9143e6e0",
+          "fc38b928-2f50-41ff-9276-b64fae1aba73",
+          "f3c63a35-9ea0-4630-bf92-97828d525590"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "492b4079ecb547c28f091d298ed435ea",
+        "course": "G4012103",
+        "nGroup": 2,
+        "nWeek": 0,
+        "numGroups": 3,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "fd9bbdc1-7c19-463c-aaac-00fd69ed5c16",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 5400.0,
+        "cannotConflictInTime": [
+          "4fd839ff-97b7-43e9-abfc-be63bee9c802",
+          "cb71d30d-2296-4361-aef6-2d7f9143e6e0",
+          "ff4693ad-8ce4-450a-8e16-2a6d4e511823"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "754d5b701ee34452abe5840d9b85727c",
+        "course": "G4012103",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "1059a6cc-70d1-4563-9918-df8038637fdf",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 5400.0,
+        "cannotConflictInTime": [
+          "4fd839ff-97b7-43e9-abfc-be63bee9c802",
+          "cb71d30d-2296-4361-aef6-2d7f9143e6e0",
+          "ff4693ad-8ce4-450a-8e16-2a6d4e511823",
+          "29763174-0b35-4230-9bf5-6d1f9f67bceb"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "754d5b701ee34452abe5840d9b85727c",
+        "course": "G4012103",
+        "nGroup": 1,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "fc38b928-2f50-41ff-9276-b64fae1aba73",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 5400.0,
+        "cannotConflictInTime": [
+          "4fd839ff-97b7-43e9-abfc-be63bee9c802",
+          "cb71d30d-2296-4361-aef6-2d7f9143e6e0",
+          "29763174-0b35-4230-9bf5-6d1f9f67bceb",
+          "6bbc4a4b-9b00-4689-a024-5d332e1d7bf0"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "754d5b701ee34452abe5840d9b85727c",
+        "course": "G4012103",
+        "nGroup": 2,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "f3c63a35-9ea0-4630-bf92-97828d525590",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 5400.0,
+        "cannotConflictInTime": [
+          "4fd839ff-97b7-43e9-abfc-be63bee9c802",
+          "cb71d30d-2296-4361-aef6-2d7f9143e6e0",
+          "6bbc4a4b-9b00-4689-a024-5d332e1d7bf0"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "754d5b701ee34452abe5840d9b85727c",
+        "course": "G4012103",
+        "nGroup": 3,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "a36a62ed-e2f8-4adb-b35d-3ad6252e94ae",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "157a3f27-9999-4dd9-a177-e769619c7d0d",
+          "798fca64-43b3-4043-899a-3642df0f9854",
+          "9da9d09b-8a75-4d7c-baa0-f62e743e28ee",
+          "898e4941-ba14-4cc0-b6ff-26840bde1d85",
+          "f2a6ab3f-6f61-47c2-9cef-ac12463f5f38"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "a176bdbf592a4555bc84c84bbd0e2c3e",
+        "course": "G4012328",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "157a3f27-9999-4dd9-a177-e769619c7d0d",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "a36a62ed-e2f8-4adb-b35d-3ad6252e94ae",
+          "798fca64-43b3-4043-899a-3642df0f9854",
+          "9da9d09b-8a75-4d7c-baa0-f62e743e28ee",
+          "898e4941-ba14-4cc0-b6ff-26840bde1d85",
+          "f2a6ab3f-6f61-47c2-9cef-ac12463f5f38"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "1e679506b0df4f95a46403d50b864650",
+        "course": "G4012328",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "798fca64-43b3-4043-899a-3642df0f9854",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 10800.0,
+        "cannotConflictInTime": [
+          "a36a62ed-e2f8-4adb-b35d-3ad6252e94ae",
+          "157a3f27-9999-4dd9-a177-e769619c7d0d"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "e8ca228b740f4e9786816cf2c5c62083",
+        "course": "G4012328",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "9da9d09b-8a75-4d7c-baa0-f62e743e28ee",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 10800.0,
+        "cannotConflictInTime": [
+          "a36a62ed-e2f8-4adb-b35d-3ad6252e94ae",
+          "157a3f27-9999-4dd9-a177-e769619c7d0d"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "e8ca228b740f4e9786816cf2c5c62083",
+        "course": "G4012328",
+        "nGroup": 1,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "898e4941-ba14-4cc0-b6ff-26840bde1d85",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 10800.0,
+        "cannotConflictInTime": [
+          "a36a62ed-e2f8-4adb-b35d-3ad6252e94ae",
+          "157a3f27-9999-4dd9-a177-e769619c7d0d"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "e8ca228b740f4e9786816cf2c5c62083",
+        "course": "G4012328",
+        "nGroup": 2,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "f2a6ab3f-6f61-47c2-9cef-ac12463f5f38",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 10800.0,
+        "cannotConflictInTime": [
+          "a36a62ed-e2f8-4adb-b35d-3ad6252e94ae",
+          "157a3f27-9999-4dd9-a177-e769619c7d0d"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "e8ca228b740f4e9786816cf2c5c62083",
+        "course": "G4012328",
+        "nGroup": 3,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "57047d42-ddff-42d9-a00e-d773d73b243b",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "cda5bf21-4282-438b-8fc8-f93bef3cea1b"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "2f79a222b7444e07a4b956fb373bea86",
+        "course": "G4012442",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "cda5bf21-4282-438b-8fc8-f93bef3cea1b",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "57047d42-ddff-42d9-a00e-d773d73b243b"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "eb9dc3602908440e9ee3c2274aacd08d",
+        "course": "G4012442",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "e9411317-5262-4201-8cbd-4efb2c67fb85",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "2661e122-d6ab-41e1-b6fb-6ef1e5eb7780"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "859218bf24694d09952aecb9b048fa6b",
+        "course": "G4012441",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "2661e122-d6ab-41e1-b6fb-6ef1e5eb7780",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "e9411317-5262-4201-8cbd-4efb2c67fb85"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "ee3cf936c8b045f1aa89c5a16bf34757",
+        "course": "G4012441",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "6ade3744-4780-4c2e-8ecf-d22800b0cbdc",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "f9fbe8e4-0a2d-4b54-83c9-37885127c7e9",
+          "d9c9f4ef-7d20-435d-8333-d3f750c060cd",
+          "3561d93c-19d1-4a50-8f60-f803235432ca",
+          "a4bb828a-f7fb-4315-b323-81f17c3aba98",
+          "601ec1b6-2024-4891-bb0c-7eecd829632c"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "a5f4d629c5034f3683d67e45110005ba",
+        "course": "G4012326",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "f9fbe8e4-0a2d-4b54-83c9-37885127c7e9",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "6ade3744-4780-4c2e-8ecf-d22800b0cbdc",
+          "d9c9f4ef-7d20-435d-8333-d3f750c060cd",
+          "3561d93c-19d1-4a50-8f60-f803235432ca",
+          "a4bb828a-f7fb-4315-b323-81f17c3aba98",
+          "601ec1b6-2024-4891-bb0c-7eecd829632c"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "a5f4d629c5034f3683d67e45110005ba",
+        "course": "G4012326",
+        "nGroup": 0,
+        "nWeek": 1,
+        "numGroups": 1,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "d9c9f4ef-7d20-435d-8333-d3f750c060cd",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 10800.0,
+        "cannotConflictInTime": [
+          "6ade3744-4780-4c2e-8ecf-d22800b0cbdc",
+          "f9fbe8e4-0a2d-4b54-83c9-37885127c7e9"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "591180553289463e886801620f77dd7f",
+        "course": "G4012326",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "3561d93c-19d1-4a50-8f60-f803235432ca",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 10800.0,
+        "cannotConflictInTime": [
+          "6ade3744-4780-4c2e-8ecf-d22800b0cbdc",
+          "f9fbe8e4-0a2d-4b54-83c9-37885127c7e9"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "591180553289463e886801620f77dd7f",
+        "course": "G4012326",
+        "nGroup": 1,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "a4bb828a-f7fb-4315-b323-81f17c3aba98",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 10800.0,
+        "cannotConflictInTime": [
+          "6ade3744-4780-4c2e-8ecf-d22800b0cbdc",
+          "f9fbe8e4-0a2d-4b54-83c9-37885127c7e9"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "591180553289463e886801620f77dd7f",
+        "course": "G4012326",
+        "nGroup": 2,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "601ec1b6-2024-4891-bb0c-7eecd829632c",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 10800.0,
+        "cannotConflictInTime": [
+          "6ade3744-4780-4c2e-8ecf-d22800b0cbdc",
+          "f9fbe8e4-0a2d-4b54-83c9-37885127c7e9"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "591180553289463e886801620f77dd7f",
+        "course": "G4012326",
+        "nGroup": 3,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "72338f1a-6068-4d7f-8b72-fc4dabe0ca66",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "8c330717-82f7-42d0-9d02-55b78b829729"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "11ce5aef93c944fbaf814666d216f429",
+        "course": "G4012447",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "8c330717-82f7-42d0-9d02-55b78b829729",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "72338f1a-6068-4d7f-8b72-fc4dabe0ca66"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "d238ab5646fe4fd48f039ab07bab0a0f",
+        "course": "G4012447",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "10c58428-373d-415f-bc1d-6e407a211a16",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 5400.0,
+        "cannotConflictInTime": [
+          "0041a3aa-f377-4e95-adfe-64d6c59449c6",
+          "aec48184-00c8-46e0-ba9b-47ef86cdd784"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "281b57b250f54a65984b2ce44af555b3",
+        "course": "G4012445",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "0041a3aa-f377-4e95-adfe-64d6c59449c6",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "10c58428-373d-415f-bc1d-6e407a211a16"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "6e58fed0e2bc4f47953ffcc039a4a34b",
+        "course": "G4012445",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 2,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "aec48184-00c8-46e0-ba9b-47ef86cdd784",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "10c58428-373d-415f-bc1d-6e407a211a16"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "6e58fed0e2bc4f47953ffcc039a4a34b",
+        "course": "G4012445",
+        "nGroup": 1,
+        "nWeek": 0,
+        "numGroups": 2,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "7b81bdd2-6427-4920-a82d-28a52733da15",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "038b0486-94bb-4f66-8c9b-63cc56054549",
+          "cd976caa-28f6-4b8d-84c7-47a49b816f06"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "a81d8c4fd7f341b9ad747432fec20e68",
+        "course": "G4012449",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "038b0486-94bb-4f66-8c9b-63cc56054549",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "7b81bdd2-6427-4920-a82d-28a52733da15"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "a4aa261358b743a19d7075ac50909313",
+        "course": "G4012449",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 2,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "cd976caa-28f6-4b8d-84c7-47a49b816f06",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "7b81bdd2-6427-4920-a82d-28a52733da15"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "a4aa261358b743a19d7075ac50909313",
+        "course": "G4012449",
+        "nGroup": 1,
+        "nWeek": 0,
+        "numGroups": 2,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "dad215ce-4fea-4bfc-8335-5a75f8ca2979",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 5400.0,
+        "cannotConflictInTime": [
+          "bbcd85ef-a0d2-494c-ab46-38f6f47d6dee",
+          "5b9ce31b-8dde-489b-9efe-9e608b577fbc",
+          "630d1402-4af9-4f47-8fc4-0a7f51815ee0",
+          "d42c174e-4543-48f1-bb6e-6146dc742672"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "2d7860a9577149959abcb585412a2809",
+        "course": "G4012221",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "bbcd85ef-a0d2-494c-ab46-38f6f47d6dee",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 10800.0,
+        "cannotConflictInTime": [
+          "dad215ce-4fea-4bfc-8335-5a75f8ca2979"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "edee4361df78448a87afeb66999284dc",
+        "course": "G4012221",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "5b9ce31b-8dde-489b-9efe-9e608b577fbc",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 10800.0,
+        "cannotConflictInTime": [
+          "dad215ce-4fea-4bfc-8335-5a75f8ca2979"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "edee4361df78448a87afeb66999284dc",
+        "course": "G4012221",
+        "nGroup": 1,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "630d1402-4af9-4f47-8fc4-0a7f51815ee0",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 10800.0,
+        "cannotConflictInTime": [
+          "dad215ce-4fea-4bfc-8335-5a75f8ca2979"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "edee4361df78448a87afeb66999284dc",
+        "course": "G4012221",
+        "nGroup": 2,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "d42c174e-4543-48f1-bb6e-6146dc742672",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 10800.0,
+        "cannotConflictInTime": [
+          "dad215ce-4fea-4bfc-8335-5a75f8ca2979"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "edee4361df78448a87afeb66999284dc",
+        "course": "G4012221",
+        "nGroup": 3,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "2c1ccaa8-6d69-4210-b393-117042104843",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "56cbff5a-c500-4bc5-90f4-1db90bce68c6",
+          "0efbe4e0-570f-4402-8549-33b62da677ca",
+          "bae4c00f-c07c-4360-b7e8-1d1fb3c9c273",
+          "62cafea2-5937-4dc1-bbd7-715405eda882",
+          "94f738f2-6070-4654-a6f0-3f7b26067876",
+          "79e7557b-cdad-4f76-b02e-6e149bc72584"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "2cc132f4e4e844b1a72a2bdf32038a5b",
+        "course": "G4012105",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "56cbff5a-c500-4bc5-90f4-1db90bce68c6",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "2c1ccaa8-6d69-4210-b393-117042104843",
+          "0efbe4e0-570f-4402-8549-33b62da677ca",
+          "bae4c00f-c07c-4360-b7e8-1d1fb3c9c273",
+          "62cafea2-5937-4dc1-bbd7-715405eda882",
+          "94f738f2-6070-4654-a6f0-3f7b26067876",
+          "79e7557b-cdad-4f76-b02e-6e149bc72584"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "2cc132f4e4e844b1a72a2bdf32038a5b",
+        "course": "G4012105",
+        "nGroup": 0,
+        "nWeek": 1,
+        "numGroups": 1,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "0efbe4e0-570f-4402-8549-33b62da677ca",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "2c1ccaa8-6d69-4210-b393-117042104843",
+          "56cbff5a-c500-4bc5-90f4-1db90bce68c6"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "78193174d59d489d93d8be1728e036ff",
+        "course": "G4012105",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 5,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "bae4c00f-c07c-4360-b7e8-1d1fb3c9c273",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "2c1ccaa8-6d69-4210-b393-117042104843",
+          "56cbff5a-c500-4bc5-90f4-1db90bce68c6"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "78193174d59d489d93d8be1728e036ff",
+        "course": "G4012105",
+        "nGroup": 1,
+        "nWeek": 0,
+        "numGroups": 5,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "62cafea2-5937-4dc1-bbd7-715405eda882",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "2c1ccaa8-6d69-4210-b393-117042104843",
+          "56cbff5a-c500-4bc5-90f4-1db90bce68c6"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "78193174d59d489d93d8be1728e036ff",
+        "course": "G4012105",
+        "nGroup": 2,
+        "nWeek": 0,
+        "numGroups": 5,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "94f738f2-6070-4654-a6f0-3f7b26067876",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "2c1ccaa8-6d69-4210-b393-117042104843",
+          "56cbff5a-c500-4bc5-90f4-1db90bce68c6"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "78193174d59d489d93d8be1728e036ff",
+        "course": "G4012105",
+        "nGroup": 3,
+        "nWeek": 0,
+        "numGroups": 5,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "79e7557b-cdad-4f76-b02e-6e149bc72584",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "2c1ccaa8-6d69-4210-b393-117042104843",
+          "56cbff5a-c500-4bc5-90f4-1db90bce68c6"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "78193174d59d489d93d8be1728e036ff",
+        "course": "G4012105",
+        "nGroup": 4,
+        "nWeek": 0,
+        "numGroups": 5,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "3b0c7e40-6e25-4dd9-9cea-2af2f9abd8bd",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 5400.0,
+        "cannotConflictInTime": [
+          "e654dbe5-fc95-412b-ac80-1570cc5be2e3",
+          "450a7160-2c02-44d9-967b-502ed3c48b01",
+          "f5e8a656-c232-46a4-8194-eeaeb9626cc0",
+          "866ea576-7d9d-4791-8781-57b514cfa31a",
+          "421a4010-981b-41ab-b247-b9ace26a66f6"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "cd3fef1a14e84560aa94b6cc5e1fb95c",
+        "course": "G4012224",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "e654dbe5-fc95-412b-ac80-1570cc5be2e3",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 10800.0,
+        "cannotConflictInTime": [
+          "3b0c7e40-6e25-4dd9-9cea-2af2f9abd8bd"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "7121f78acdd74483ac3a51c55618fe67",
+        "course": "G4012224",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 5,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "450a7160-2c02-44d9-967b-502ed3c48b01",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 10800.0,
+        "cannotConflictInTime": [
+          "3b0c7e40-6e25-4dd9-9cea-2af2f9abd8bd"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "7121f78acdd74483ac3a51c55618fe67",
+        "course": "G4012224",
+        "nGroup": 1,
+        "nWeek": 0,
+        "numGroups": 5,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "f5e8a656-c232-46a4-8194-eeaeb9626cc0",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 10800.0,
+        "cannotConflictInTime": [
+          "3b0c7e40-6e25-4dd9-9cea-2af2f9abd8bd"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "7121f78acdd74483ac3a51c55618fe67",
+        "course": "G4012224",
+        "nGroup": 2,
+        "nWeek": 0,
+        "numGroups": 5,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "866ea576-7d9d-4791-8781-57b514cfa31a",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 10800.0,
+        "cannotConflictInTime": [
+          "3b0c7e40-6e25-4dd9-9cea-2af2f9abd8bd"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "7121f78acdd74483ac3a51c55618fe67",
+        "course": "G4012224",
+        "nGroup": 3,
+        "nWeek": 0,
+        "numGroups": 5,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "421a4010-981b-41ab-b247-b9ace26a66f6",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 10800.0,
+        "cannotConflictInTime": [
+          "3b0c7e40-6e25-4dd9-9cea-2af2f9abd8bd"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "7121f78acdd74483ac3a51c55618fe67",
+        "course": "G4012224",
+        "nGroup": 4,
+        "nWeek": 0,
+        "numGroups": 5,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "c2ac7962-daa3-4c92-bd2d-a92cd595a76c",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "10e0f048-44de-4856-bc7d-26b89936cda7",
+          "15e002ba-4d3d-44fe-8682-2ddac7ea5423",
+          "1aebb748-53b5-4a1d-b4cd-37d366985d3b",
+          "3f50334c-c72c-4ee4-990b-b0fea85be9b8"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "c57fe3e6db91441b8bd0683d2dfa26c0",
+        "course": "G4012225",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "10e0f048-44de-4856-bc7d-26b89936cda7",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "c2ac7962-daa3-4c92-bd2d-a92cd595a76c"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "85618297b7274cb7918a994ef9df3706",
+        "course": "G4012225",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "15e002ba-4d3d-44fe-8682-2ddac7ea5423",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "c2ac7962-daa3-4c92-bd2d-a92cd595a76c"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "85618297b7274cb7918a994ef9df3706",
+        "course": "G4012225",
+        "nGroup": 1,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "1aebb748-53b5-4a1d-b4cd-37d366985d3b",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "c2ac7962-daa3-4c92-bd2d-a92cd595a76c"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "85618297b7274cb7918a994ef9df3706",
+        "course": "G4012225",
+        "nGroup": 2,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "3f50334c-c72c-4ee4-990b-b0fea85be9b8",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "c2ac7962-daa3-4c92-bd2d-a92cd595a76c"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "85618297b7274cb7918a994ef9df3706",
+        "course": "G4012225",
+        "nGroup": 3,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "22dd8da7-7536-498c-92c8-a71741840d7e",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "6b55709c-70cd-44cb-82a2-3b3179c4f429",
+          "6000bddf-1c00-4fb7-9e39-2904f218c6a2"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "f72cf5bb241144c5a82f07ca81d5c085",
+        "course": "G4012446",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "6b55709c-70cd-44cb-82a2-3b3179c4f429",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "22dd8da7-7536-498c-92c8-a71741840d7e"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "39466c17fad2438c82deab35104f9f4f",
+        "course": "G4012446",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 2,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "6000bddf-1c00-4fb7-9e39-2904f218c6a2",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "22dd8da7-7536-498c-92c8-a71741840d7e"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "39466c17fad2438c82deab35104f9f4f",
+        "course": "G4012446",
+        "nGroup": 1,
+        "nWeek": 0,
+        "numGroups": 2,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "3c73c2fc-8347-4948-b64f-1754c2924416",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "726178ae-35b4-4cae-a38d-2cdfc0767ae8",
+          "5f844806-bb60-43c8-9f2d-1eeea4f86c63",
+          "23baa37d-ced7-4721-bd40-fd549a887bbf",
+          "02ddeef9-9538-46a8-afa3-eea951590860",
+          "a5fe4f3e-a1cd-47eb-8f73-93992c08a5a9",
+          "d478bd31-0478-45a4-8d07-dc6b7a8a9f10"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "dabcb57afa1349a286fe4c7acce1b291",
+        "course": "G4012223",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "726178ae-35b4-4cae-a38d-2cdfc0767ae8",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "3c73c2fc-8347-4948-b64f-1754c2924416",
+          "5f844806-bb60-43c8-9f2d-1eeea4f86c63",
+          "23baa37d-ced7-4721-bd40-fd549a887bbf",
+          "02ddeef9-9538-46a8-afa3-eea951590860",
+          "a5fe4f3e-a1cd-47eb-8f73-93992c08a5a9",
+          "d478bd31-0478-45a4-8d07-dc6b7a8a9f10"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "dabcb57afa1349a286fe4c7acce1b291",
+        "course": "G4012223",
+        "nGroup": 0,
+        "nWeek": 1,
+        "numGroups": 1,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "5f844806-bb60-43c8-9f2d-1eeea4f86c63",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "3c73c2fc-8347-4948-b64f-1754c2924416",
+          "726178ae-35b4-4cae-a38d-2cdfc0767ae8"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "6967ce3dbafe469ea480ed469f92fe14",
+        "course": "G4012223",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 5,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "23baa37d-ced7-4721-bd40-fd549a887bbf",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "3c73c2fc-8347-4948-b64f-1754c2924416",
+          "726178ae-35b4-4cae-a38d-2cdfc0767ae8"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "6967ce3dbafe469ea480ed469f92fe14",
+        "course": "G4012223",
+        "nGroup": 1,
+        "nWeek": 0,
+        "numGroups": 5,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "02ddeef9-9538-46a8-afa3-eea951590860",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "3c73c2fc-8347-4948-b64f-1754c2924416",
+          "726178ae-35b4-4cae-a38d-2cdfc0767ae8"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "6967ce3dbafe469ea480ed469f92fe14",
+        "course": "G4012223",
+        "nGroup": 2,
+        "nWeek": 0,
+        "numGroups": 5,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "a5fe4f3e-a1cd-47eb-8f73-93992c08a5a9",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "3c73c2fc-8347-4948-b64f-1754c2924416",
+          "726178ae-35b4-4cae-a38d-2cdfc0767ae8"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "6967ce3dbafe469ea480ed469f92fe14",
+        "course": "G4012223",
+        "nGroup": 3,
+        "nWeek": 0,
+        "numGroups": 5,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "d478bd31-0478-45a4-8d07-dc6b7a8a9f10",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 9000.0,
+        "cannotConflictInTime": [
+          "3c73c2fc-8347-4948-b64f-1754c2924416",
+          "726178ae-35b4-4cae-a38d-2cdfc0767ae8"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "6967ce3dbafe469ea480ed469f92fe14",
+        "course": "G4012223",
+        "nGroup": 4,
+        "nWeek": 0,
+        "numGroups": 5,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "5ee4118f-3d71-4d6e-98fc-5bd0c654be2b",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "753a3798-5776-45d1-b0e7-4f90f4de6598",
+          "ad9a347a-4cc8-421d-9f57-1a185f5f960b",
+          "50d7584d-a992-4b09-a4f5-a37cb9af9df4",
+          "dd95d71b-6890-4773-b756-a6d9278fafa1",
+          "dddfa499-df2f-445c-84a3-07ad82ce7f7a",
+          "24f5acc5-60cd-49c8-8e3a-a657a6a3f947",
+          "48be800a-6914-4155-a368-2833958e251e",
+          "c72c6ee2-f91e-4808-a617-f9b8df795794",
+          "5d6c80fc-7acd-4d66-93ac-5452c24ad630"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "18f3984cecf848b0b242ecdb02f3b7c9",
+        "course": "G4012102",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "753a3798-5776-45d1-b0e7-4f90f4de6598",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "5ee4118f-3d71-4d6e-98fc-5bd0c654be2b",
+          "ad9a347a-4cc8-421d-9f57-1a185f5f960b",
+          "50d7584d-a992-4b09-a4f5-a37cb9af9df4",
+          "dd95d71b-6890-4773-b756-a6d9278fafa1",
+          "dddfa499-df2f-445c-84a3-07ad82ce7f7a",
+          "24f5acc5-60cd-49c8-8e3a-a657a6a3f947",
+          "48be800a-6914-4155-a368-2833958e251e",
+          "c72c6ee2-f91e-4808-a617-f9b8df795794",
+          "5d6c80fc-7acd-4d66-93ac-5452c24ad630"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "18f3984cecf848b0b242ecdb02f3b7c9",
+        "course": "G4012102",
+        "nGroup": 0,
+        "nWeek": 1,
+        "numGroups": 1,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "ad9a347a-4cc8-421d-9f57-1a185f5f960b",
+      "constraints": {
+        "sessionType": "CLIS",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "5ee4118f-3d71-4d6e-98fc-5bd0c654be2b",
+          "753a3798-5776-45d1-b0e7-4f90f4de6598",
+          "dddfa499-df2f-445c-84a3-07ad82ce7f7a",
+          "24f5acc5-60cd-49c8-8e3a-a657a6a3f947"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "4f0f28474a034c3c8cb78d413eaedc64",
+        "course": "G4012102",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 3,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "50d7584d-a992-4b09-a4f5-a37cb9af9df4",
+      "constraints": {
+        "sessionType": "CLIS",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "5ee4118f-3d71-4d6e-98fc-5bd0c654be2b",
+          "753a3798-5776-45d1-b0e7-4f90f4de6598",
+          "24f5acc5-60cd-49c8-8e3a-a657a6a3f947",
+          "48be800a-6914-4155-a368-2833958e251e",
+          "c72c6ee2-f91e-4808-a617-f9b8df795794"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "4f0f28474a034c3c8cb78d413eaedc64",
+        "course": "G4012102",
+        "nGroup": 1,
+        "nWeek": 0,
+        "numGroups": 3,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "dd95d71b-6890-4773-b756-a6d9278fafa1",
+      "constraints": {
+        "sessionType": "CLIS",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "5ee4118f-3d71-4d6e-98fc-5bd0c654be2b",
+          "753a3798-5776-45d1-b0e7-4f90f4de6598",
+          "c72c6ee2-f91e-4808-a617-f9b8df795794",
+          "5d6c80fc-7acd-4d66-93ac-5452c24ad630"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "4f0f28474a034c3c8cb78d413eaedc64",
+        "course": "G4012102",
+        "nGroup": 2,
+        "nWeek": 0,
+        "numGroups": 3,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "dddfa499-df2f-445c-84a3-07ad82ce7f7a",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 5400.0,
+        "cannotConflictInTime": [
+          "5ee4118f-3d71-4d6e-98fc-5bd0c654be2b",
+          "753a3798-5776-45d1-b0e7-4f90f4de6598",
+          "ad9a347a-4cc8-421d-9f57-1a185f5f960b"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "d63bacf83c164db0a1b004f97f70f119",
+        "course": "G4012102",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 5,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "24f5acc5-60cd-49c8-8e3a-a657a6a3f947",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 5400.0,
+        "cannotConflictInTime": [
+          "5ee4118f-3d71-4d6e-98fc-5bd0c654be2b",
+          "753a3798-5776-45d1-b0e7-4f90f4de6598",
+          "ad9a347a-4cc8-421d-9f57-1a185f5f960b",
+          "50d7584d-a992-4b09-a4f5-a37cb9af9df4"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "d63bacf83c164db0a1b004f97f70f119",
+        "course": "G4012102",
+        "nGroup": 1,
+        "nWeek": 0,
+        "numGroups": 5,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "48be800a-6914-4155-a368-2833958e251e",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 5400.0,
+        "cannotConflictInTime": [
+          "5ee4118f-3d71-4d6e-98fc-5bd0c654be2b",
+          "753a3798-5776-45d1-b0e7-4f90f4de6598",
+          "50d7584d-a992-4b09-a4f5-a37cb9af9df4"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "d63bacf83c164db0a1b004f97f70f119",
+        "course": "G4012102",
+        "nGroup": 2,
+        "nWeek": 0,
+        "numGroups": 5,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "c72c6ee2-f91e-4808-a617-f9b8df795794",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 5400.0,
+        "cannotConflictInTime": [
+          "5ee4118f-3d71-4d6e-98fc-5bd0c654be2b",
+          "753a3798-5776-45d1-b0e7-4f90f4de6598",
+          "50d7584d-a992-4b09-a4f5-a37cb9af9df4",
+          "dd95d71b-6890-4773-b756-a6d9278fafa1"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "d63bacf83c164db0a1b004f97f70f119",
+        "course": "G4012102",
+        "nGroup": 3,
+        "nWeek": 0,
+        "numGroups": 5,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "5d6c80fc-7acd-4d66-93ac-5452c24ad630",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 5400.0,
+        "cannotConflictInTime": [
+          "5ee4118f-3d71-4d6e-98fc-5bd0c654be2b",
+          "753a3798-5776-45d1-b0e7-4f90f4de6598",
+          "dd95d71b-6890-4773-b756-a6d9278fafa1"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "d63bacf83c164db0a1b004f97f70f119",
+        "course": "G4012102",
+        "nGroup": 4,
+        "nWeek": 0,
+        "numGroups": 5,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "6a511e52-384b-490b-b24b-c3249fe0d44a",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "621dcffd-e2a0-413c-9c40-0749568ce5eb",
+          "05a707b3-96b5-423a-9cec-7f15476fe93e",
+          "8bb5cf09-d4a4-4223-a9b9-e5dd68f7fdf3",
+          "45247562-e37f-49de-bf3c-6061eb6cec9e",
+          "7f97dff6-0a80-4e52-ab37-a9daf422203d"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "f516b7166bd04863873f8781a2389602",
+        "course": "G4012321",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "621dcffd-e2a0-413c-9c40-0749568ce5eb",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "6a511e52-384b-490b-b24b-c3249fe0d44a",
+          "05a707b3-96b5-423a-9cec-7f15476fe93e",
+          "8bb5cf09-d4a4-4223-a9b9-e5dd68f7fdf3",
+          "45247562-e37f-49de-bf3c-6061eb6cec9e",
+          "7f97dff6-0a80-4e52-ab37-a9daf422203d"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "ad2ab5aabcd9415fa41e4fe1fc925cc3",
+        "course": "G4012321",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "05a707b3-96b5-423a-9cec-7f15476fe93e",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "6a511e52-384b-490b-b24b-c3249fe0d44a",
+          "621dcffd-e2a0-413c-9c40-0749568ce5eb"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "4b94c125febe49458adb5deb608a6879",
+        "course": "G4012321",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "8bb5cf09-d4a4-4223-a9b9-e5dd68f7fdf3",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "6a511e52-384b-490b-b24b-c3249fe0d44a",
+          "621dcffd-e2a0-413c-9c40-0749568ce5eb"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "4b94c125febe49458adb5deb608a6879",
+        "course": "G4012321",
+        "nGroup": 1,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "45247562-e37f-49de-bf3c-6061eb6cec9e",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "6a511e52-384b-490b-b24b-c3249fe0d44a",
+          "621dcffd-e2a0-413c-9c40-0749568ce5eb"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "4b94c125febe49458adb5deb608a6879",
+        "course": "G4012321",
+        "nGroup": 2,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "7f97dff6-0a80-4e52-ab37-a9daf422203d",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "6a511e52-384b-490b-b24b-c3249fe0d44a",
+          "621dcffd-e2a0-413c-9c40-0749568ce5eb"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "4b94c125febe49458adb5deb608a6879",
+        "course": "G4012321",
+        "nGroup": 3,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "e2ca00df-5149-4cc5-a03e-520d274bbbc4",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 5400.0,
+        "cannotConflictInTime": [
+          "6fa1c7a5-283f-431d-ba87-00876d61a536",
+          "5e7116eb-0b7d-4f5f-ae81-8d077312d3b8",
+          "14fbb5c4-d3ea-4392-a75a-3f627ea53b18",
+          "63982324-1627-4ccd-84f7-51c357b89bd7",
+          "b2fea30b-6a15-4730-96ab-faae84d5409a"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "3b0b4f271ebc4d3db36c8d3514d0b021",
+        "course": "G4012104",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "6fa1c7a5-283f-431d-ba87-00876d61a536",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 10800.0,
+        "cannotConflictInTime": [
+          "e2ca00df-5149-4cc5-a03e-520d274bbbc4"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "b290946fd1fa44a2984971641dc48561",
+        "course": "G4012104",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 5,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "5e7116eb-0b7d-4f5f-ae81-8d077312d3b8",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 10800.0,
+        "cannotConflictInTime": [
+          "e2ca00df-5149-4cc5-a03e-520d274bbbc4"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "b290946fd1fa44a2984971641dc48561",
+        "course": "G4012104",
+        "nGroup": 1,
+        "nWeek": 0,
+        "numGroups": 5,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "14fbb5c4-d3ea-4392-a75a-3f627ea53b18",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 10800.0,
+        "cannotConflictInTime": [
+          "e2ca00df-5149-4cc5-a03e-520d274bbbc4"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "b290946fd1fa44a2984971641dc48561",
+        "course": "G4012104",
+        "nGroup": 2,
+        "nWeek": 0,
+        "numGroups": 5,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "63982324-1627-4ccd-84f7-51c357b89bd7",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 10800.0,
+        "cannotConflictInTime": [
+          "e2ca00df-5149-4cc5-a03e-520d274bbbc4"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "b290946fd1fa44a2984971641dc48561",
+        "course": "G4012104",
+        "nGroup": 3,
+        "nWeek": 0,
+        "numGroups": 5,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "b2fea30b-6a15-4730-96ab-faae84d5409a",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 10800.0,
+        "cannotConflictInTime": [
+          "e2ca00df-5149-4cc5-a03e-520d274bbbc4"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "b290946fd1fa44a2984971641dc48561",
+        "course": "G4012104",
+        "nGroup": 4,
+        "nWeek": 0,
+        "numGroups": 5,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "20edc736-f58f-4da2-9b1a-25a8d05a1145",
+      "constraints": {
+        "sessionType": "CLE",
+        "duration": 3600.0,
+        "cannotConflictInTime": [
+          "3521dd9a-64c9-4ea1-b840-909a51eb2eb6",
+          "7b051180-021c-43de-93af-4b0ed4f5121f",
+          "0e3dd542-7112-475c-b523-393d0eb8f7a0",
+          "6d148b5d-61f7-4f8c-9de5-dee5e3406212",
+          "60a24e64-dced-4a0e-8ccc-3036fa6018ab",
+          "b37f300b-5711-45d4-bad0-6e0bc8c9c3a7",
+          "44c387c2-4197-40d4-a612-a84a9f1b7dc2",
+          "53c6f2ee-ed56-4f17-b3da-202c50f9da84"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "0ad180a714cc43b681ad3e3cbebab670",
+        "course": "G4012322",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 1,
+        "numWeeks": 1
+      }
+    },
+    {
+      "id": "3521dd9a-64c9-4ea1-b840-909a51eb2eb6",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "7b051180-021c-43de-93af-4b0ed4f5121f",
+          "20edc736-f58f-4da2-9b1a-25a8d05a1145"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "4b7f7aede5a44eb183dc1d81e71d729a",
+        "course": "G4012322",
+        "nGroup": 0,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "7b051180-021c-43de-93af-4b0ed4f5121f",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "3521dd9a-64c9-4ea1-b840-909a51eb2eb6",
+          "20edc736-f58f-4da2-9b1a-25a8d05a1145"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "4b7f7aede5a44eb183dc1d81e71d729a",
+        "course": "G4012322",
+        "nGroup": 0,
+        "nWeek": 1,
+        "numGroups": 4,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "0e3dd542-7112-475c-b523-393d0eb8f7a0",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "6d148b5d-61f7-4f8c-9de5-dee5e3406212",
+          "20edc736-f58f-4da2-9b1a-25a8d05a1145"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "4b7f7aede5a44eb183dc1d81e71d729a",
+        "course": "G4012322",
+        "nGroup": 1,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "6d148b5d-61f7-4f8c-9de5-dee5e3406212",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "0e3dd542-7112-475c-b523-393d0eb8f7a0",
+          "20edc736-f58f-4da2-9b1a-25a8d05a1145"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "4b7f7aede5a44eb183dc1d81e71d729a",
+        "course": "G4012322",
+        "nGroup": 1,
+        "nWeek": 1,
+        "numGroups": 4,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "60a24e64-dced-4a0e-8ccc-3036fa6018ab",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "b37f300b-5711-45d4-bad0-6e0bc8c9c3a7",
+          "20edc736-f58f-4da2-9b1a-25a8d05a1145"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "4b7f7aede5a44eb183dc1d81e71d729a",
+        "course": "G4012322",
+        "nGroup": 2,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "b37f300b-5711-45d4-bad0-6e0bc8c9c3a7",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "60a24e64-dced-4a0e-8ccc-3036fa6018ab",
+          "20edc736-f58f-4da2-9b1a-25a8d05a1145"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "4b7f7aede5a44eb183dc1d81e71d729a",
+        "course": "G4012322",
+        "nGroup": 2,
+        "nWeek": 1,
+        "numGroups": 4,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "44c387c2-4197-40d4-a612-a84a9f1b7dc2",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "53c6f2ee-ed56-4f17-b3da-202c50f9da84",
+          "20edc736-f58f-4da2-9b1a-25a8d05a1145"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "4b7f7aede5a44eb183dc1d81e71d729a",
+        "course": "G4012322",
+        "nGroup": 3,
+        "nWeek": 0,
+        "numGroups": 4,
+        "numWeeks": 2
+      }
+    },
+    {
+      "id": "53c6f2ee-ed56-4f17-b3da-202c50f9da84",
+      "constraints": {
+        "sessionType": "CLIL",
+        "duration": 7200.0,
+        "cannotConflictInTime": [
+          "44c387c2-4197-40d4-a612-a84a9f1b7dc2",
+          "20edc736-f58f-4da2-9b1a-25a8d05a1145"
+        ]
+      },
+      "metadata": {
+        "sessionGroup": "4b7f7aede5a44eb183dc1d81e71d729a",
+        "course": "G4012322",
+        "nGroup": 3,
+        "nWeek": 1,
+        "numGroups": 4,
+        "numWeeks": 2
+      }
+    }
+  ],
+  "rooms": [
+    {
+      "id": "a836d2d2-59ee-4429-b141-14c6a06c93a8",
+      "constraints": {
+        "capacity": 135,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "2ba481e6-8ddb-4842-b40d-e993024d3298",
+        "room": "A1"
+      }
+    },
+    {
+      "id": "c7b334a2-7325-43b7-a175-3abe889091f2",
+      "constraints": {
+        "capacity": 124,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "2ba481e6-8ddb-4842-b40d-e993024d3298",
+        "room": "A2"
+      }
+    },
+    {
+      "id": "b92a1b36-8df1-49b6-932b-ba40e3d8562c",
+      "constraints": {
+        "capacity": 112,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "2ba481e6-8ddb-4842-b40d-e993024d3298",
+        "room": "A3"
+      }
+    },
+    {
+      "id": "fbd9f9ce-fe7f-40bb-9552-ee6e6d027189",
+      "constraints": {
+        "capacity": 100,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "2ba481e6-8ddb-4842-b40d-e993024d3298",
+        "room": "A4"
+      }
+    },
+    {
+      "id": "58dca030-707d-4f17-a128-8497c193d53f",
+      "constraints": {
+        "capacity": 42,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "2ba481e6-8ddb-4842-b40d-e993024d3298",
+        "room": "A5"
+      }
+    },
+    {
+      "id": "42684589-c7d4-486d-900f-dee6356ea87d",
+      "constraints": {
+        "capacity": 54,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "2ba481e6-8ddb-4842-b40d-e993024d3298",
+        "room": "A6"
+      }
+    },
+    {
+      "id": "b05d53ad-f8c7-4b0e-bf71-2db8bd6b8966",
+      "constraints": {
+        "capacity": 54,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "2ba481e6-8ddb-4842-b40d-e993024d3298",
+        "room": "A7"
+      }
+    },
+    {
+      "id": "54cbdb26-7213-4921-aa2c-ae813978b6f1",
+      "constraints": {
+        "capacity": 42,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "2ba481e6-8ddb-4842-b40d-e993024d3298",
+        "room": "A8"
+      }
+    },
+    {
+      "id": "a9583d83-1711-446d-aa22-82cdd3f8b132",
+      "constraints": {
+        "capacity": 10,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "2ba481e6-8ddb-4842-b40d-e993024d3298",
+        "room": "AT"
+      }
+    },
+    {
+      "id": "e6779459-08e4-45e2-82f1-6a8b2fe0c1ac",
+      "constraints": {
+        "capacity": 15,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "2ba481e6-8ddb-4842-b40d-e993024d3298",
+        "room": "AT3"
+      }
+    },
+    {
+      "id": "39462e16-a2c5-4e84-89cf-5d9ef6630a23",
+      "constraints": {
+        "capacity": 28,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "2ba481e6-8ddb-4842-b40d-e993024d3298",
+        "room": "I1"
+      }
+    },
+    {
+      "id": "5c9b5f5b-a0e9-4912-ace7-0e8e4057b526",
+      "constraints": {
+        "capacity": 27,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "2ba481e6-8ddb-4842-b40d-e993024d3298",
+        "room": "I2"
+      }
+    },
+    {
+      "id": "43cd7f2e-e1f8-42ca-920c-7da0a3c304e4",
+      "constraints": {
+        "capacity": 20,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "2ba481e6-8ddb-4842-b40d-e993024d3298",
+        "room": "I3"
+      }
+    },
+    {
+      "id": "122ba19c-d0e5-47b7-9e87-96d2230213b2",
+      "constraints": {
+        "capacity": 21,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "2ba481e6-8ddb-4842-b40d-e993024d3298",
+        "room": "I4"
+      }
+    },
+    {
+      "id": "c1ea0fa3-d40c-4df5-a010-e206964c8e58",
+      "constraints": {
+        "capacity": -1,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "2ba481e6-8ddb-4842-b40d-e993024d3298",
+        "room": "L17"
+      }
+    },
+    {
+      "id": "7299be80-071c-488b-aac9-e5e47db891ef",
+      "constraints": {
+        "capacity": -1,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "2ba481e6-8ddb-4842-b40d-e993024d3298",
+        "room": "L27"
+      }
+    },
+    {
+      "id": "e911b456-5d8b-4f08-94d4-8e78dcbb0e8d",
+      "constraints": {
+        "capacity": 25,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "2ba481e6-8ddb-4842-b40d-e993024d3298",
+        "room": "LB1"
+      }
+    },
+    {
+      "id": "8e040479-0dba-410f-b0b3-cd32eefe44c3",
+      "constraints": {
+        "capacity": -1,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "2ba481e6-8ddb-4842-b40d-e993024d3298",
+        "room": "LB12"
+      }
+    },
+    {
+      "id": "ed3e482b-bf07-4db1-9878-5d332664ce3d",
+      "constraints": {
+        "capacity": 25,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "2ba481e6-8ddb-4842-b40d-e993024d3298",
+        "room": "LB2"
+      }
+    },
+    {
+      "id": "a02d9331-fa49-4bd4-ac75-616e081293f2",
+      "constraints": {
+        "capacity": 25,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "2ba481e6-8ddb-4842-b40d-e993024d3298",
+        "room": "LB3"
+      }
+    },
+    {
+      "id": "203d29c0-282b-4503-a604-6ee828abb4ae",
+      "constraints": {
+        "capacity": 25,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "2ba481e6-8ddb-4842-b40d-e993024d3298",
+        "room": "LB4"
+      }
+    },
+    {
+      "id": "2999b346-fffb-48b3-88f1-e2c6afe6adcb",
+      "constraints": {
+        "capacity": 25,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "2ba481e6-8ddb-4842-b40d-e993024d3298",
+        "room": "LB5"
+      }
+    },
+    {
+      "id": "c656c985-7ff8-4c6c-ad21-66673d0a67b0",
+      "constraints": {
+        "capacity": 25,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "2ba481e6-8ddb-4842-b40d-e993024d3298",
+        "room": "PP"
+      }
+    },
+    {
+      "id": "16ffe59a-238e-4ea0-b8c5-fa2953f6a4dc",
+      "constraints": {
+        "capacity": 50,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "2ba481e6-8ddb-4842-b40d-e993024d3298",
+        "room": "Prox"
+      }
+    },
+    {
+      "id": "ddcded65-f94a-4ee4-8c29-88741c55287a",
+      "constraints": {
+        "capacity": 5,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "0adfb5b9-5cbb-472f-82a5-94c7a3b3a404",
+        "room": "I5"
+      }
+    },
+    {
+      "id": "3af3f986-f380-448b-a047-e16afd26c67f",
+      "constraints": {
+        "capacity": 20,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "0adfb5b9-5cbb-472f-82a5-94c7a3b3a404",
+        "room": "I6"
+      }
+    },
+    {
+      "id": "1f61a2e8-db9e-48a5-a7cf-85e94ab951a8",
+      "constraints": {
+        "capacity": 20,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "0adfb5b9-5cbb-472f-82a5-94c7a3b3a404",
+        "room": "I7"
+      }
+    },
+    {
+      "id": "77d15586-4d2b-40aa-bba3-9abe4b426c35",
+      "constraints": {
+        "capacity": 5,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "0adfb5b9-5cbb-472f-82a5-94c7a3b3a404",
+        "room": "I8"
+      }
+    },
+    {
+      "id": "fe095b42-4caf-4f77-ac61-b72782e038d5",
+      "constraints": {
+        "capacity": 80,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "316e42cf-f6bc-4742-a980-e9d10b7628f1",
+        "room": "IA01"
+      }
+    },
+    {
+      "id": "95731a62-6b97-416a-afe5-6b8903945347",
+      "constraints": {
+        "capacity": 28,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "316e42cf-f6bc-4742-a980-e9d10b7628f1",
+        "room": "IA02"
+      }
+    },
+    {
+      "id": "9a19346c-e472-42b9-8ef1-175e05e3ff7c",
+      "constraints": {
+        "capacity": 28,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "316e42cf-f6bc-4742-a980-e9d10b7628f1",
+        "room": "IA03"
+      }
+    },
+    {
+      "id": "133ad44d-05e4-4176-8ff8-fd421a375975",
+      "constraints": {
+        "capacity": 28,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "316e42cf-f6bc-4742-a980-e9d10b7628f1",
+        "room": "IA04"
+      }
+    },
+    {
+      "id": "8ec0eec6-317d-4068-be1f-0786c7ebcf03",
+      "constraints": {
+        "capacity": 28,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "316e42cf-f6bc-4742-a980-e9d10b7628f1",
+        "room": "IA13"
+      }
+    },
+    {
+      "id": "0bd8e2d9-2a06-4591-8aa1-2246222f7659",
+      "constraints": {
+        "capacity": 28,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "316e42cf-f6bc-4742-a980-e9d10b7628f1",
+        "room": "IA14"
+      }
+    },
+    {
+      "id": "f7ecb378-0724-4a66-9b25-d60e387b10b2",
+      "constraints": {
+        "capacity": 90,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "316e42cf-f6bc-4742-a980-e9d10b7628f1",
+        "room": "IAS1"
+      }
+    },
+    {
+      "id": "54e1d1f4-d387-44eb-8233-91a7079975f4",
+      "constraints": {
+        "capacity": 28,
+        "sessionTypes": [
+          "CLE",
+          "CLIS",
+          "CLIL"
+        ],
+        "preferredSessionTypes": null,
+        "distancesInMinutes": {}
+      },
+      "metadata": {
+        "building": "316e42cf-f6bc-4742-a980-e9d10b7628f1",
+        "room": "IAS2"
+      }
+    }
+  ]
 }
