@@ -50,8 +50,10 @@ class AspSolver(Solver):
 
     def solve(self) -> Output:
         asp_problem = self.__generate_asp_problem()
-        save_txt_file(self._execution_uuid, "asp_problem", asp_problem)
-        print(asp_problem)
+        if self._execution_uuid is not None:
+            save_txt_file(self._execution_uuid, "asp_problem", asp_problem)
+        else:
+            print(asp_problem)
 
         solution = None
         for answer, optimization, optimality, answer_number in ASP(asp_problem).with_answer_number:
@@ -61,9 +63,11 @@ class AspSolver(Solver):
         if solution is None:
             raise RuntimeError("Could not generate schedule; a valid solution could not be returned")
 
-        print("---")
-        save_txt_file(self._execution_uuid, "asp_solution", solution)
-        print(solution)
+        if self._execution_uuid is not None:
+            save_txt_file(self._execution_uuid, "asp_solution", solution)
+        else:
+            print("---")
+            print(solution)
 
         timetable = Output()
         return timetable
