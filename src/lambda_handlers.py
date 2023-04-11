@@ -23,6 +23,7 @@ def event_handler(event: dict, context: LambdaContext):
 
     logger.info("Creating ASP Solver")
     solver = AspSolver(input_data.sessions, input_data.rooms, input_data.settings)
+    solver.with_execution_uuid(execution_uuid)
     logger.info("Invoking ASP Solver")
     output = solver.solve()
 

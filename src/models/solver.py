@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Optional
 
 from models.dto.output import Output
 from models.room import Room
@@ -12,6 +12,10 @@ class Solver(ABC):
         self._sessions = sessions
         self._rooms = rooms
         self._settings = settings
+        self._execution_uuid: Optional[str] = None
+
+    def with_execution_uuid(self, execution_uuid: str):
+        self._execution_uuid = execution_uuid
 
     @abstractmethod
     def solve(self) -> Output:

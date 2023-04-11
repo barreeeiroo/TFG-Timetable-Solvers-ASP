@@ -42,3 +42,17 @@ def save_output_object(execution_uuid: str, output: Output) -> str:
     logger.info(f"Object stored")
 
     return object_key
+
+
+def save_txt_file(execution_uuid: str, file_name: str, content: str) -> str:
+    object_key = f"{execution_uuid}/{file_name}.txt"
+    logger.info(f"Storing object {object_key} in bucket {__SOLVERS_BUCKET}")
+
+    s3.put_object(
+        Body=content,
+        Bucket=__SOLVERS_BUCKET,
+        Key=object_key
+    )
+    logger.info(f"Object stored")
+
+    return object_key

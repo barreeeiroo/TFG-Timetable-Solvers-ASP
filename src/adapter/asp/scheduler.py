@@ -7,6 +7,7 @@ from adapter.asp.rules import Statements
 from adapter.time.week import Week
 from models.dto.output import Output
 from models.solver import Solver
+from sdk.aws_s3 import save_txt_file
 
 
 class AspSolver(Solver):
@@ -49,6 +50,7 @@ class AspSolver(Solver):
 
     def solve(self) -> Output:
         asp_problem = self.__generate_asp_problem()
+        save_txt_file(self._execution_uuid, "asp_problem", asp_problem)
         print(asp_problem)
 
         solution = None
@@ -60,6 +62,7 @@ class AspSolver(Solver):
             raise RuntimeError("Could not generate schedule; a valid solution could not be returned")
 
         print("---")
+        save_txt_file(self._execution_uuid, "asp_solution", solution)
         print(solution)
 
         timetable = Output()
