@@ -10,7 +10,7 @@ class RoomConstraints(BaseModel):
     class Config:
         allow_population_by_field_name = True
 
-    capacity: Optional[int] = None
+    capacity: int
     session_types: List[str] = Field(alias="sessionTypes")
 
     preferred_session_types: Optional[List[str]] = Field(alias="preferredSessionTypes", default=None)
