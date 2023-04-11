@@ -118,7 +118,7 @@ class Statements:
         statements: List[str] = []
         for session in self.__sessions:
             clingo_session = ClC.session(
-                ClN.session_to_clingo(session), session.constraints.session_type,
+                ClN.session_to_clingo(session), ClN.session_type_to_clingo(session.constraints.session_type),
                 self.__week.get_slots_count_for_timedelta(session.constraints.duration)
             )
             statements.append(f"{clingo_session}.")
