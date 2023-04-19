@@ -1,4 +1,5 @@
 import calendar
+import math
 from collections import defaultdict
 from datetime import timedelta
 from typing import Dict, List
@@ -20,7 +21,6 @@ class Week:
             day_slot = Slot(
                 week_day=day,
                 timeframe=self.__day_timeframe,
-                status=SlotType.AVAILABLE,
             )
             self.slots[day] = generate_sub_slots(day_slot, self.__slot_duration)
 
@@ -43,6 +43,11 @@ class Week:
 
     def get_total_slot_count(self) -> int:
         return sum(map(len, self.slots.values()))
+
+    def get_slot_by_number(self, number: int) -> Slot:
+        slots_per_day = self.get_slots_per_day_count()
+        day = math.floor(number / slots_per_day)
+        return self.slots[day][number - slots_per_day * day]
 
     def print_available_slots(self):
         self.__print_slots()

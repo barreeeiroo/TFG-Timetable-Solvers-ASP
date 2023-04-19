@@ -1,15 +1,18 @@
 from clyngor import solve
 
 from adapter.asp.rules import Rules
+from adapter.asp.constants import ClingoNaming as ClN
 from adapter.time.week import Week
 from models.dto.output import Output
+from models.schedule import ScheduleUnit
 from models.solver import Solver
 from sdk.aws_s3 import save_txt_file
 
 
 class AspSolver(Solver):
     def solve(self) -> Output:
-        rules = Rules(Week(self._settings), self._sessions, self._rooms)
+        week = Week(self._settings)
+        rules = Rules(week, self._sessions, self._rooms)
         asp_problem = rules.generate_asp_problem()
 
         if self._execution_uuid is not None:
@@ -19,8 +22,7 @@ class AspSolver(Solver):
 
         solution = None
         for answer, optimization, optimality, answer_number in solve(inline=asp_problem,
-                                                                     use_clingo_module=False,
-                                                                     subproc_shell=True).with_answer_number:
+                                                                     use_clingo_module=False).with_answer_number:
             solution = answer
             break
 
@@ -33,5 +35,13 @@ class AspSolver(Solver):
             print("---")
             print(solution)
 
-        timetable = Output()
-        return timetable
+        output = Output()
+        for _, (timeslot, clingo_session, clingo_room) in solution:
+            session_hex, room_hex = ClN.get_id_from_clingo(clingo_session), ClN.get_id_from_clingo(clingo_room)
+            output.timetable.append(ScheduleUnit(
+                slot=week.get_slot_by_number(timeslot - 1),
+                session=self._find_session_by_hex(session_hex),
+                room=self._find_room_by_hex(room_hex),
+            ))
+
+        return output

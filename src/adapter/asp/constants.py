@@ -67,3 +67,8 @@ class ClingoNaming:
     @staticmethod
     def session_type_to_clingo(session_type: str) -> str:
         return f"{ClingoNaming.SESSION_TYPE}_{session_type}"
+
+    @staticmethod
+    def get_id_from_clingo(clingo: str) -> str:
+        _, data = clingo.split("_")
+        return data

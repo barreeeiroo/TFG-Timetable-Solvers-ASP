@@ -17,6 +17,12 @@ class Solver(ABC):
     def with_execution_uuid(self, execution_uuid: str):
         self._execution_uuid = execution_uuid
 
+    def _find_session_by_hex(self, uuid_hex: str) -> Session:
+        return next(session for session in self._sessions if session.id.hex == uuid_hex)
+
+    def _find_room_by_hex(self, uuid_hex: str) -> Room:
+        return next(room for room in self._rooms if room.id.hex == uuid_hex)
+
     @abstractmethod
     def solve(self) -> Output:
         raise NotImplementedError()
