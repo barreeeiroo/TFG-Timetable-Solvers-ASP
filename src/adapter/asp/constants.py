@@ -2,7 +2,7 @@ from models.room import Room
 from models.session import Session
 
 
-class ClingoConstants:
+class ClingoVariables:
     ANY = "_"
 
     TIMESLOT = "T"
@@ -13,41 +13,57 @@ class ClingoConstants:
     ROOM_TYPE = "RT"
     ROOM_CAPACITY = "RC"
 
+
+class ClingoPredicates:
+    TIMESLOT = "timeslot"
+    ROOM = "room"
+    ROOM_TYPE = "roomType"
+    SESSION = "session"
+
     ASSIGNED_SLOT = "assignedSlot"
+    SCHEDULED_SESSION = "scheduledSession"
     USED_ROOM = "usedRoom"
     BLOCKED_SLOT = "blockedSlot"
     UNDESIRABLE_SLOT = "undesirableSlot"
 
     @staticmethod
-    def assigned_slot(timeslot: str, unit: str, session_type: str, room: str) -> str:
-        return f"{ClingoConstants.ASSIGNED_SLOT}({timeslot},{unit},{session_type},{room})"
+    def scheduled_session(timeslot: str, session: str) -> str:
+        return f"{ClingoPredicates.SCHEDULED_SESSION}({timeslot},{session})"
 
     @staticmethod
-    def used_room(timeslot: str, room: str, room_type: str, session_type: str) -> str:
-        return f"{ClingoConstants.USED_ROOM}({timeslot},{room},{room_type},{session_type})"
+    def assigned_slot(timeslot: str, session: str, room: str) -> str:
+        return f"{ClingoPredicates.ASSIGNED_SLOT}({timeslot},{session},{room})"
 
     @staticmethod
     def timeslot(timeslot: str) -> str:
-        return f"timeslot({timeslot})"
+        return f"{ClingoPredicates.TIMESLOT}({timeslot})"
 
     @staticmethod
-    def room(room: str, room_type: str, room_capacity: int) -> str:
-        return f"room({room},{room_type},{room_capacity})"
+    def room(room: str, room_capacity: int) -> str:
+        return f"{ClingoPredicates.ROOM}({room},{room_capacity})"
+
+    @staticmethod
+    def room_type(room: str, room_type: str) -> str:
+        return f"{ClingoPredicates.ROOM_TYPE}({room},{room_type})"
 
     @staticmethod
     def session(session: str, session_type: str, session_duration: int):
-        return f"session({session},{session_type},{session_duration})"
+        return f"{ClingoPredicates.SESSION}({session},{session_type},{session_duration})"
 
 
 class ClingoNaming:
+    ROOM = "room"
+    SESSION = "session"
+    SESSION_TYPE = "st"
+
     @staticmethod
     def room_to_clingo(room: Room) -> str:
-        return f"room_{room.id.hex}"
+        return f"{ClingoNaming.ROOM}_{room.id.hex}"
 
     @staticmethod
     def session_to_clingo(session: Session) -> str:
-        return f"session_{session.id.hex}"
+        return f"{ClingoNaming.SESSION}_{session.id.hex}"
 
     @staticmethod
     def session_type_to_clingo(session_type: str) -> str:
-        return f"st_{session_type}"
+        return f"{ClingoNaming.SESSION_TYPE}_{session_type}"
