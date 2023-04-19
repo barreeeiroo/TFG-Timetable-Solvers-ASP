@@ -2,6 +2,9 @@
 
 FROM python:3.9-slim-bullseye
 
+RUN apt-get update && apt-get install -y \
+  gringo
+
 WORKDIR /app
 
 COPY requirements.txt requirements.txt
