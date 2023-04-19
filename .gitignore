@@ -157,3 +157,6 @@ cython_debug/
 
 # Submodules
 *.iml
+
+# Packaged Docker
+docker/
