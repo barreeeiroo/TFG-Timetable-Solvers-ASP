@@ -97,10 +97,10 @@ class ConstraintRules:
 
     @staticmethod
     def exclude_sessions_scheduled_in_same_overlapping_timeslot() -> str:
-        assigned_slot_one = ClP.assigned_slot(ClV.TIMESLOT, f"{ClV.SESSION}1", ClV.ANY)
-        assigned_slot_two = ClP.assigned_slot(ClV.TIMESLOT, f"{ClV.SESSION}2", ClV.ANY)
+        scheduled_session_one = ClP.scheduled_session(ClV.TIMESLOT, f"{ClV.SESSION}1")
+        scheduled_session_two = ClP.scheduled_session(ClV.TIMESLOT, f"{ClV.SESSION}2")
         no_overlap = ClP.no_timeslot_overlap_in_sessions(f"{ClV.SESSION}1", f"{ClV.SESSION}2")
-        return f":- {assigned_slot_one}, {assigned_slot_two}, {no_overlap}."
+        return f":- {scheduled_session_one}, {scheduled_session_two}, {no_overlap}."
 
     @staticmethod
     def exclude_sessions_scheduled_in_non_contiguous_timeslots() -> str:
