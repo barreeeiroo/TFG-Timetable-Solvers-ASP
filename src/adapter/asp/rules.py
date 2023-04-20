@@ -12,6 +12,20 @@ class FactRules:
         return f"{ClP.timeslot(f'1..{total_slot_count}')}."
 
     @staticmethod
+    def generate_day_breaks(week: Week) -> List[str]:
+        total_slots = week.get_total_slot_count()
+        slots_per_day = week.get_slots_per_day_count()
+        num_days = int(total_slots / slots_per_day)
+
+        statements: List[str] = []
+        for i in range(1, num_days):
+            day_end = slots_per_day * i
+            next_day_start = day_end + 1
+            statement = ClP.break_session_timeslot(day_end, next_day_start)
+            statements.append(f"{statement}.")
+        return statements
+
+    @staticmethod
     def generate_rooms(rooms: List[Room]) -> List[str]:
         statements: List[str] = []
         for room in rooms:
@@ -103,6 +117,13 @@ class ConstraintRules:
         return f":- {scheduled_session_one}, {scheduled_session_two}, {no_overlap}."
 
     @staticmethod
+    def exclude_sessions_scheduled_in_different_days() -> str:
+        scheduled_session_one = ClP.scheduled_session(f"{ClV.TIMESLOT}1", ClV.SESSION)
+        scheduled_session_two = ClP.scheduled_session(f"{ClV.TIMESLOT}2", ClV.SESSION)
+        no_overlap = ClP.break_session_timeslot(f"{ClV.TIMESLOT}1", f"{ClV.TIMESLOT}2")
+        return f":- {scheduled_session_one}, {scheduled_session_two}, {no_overlap}."
+
+    @staticmethod
     def exclude_sessions_scheduled_in_non_contiguous_timeslots() -> str:
         scheduled_session_one = ClP.scheduled_session(f"{ClV.TIMESLOT}1", ClV.SESSION)
         scheduled_session_two = ClP.scheduled_session(f"{ClV.TIMESLOT}2", ClV.SESSION)
@@ -135,6 +156,7 @@ class Rules:
             FactRules.generate_timeslot(self.week.get_total_slot_count()),
         ]
 
+        statements.extend(FactRules.generate_day_breaks(self.week))
         statements.extend(FactRules.generate_rooms(self.rooms))
         statements.extend(FactRules.generate_room_types(self.rooms))
         statements.extend(FactRules.generate_sessions(self.sessions, self.week))
@@ -159,6 +181,7 @@ class Rules:
             ConstraintRules.exclude_more_than_one_session_in_same_room_and_timeslot(),
             ConstraintRules.exclude_same_session_in_different_room(),
             ConstraintRules.exclude_sessions_scheduled_in_same_overlapping_timeslot(),
+            ConstraintRules.exclude_sessions_scheduled_in_different_days(),
             ConstraintRules.exclude_sessions_scheduled_in_non_contiguous_timeslots(),
             ConstraintRules.exclude_sessions_which_are_isolated_from_other(),
         ])
