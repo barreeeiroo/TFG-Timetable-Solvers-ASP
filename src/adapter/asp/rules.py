@@ -102,6 +102,19 @@ class ConstraintRules:
         no_overlap = ClP.no_timeslot_overlap_in_sessions(f"{ClV.SESSION}1", f"{ClV.SESSION}2")
         return f":- {assigned_slot_one}, {assigned_slot_two}, {no_overlap}."
 
+    @staticmethod
+    def exclude_sessions_scheduled_in_non_contiguous_timeslots() -> str:
+        scheduled_session_one = ClP.scheduled_session(f"{ClV.TIMESLOT}1", ClV.SESSION)
+        scheduled_session_two = ClP.scheduled_session(f"{ClV.TIMESLOT}2", ClV.SESSION)
+        scheduled_sessions = f"{scheduled_session_one}, {scheduled_session_two}"
+
+        comparison = f"{ClV.TIMESLOT}1 + 1 < {ClV.TIMESLOT}2"
+
+        contiguousness_rule = f"{ClV.TIMESLOT}1+1..{ClV.TIMESLOT}2-1"
+        contiguous_sessions = f"{ClP.scheduled_session(ClV.TIMESLOT, ClV.SESSION)} : T = {contiguousness_rule}"
+
+        return f":- {scheduled_sessions}, {comparison}, not {contiguous_sessions}."
+
 
 class Rules:
     def __init__(self, week: Week, sessions: List[Session], rooms: List[Room]):
@@ -138,6 +151,7 @@ class Rules:
             ConstraintRules.exclude_more_than_one_session_in_same_room_and_timeslot(),
             ConstraintRules.exclude_same_session_in_different_room(),
             ConstraintRules.exclude_sessions_scheduled_in_same_overlapping_timeslot(),
+            ConstraintRules.exclude_sessions_scheduled_in_non_contiguous_timeslots(),
         ])
 
     def generate_asp_problem(self) -> str:
