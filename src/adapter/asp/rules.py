@@ -113,7 +113,15 @@ class ConstraintRules:
         contiguousness_rule = f"{ClV.TIMESLOT}1+1..{ClV.TIMESLOT}2-1"
         contiguous_sessions = f"{ClP.scheduled_session(ClV.TIMESLOT, ClV.SESSION)} : T = {contiguousness_rule}"
 
-        return f":- {scheduled_sessions}, {comparison}, not {contiguous_sessions}."
+        # Too costly, avoid...
+        return f"% :- {scheduled_sessions}, {comparison}, not {contiguous_sessions}."
+
+    @staticmethod
+    def exclude_sessions_which_are_isolated_from_other() -> str:
+        scheduled_session = ClP.scheduled_session(ClV.TIMESLOT, ClV.SESSION)
+        scheduled_session_one = ClP.scheduled_session(f"{ClV.TIMESLOT}-1", ClV.SESSION)
+        scheduled_session_two = ClP.scheduled_session(f"{ClV.TIMESLOT}+1", ClV.SESSION)
+        return f":- {scheduled_session}, not {scheduled_session_one}, not {scheduled_session_two}."
 
 
 class Rules:
@@ -152,6 +160,7 @@ class Rules:
             ConstraintRules.exclude_same_session_in_different_room(),
             ConstraintRules.exclude_sessions_scheduled_in_same_overlapping_timeslot(),
             ConstraintRules.exclude_sessions_scheduled_in_non_contiguous_timeslots(),
+            ConstraintRules.exclude_sessions_which_are_isolated_from_other(),
         ])
 
     def generate_asp_problem(self) -> str:
