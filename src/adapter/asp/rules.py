@@ -39,6 +39,20 @@ class FactRules:
             statements.append(f"{clingo_session}.")
         return statements
 
+    @staticmethod
+    def generate_no_overlapping_sessions(sessions: List[Session]) -> List[str]:
+        statements: List[str] = []
+        for session in sessions:
+            for no_overlapping_session_uuid in session.constraints.cannot_conflict_in_time:
+                session1, session2 = sorted((
+                    ClN.session_to_clingo(session),
+                    ClN.session_to_clingo(no_overlapping_session_uuid),
+                ))
+                statement = f"{ClP.no_timeslot_overlap_in_sessions(session1, session2)}."
+                if statement not in statements:
+                    statements.append(statement)
+        return statements
+
 
 class ChoiceRules:
     @staticmethod
@@ -81,6 +95,13 @@ class ConstraintRules:
         condition = f"{ClV.ROOM}1 != {ClV.ROOM}2"
         return f":- {assigned_slot_one}, {assigned_slot_two}, {condition}."
 
+    @staticmethod
+    def exclude_sessions_scheduled_in_same_overlapping_timeslot() -> str:
+        assigned_slot_one = ClP.assigned_slot(ClV.TIMESLOT, f"{ClV.SESSION}1", ClV.ANY)
+        assigned_slot_two = ClP.assigned_slot(ClV.TIMESLOT, f"{ClV.SESSION}2", ClV.ANY)
+        no_overlap = ClP.no_timeslot_overlap_in_sessions(f"{ClV.SESSION}1", f"{ClV.SESSION}2")
+        return f":- {assigned_slot_one}, {assigned_slot_two}, {no_overlap}."
+
 
 class Rules:
     def __init__(self, week: Week, sessions: List[Session], rooms: List[Room]):
@@ -96,6 +117,7 @@ class Rules:
         statements.extend(FactRules.generate_rooms(self.rooms))
         statements.extend(FactRules.generate_room_types(self.rooms))
         statements.extend(FactRules.generate_sessions(self.sessions, self.week))
+        statements.extend(FactRules.generate_no_overlapping_sessions(self.sessions))
 
         return "\n".join(statements)
 
@@ -115,6 +137,7 @@ class Rules:
         return "\n".join([
             ConstraintRules.exclude_more_than_one_session_in_same_room_and_timeslot(),
             ConstraintRules.exclude_same_session_in_different_room(),
+            ConstraintRules.exclude_sessions_scheduled_in_same_overlapping_timeslot(),
         ])
 
     def generate_asp_problem(self) -> str:

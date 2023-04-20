@@ -20,9 +20,9 @@ class AspSolver(Solver):
         else:
             print(asp_problem)
 
+        answers = solve(inline=asp_problem, use_clingo_module=False)
         solution = None
-        for answer, optimization, optimality, answer_number in solve(inline=asp_problem,
-                                                                     use_clingo_module=False).with_answer_number:
+        for answer, optimization, optimality, answer_number in answers.with_answer_number:
             solution = answer
             break
 

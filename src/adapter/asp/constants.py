@@ -1,3 +1,6 @@
+from typing import Union
+from uuid import UUID
+
 from models.room import Room
 from models.session import Session
 
@@ -22,6 +25,7 @@ class ClingoPredicates:
 
     ASSIGNED_SLOT = "assignedSlot"
     SCHEDULED_SESSION = "scheduledSession"
+    NO_TIMESLOT_OVERLAP_IN_SESSIONS = "noTimeslotOverlapInSessions"
     USED_ROOM = "usedRoom"
     BLOCKED_SLOT = "blockedSlot"
     UNDESIRABLE_SLOT = "undesirableSlot"
@@ -33,6 +37,10 @@ class ClingoPredicates:
     @staticmethod
     def assigned_slot(timeslot: str, session: str, room: str) -> str:
         return f"{ClingoPredicates.ASSIGNED_SLOT}({timeslot},{session},{room})"
+
+    @staticmethod
+    def no_timeslot_overlap_in_sessions(session1: str, session2: str) -> str:
+        return f"{ClingoPredicates.NO_TIMESLOT_OVERLAP_IN_SESSIONS}({session1},{session2})"
 
     @staticmethod
     def timeslot(timeslot: str) -> str:
@@ -61,7 +69,9 @@ class ClingoNaming:
         return f"{ClingoNaming.ROOM}_{room.id.hex}"
 
     @staticmethod
-    def session_to_clingo(session: Session) -> str:
+    def session_to_clingo(session: Union[Session, UUID]) -> str:
+        if isinstance(session, UUID):
+            return f"{ClingoNaming.SESSION}_{session.hex}"
         return f"{ClingoNaming.SESSION}_{session.id.hex}"
 
     @staticmethod
