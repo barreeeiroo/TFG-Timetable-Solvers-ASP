@@ -140,9 +140,14 @@ class ConstraintRules:
     @staticmethod
     def exclude_sessions_which_are_isolated_from_other() -> str:
         scheduled_session = ClP.scheduled_session(ClV.TIMESLOT, ClV.SESSION)
+
         scheduled_session_one = ClP.scheduled_session(f"{ClV.TIMESLOT}-1", ClV.SESSION)
         scheduled_session_two = ClP.scheduled_session(f"{ClV.TIMESLOT}+1", ClV.SESSION)
-        return f":- {scheduled_session}, not {scheduled_session_one}, not {scheduled_session_two}."
+        excluded_sessions = f"not {scheduled_session_one}, not {scheduled_session_two}"
+
+        single_slot_session = f"{ClP.session(ClV.SESSION, ClV.ANY, ClV.SESSION_DURATION)}, {ClV.SESSION_DURATION} > 1"
+
+        return f":- {scheduled_session}, {excluded_sessions}, {single_slot_session}."
 
 
 class Rules:

@@ -3,9 +3,9 @@ room(r1,-1).
 room(r2,-1).
 roomType(r1,st_CLE).
 roomType(r2,st_CLE).
-roomType(r2,st_CLIL).
 session(s1,st_CLE,2).
 session(s2,st_CLE,2).
+session(s3,st_CLE,1).
 noOverlap(s1,s3).
 breakSessionTimeslot(2,3).
 
@@ -19,6 +19,6 @@ H { scheduledSession(T,S) : timeslot(T) } H :- session(S,_,H).
 :- scheduledSession(T,S1), scheduledSession(T,S2), noTimeslotOverlapInSessions(S1,S2).
 :- scheduledSession(T1,S), scheduledSession(T2,S), breakSessionTimeslot(T1,T2).
 % :- scheduledSession(T1,S), scheduledSession(T2,S), T1 + 1 < T2, not scheduledSession(T,S) : T = T1+1..T2-1.
-:- scheduledSession(T,S), not scheduledSession(T-1,S), not scheduledSession(T+1,S).
+:- scheduledSession(T,S), not scheduledSession(T-1,S), not scheduledSession(T+1,S), session(S,_,H), H > 1.
 
 #show assignedSlot/3.
