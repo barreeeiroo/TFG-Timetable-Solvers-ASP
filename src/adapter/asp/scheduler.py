@@ -1,7 +1,7 @@
 from clyngor import solve
 
-from adapter.asp.rules import Rules
 from adapter.asp.constants import ClingoNaming as ClN
+from adapter.asp.rules import Rules
 from adapter.time.week import Week
 from models.dto.output import Output
 from models.schedule import ScheduleUnit
@@ -30,7 +30,9 @@ class AspSolver(Solver):
             raise RuntimeError("Could not generate schedule; a valid solution could not be returned")
 
         if self._execution_uuid is not None:
-            save_txt_file(self._execution_uuid, "asp_solution", solution)
+            lines = [f"{timeslot}\t{clingo_session}\t{clingo_room}\n"
+                     for _, (timeslot, clingo_session, clingo_room) in solution]
+            save_txt_file(self._execution_uuid, "asp_solution", "".join(lines))
         else:
             print("---")
             print(solution)
