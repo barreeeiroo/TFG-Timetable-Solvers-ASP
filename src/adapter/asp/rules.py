@@ -12,6 +12,10 @@ class FactRules:
         return f"{ClP.timeslot(f'1..{total_slot_count}')}."
 
     @staticmethod
+    def contiguous_timeslots() -> str:
+        return f"{ClP.contiguous_timeslot('1;-1')}."
+
+    @staticmethod
     def generate_day_breaks(week: Week) -> List[str]:
         total_slots = week.get_total_slot_count()
         slots_per_day = week.get_slots_per_day_count()
@@ -91,7 +95,26 @@ class ChoiceRules:
 
 
 class NormalRules:
-    pass
+    @staticmethod
+    def generate_scheduled_session_chains() -> List[str]:
+        def first_normal_rule() -> str:
+            scheduled_chain = ClP.scheduled_session_chain(ClV.SESSION, ClV.TIMESLOT, ClV.CONTIGUOUS_TIMESLOT)
+            scheduled_session = ClP.scheduled_session(ClV.TIMESLOT, ClV.SESSION)
+            timeslot = ClP.timeslot(f"{ClV.TIMESLOT}+{ClV.CONTIGUOUS_TIMESLOT}")
+            contiguous_timeslot = ClP.contiguous_timeslot(ClV.CONTIGUOUS_TIMESLOT)
+            return f"{scheduled_chain} :- {scheduled_session}, {timeslot}, {contiguous_timeslot}."
+
+        def second_normal_rule() -> str:
+            scheduled_chain_left = ClP.scheduled_session_chain(ClV.SESSION, f"{ClV.TIMESLOT}+{ClV.CONTIGUOUS_TIMESLOT}",
+                                                               ClV.CONTIGUOUS_TIMESLOT)
+            scheduled_chain_right = ClP.scheduled_session_chain(ClV.SESSION, ClV.TIMESLOT, ClV.CONTIGUOUS_TIMESLOT)
+            timeslot = ClP.timeslot(f"{ClV.TIMESLOT}+{ClV.CONTIGUOUS_TIMESLOT}")
+            return f"{scheduled_chain_left} :- {scheduled_chain_right}, {timeslot}."
+
+        return [
+            first_normal_rule(),
+            second_normal_rule(),
+        ]
 
 
 class ConstraintRules:
@@ -138,6 +161,14 @@ class ConstraintRules:
         return f"% :- {scheduled_sessions}, {comparison}, not {contiguous_sessions}."
 
     @staticmethod
+    def exclude_sessions_scheduled_in_non_contiguous_timeslots_alt() -> str:
+        scheduled_chain_one = ClP.scheduled_session_chain(ClV.SESSION, ClV.TIMESLOT, -1)
+        scheduled_session = ClP.scheduled_session(ClV.TIMESLOT, ClV.SESSION)
+        scheduled_chain_two = ClP.scheduled_session_chain(ClV.SESSION, ClV.TIMESLOT, 1)
+
+        return f":- {scheduled_chain_one}, not {scheduled_session}, {scheduled_chain_two}."
+
+    @staticmethod
     def exclude_sessions_which_are_isolated_from_other() -> str:
         scheduled_session = ClP.scheduled_session(ClV.TIMESLOT, ClV.SESSION)
 
@@ -149,6 +180,24 @@ class ConstraintRules:
 
         return f":- {scheduled_session}, {excluded_sessions}, {single_slot_session}."
 
+    @staticmethod
+    def exclude_sessions_which_are_isolated_from_other_alt(sessions: List[Session], week: Week) -> List[str]:
+        max_slots = max([week.get_slots_count_for_timedelta(session.constraints.duration) for session in sessions])
+
+        statements = []
+        for i in range(1, max_slots):
+            scheduled_session = ClP.scheduled_session(ClV.TIMESLOT, ClV.SESSION)
+
+            excluded_session_one = ClP.scheduled_session(f"{ClV.TIMESLOT}+{i}", ClV.SESSION)
+            excluded_session_two = ClP.scheduled_session(f"{ClV.TIMESLOT}-{i}", ClV.SESSION)
+
+            base_statement = f"{scheduled_session}, not {excluded_session_one}, not {excluded_session_two}"
+            session_slot = f"{ClP.session(ClV.SESSION, ClV.ANY, ClV.SESSION_DURATION)}, {ClV.SESSION_DURATION} > {i}"
+            # See exclude_sessions_which_are_isolated_from_other
+            statements.append(f"% :- {base_statement}, {session_slot}.")
+
+        return statements
+
 
 class Rules:
     def __init__(self, week: Week, sessions: List[Session], rooms: List[Room]):
@@ -159,6 +208,7 @@ class Rules:
     def __generate_facts(self) -> str:
         statements: List[str] = [
             FactRules.generate_timeslot(self.week.get_total_slot_count()),
+            FactRules.contiguous_timeslots(),
         ]
 
         statements.extend(FactRules.generate_day_breaks(self.week))
@@ -178,24 +228,32 @@ class Rules:
 
     @staticmethod
     def __generate_normals() -> str:
-        return "\n".join([])
+        statements = []
 
-    @staticmethod
-    def __generate_constraints() -> str:
-        return "\n".join([
+        statements.extend(NormalRules.generate_scheduled_session_chains())
+
+        return "\n".join(statements)
+
+    def __generate_constraints(self) -> str:
+        statements = [
             ConstraintRules.exclude_more_than_one_session_in_same_room_and_timeslot(),
             ConstraintRules.exclude_same_session_in_different_room(),
             ConstraintRules.exclude_sessions_scheduled_in_same_overlapping_timeslot(),
             ConstraintRules.exclude_sessions_scheduled_in_different_days(),
             ConstraintRules.exclude_sessions_scheduled_in_non_contiguous_timeslots(),
+            ConstraintRules.exclude_sessions_scheduled_in_non_contiguous_timeslots_alt(),
             ConstraintRules.exclude_sessions_which_are_isolated_from_other(),
-        ])
+        ]
+
+        statements.extend(ConstraintRules.exclude_sessions_which_are_isolated_from_other_alt(self.sessions, self.week))
+
+        return "\n".join(statements)
 
     def generate_asp_problem(self) -> str:
         facts = self.__generate_facts()
         choices = Rules.__generate_choices()
         normals = Rules.__generate_normals()
-        constraints = Rules.__generate_constraints()
+        constraints = self.__generate_constraints()
 
         return "\n\n".join([
             facts,
