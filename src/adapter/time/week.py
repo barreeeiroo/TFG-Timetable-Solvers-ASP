@@ -47,7 +47,7 @@ class Week:
     def get_slot_by_number(self, number: int) -> Slot:
         slots_per_day = self.get_slots_per_day_count()
         day = math.floor(number / slots_per_day)
-        return self.slots[day][number - slots_per_day * day]
+        return self.slots[day + 1][number - slots_per_day * day]
 
     def print_available_slots(self):
         self.__print_slots()
@@ -62,7 +62,7 @@ class Week:
                     continue
                 if undesirable and slot.slot_type != SlotType.UNDESIRABLE:
                     continue
-                print(f"{calendar.day_name[day]}: {slot}")
+                print(f"{calendar.day_name[day - 1]}: {slot}")
 
     def __repr__(self):
         return f"Week({self.get_total_slot_count()})"
