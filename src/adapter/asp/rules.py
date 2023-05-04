@@ -120,6 +120,19 @@ class NormalRules:
 
 class ConstraintRules:
     @staticmethod
+    def exclude_blocked_timeslots(week: Week) -> List[str]:
+        blocked_slots: List[int] = week.get_slot_ids_per_type(SlotType.BLOCKED)
+        if not blocked_slots:
+            return []
+
+        statements = []
+        for blocked_slot in blocked_slots:
+            stmt = f"{ClP.BLOCKED_SLOT} :- {ClP.assigned_slot(str(blocked_slot), ClV.ANY, ClV.ANY)}."
+            statements.append(stmt)
+        statements.append(f":- {ClP.BLOCKED_SLOT}.")
+        return statements
+
+    @staticmethod
     def exclude_more_than_one_session_in_same_room_and_timeslot() -> str:
         assigned_slot = ClP.assigned_slot(ClV.TIMESLOT, ClV.SESSION, ClV.ROOM)
         session = ClP.session(ClV.SESSION, ClV.ANY, ClV.ANY)
@@ -200,6 +213,26 @@ class ConstraintRules:
         return statements
 
 
+class PenaltyRules:
+    @staticmethod
+    def avoid_undesirable_slots(week: Week) -> List[str]:
+        statements = []
+        assigned_slot = ClP.assigned_slot(ClV.TIMESLOT, ClV.ANY, ClV.ANY)
+
+        undesirable_penalties = {
+            SlotType.UNDESIRABLE_1: SlotPenalties.UNDESIRABLE_1,
+            SlotType.UNDESIRABLE_2: SlotPenalties.UNDESIRABLE_2,
+            SlotType.UNDESIRABLE_5: SlotPenalties.UNDESIRABLE_5,
+        }
+
+        for slot_type, penalty_amount in undesirable_penalties.values():
+            for blocked_slot in week.get_slot_ids_per_type(slot_type):
+                penalty = f"{ClV.TIMESLOT} == {blocked_slot}.[{penalty_amount},{ClV.TIMESLOT}]"
+                statements.append(f":~ {assigned_slot}, {penalty}")
+
+        return statements
+
+
 class Rules:
     def __init__(self, week: Week, sessions: List[Session], rooms: List[Room]):
         self.sessions = sessions
@@ -236,7 +269,11 @@ class Rules:
         return "\n".join(statements)
 
     def __generate_constraints(self) -> str:
-        statements = [
+        statements = []
+
+        statements.extend(ConstraintRules.exclude_blocked_timeslots(self.week))
+
+        statements.extend([
             ConstraintRules.exclude_more_than_one_session_in_same_room_and_timeslot(),
             ConstraintRules.exclude_same_session_in_different_room(),
             ConstraintRules.exclude_sessions_scheduled_in_same_overlapping_timeslot(),
@@ -244,9 +281,16 @@ class Rules:
             ConstraintRules.exclude_sessions_scheduled_in_non_contiguous_timeslots(),
             ConstraintRules.exclude_sessions_scheduled_in_non_contiguous_timeslots_alt(),
             ConstraintRules.exclude_sessions_which_are_isolated_from_other(),
-        ]
+        ])
 
         statements.extend(ConstraintRules.exclude_sessions_which_are_isolated_from_other_alt(self.sessions, self.week))
+
+        return "\n".join(statements)
+
+    def __generate_penalties(self) -> str:
+        statements = []
+
+        statements.extend(PenaltyRules.avoid_undesirable_slots(self.week))
 
         return "\n".join(statements)
 
@@ -276,40 +320,3 @@ class Rules2:
         used_room = ClP.used_room(ClV.TIMESLOT, ClV.ROOM, ClV.ROOM_TYPE, ClV.SESSION_TYPE)
         condition = f"{ClV.ROOM_TYPE} != {ClV.SESSION_TYPE}"
         return f":~ {used_room}, {condition}.[{penality_amount},{ClV.TIMESLOT}]"
-
-    def __get_slot_ids_per_type(self, desired_slot_type: SlotType) -> List[int]:
-        slot_ids: List[int] = []
-        for week_day, slots in self.__week.slots.items():
-            offset = week_day * self.__week.get_slots_per_day_count()
-            for slot_id, slot in enumerate(slots):
-                if slot.slot_type == desired_slot_type:
-                    slot_ids.append(offset + slot_id)
-        return slot_ids
-
-    def generate_undesirable_slots(self) -> List[str]:
-        statements = []
-        assigned_slot = ClP.assigned_slot(ClV.TIMESLOT, ClV.ANY, ClV.ANY)
-
-        undesirable_penalties = {
-            SlotType.UNDESIRABLE_1: SlotPenalties.UNDESIRABLE_1,
-            SlotType.UNDESIRABLE_2: SlotPenalties.UNDESIRABLE_2,
-            SlotType.UNDESIRABLE_5: SlotPenalties.UNDESIRABLE_5,
-        }
-
-        for slot_type, penalty_amount in undesirable_penalties.values():
-            for blocked_slot in self.__get_slot_ids_per_type(slot_type):
-                penalty = f"{ClV.TIMESLOT} == {blocked_slot}.[{penalty_amount},{ClV.TIMESLOT}]"
-                statements.append(f":~ {assigned_slot}, {penalty}")
-        return statements
-
-    def generate_blocked_slots(self) -> List[str]:
-        blocked_slots: List[int] = self.__get_slot_ids_per_type(SlotType.BLOCKED)
-        if not blocked_slots:
-            return []
-
-        statements = []
-        for blocked_slot in blocked_slots:
-            stmt = f"{ClP.BLOCKED_SLOT} :- {ClP.assigned_slot(str(blocked_slot), ClV.ANY, ClV.ANY)}."
-            statements.append(stmt)
-        statements.append(f":- {ClP.BLOCKED_SLOT}.")
-        return statements
