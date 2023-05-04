@@ -1,6 +1,7 @@
 from typing import List
 
 from adapter.asp.constants import ClingoNaming as ClN, ClingoPredicates as ClP, ClingoVariables as ClV
+from adapter.asp.penalties import SlotPenalties
 from adapter.time.week import Week
 from models.dto.input import Room, Session
 from models.slot import SlotType
@@ -290,9 +291,9 @@ class Rules2:
         assigned_slot = ClP.assigned_slot(ClV.TIMESLOT, ClV.ANY, ClV.ANY)
 
         undesirable_penalties = {
-            SlotType.UNDESIRABLE_1: 10,
-            SlotType.UNDESIRABLE_2: 20,
-            SlotType.UNDESIRABLE_5: 50,
+            SlotType.UNDESIRABLE_1: SlotPenalties.UNDESIRABLE_1,
+            SlotType.UNDESIRABLE_2: SlotPenalties.UNDESIRABLE_2,
+            SlotType.UNDESIRABLE_5: SlotPenalties.UNDESIRABLE_5,
         }
 
         for slot_type, penalty_amount in undesirable_penalties.values():
