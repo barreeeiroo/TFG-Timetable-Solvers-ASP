@@ -1,7 +1,7 @@
 from typing import List
 
 from adapter.asp.constants import ClingoNaming as ClN, ClingoPredicates as ClP, ClingoVariables as ClV
-from adapter.asp.penalties import SlotPenalties
+from adapter.asp.penalties import PenaltyNames, SlotPenalties
 from adapter.time.week import Week
 from models.dto.input import Room, Session
 from models.slot import SlotType
@@ -15,6 +15,21 @@ class FactRules:
     @staticmethod
     def contiguous_timeslots() -> str:
         return f"{ClP.contiguous_timeslot('1;-1')}."
+
+    @staticmethod
+    def generate_undesirable_timeslots(week: Week) -> List[str]:
+        undesirable_penalties = {
+            SlotType.UNDESIRABLE_1: SlotPenalties.UNDESIRABLE_1,
+            SlotType.UNDESIRABLE_2: SlotPenalties.UNDESIRABLE_2,
+            SlotType.UNDESIRABLE_5: SlotPenalties.UNDESIRABLE_5,
+        }
+
+        statements = []
+        for slot_type, penalty_amount in undesirable_penalties.items():
+            for slot in week.get_slot_ids_per_type(slot_type):
+                undesirable_timeslot = ClP.undesirable_timeslot(slot, penalty_amount)
+                statements.append(f"{undesirable_timeslot}.")
+        return statements
 
     @staticmethod
     def generate_day_breaks(week: Week) -> List[str]:
@@ -214,22 +229,23 @@ class ConstraintRules:
 
 class PenaltyRules:
     @staticmethod
-    def avoid_undesirable_slots(week: Week) -> List[str]:
-        statements = []
+    def avoid_undesirable_timeslots() -> str:
+        penalty = ClP.penalty(PenaltyNames.UNDESIRABLE_TIMESLOT, ClV.PENALTY_COST, 1, 0)
+        undesirable_timeslot = ClP.undesirable_timeslot(ClV.TIMESLOT, ClV.PENALTY_COST)
         assigned_slot = ClP.assigned_slot(ClV.TIMESLOT, ClV.ANY, ClV.ANY)
+        return f"{penalty} :- {assigned_slot}, {undesirable_timeslot}."
 
-        undesirable_penalties = {
-            SlotType.UNDESIRABLE_1: SlotPenalties.UNDESIRABLE_1,
-            SlotType.UNDESIRABLE_2: SlotPenalties.UNDESIRABLE_2,
-            SlotType.UNDESIRABLE_5: SlotPenalties.UNDESIRABLE_5,
-        }
 
-        for slot_type, penalty_amount in undesirable_penalties.items():
-            for blocked_slot in week.get_slot_ids_per_type(slot_type):
-                penalty = f"{ClV.TIMESLOT} == {blocked_slot}.[{penalty_amount},{ClV.TIMESLOT}]"
-                statements.append(f":~ {assigned_slot}, {penalty}")
+class Directives:
+    @staticmethod
+    def generate_penalty_definition() -> str:
+        penalty_calc = f"{ClV.PENALTY_COST}@{ClV.PENALTY_PRIORITY},{ClV.PENALTY_VALUE},{ClV.PENALTY_NAME}"
+        penalty = ClP.penalty(ClV.PENALTY_NAME, ClV.PENALTY_COST, ClV.PENALTY_VALUE, ClV.PENALTY_PRIORITY)
+        return f"#minimize {{ {penalty_calc} : {penalty} }}."
 
-        return statements
+    @staticmethod
+    def generate_show() -> str:
+        return f"#show {ClP.ASSIGNED_SLOT}/3."
 
 
 class Rules:
@@ -243,10 +259,12 @@ class Rules:
             FactRules.generate_timeslot(self.week.get_total_slot_count()),
             FactRules.contiguous_timeslots(),
         ]
-
+        statements.extend(FactRules.generate_undesirable_timeslots(self.week))
         statements.extend(FactRules.generate_day_breaks(self.week))
+
         statements.extend(FactRules.generate_rooms(self.rooms))
         statements.extend(FactRules.generate_room_types(self.rooms))
+
         statements.extend(FactRules.generate_sessions(self.sessions, self.week))
         statements.extend(FactRules.generate_no_overlapping_sessions(self.sessions))
 
@@ -286,19 +304,26 @@ class Rules:
 
         return "\n".join(statements)
 
-    def __generate_penalties(self) -> str:
-        statements = []
+    @staticmethod
+    def __generate_penalties() -> str:
+        return "\n".join([
+            PenaltyRules.avoid_undesirable_timeslots(),
+        ])
 
-        statements.extend(PenaltyRules.avoid_undesirable_slots(self.week))
-
-        return "\n".join(statements)
+    @staticmethod
+    def __generate_directives() -> str:
+        return "\n".join([
+            Directives.generate_penalty_definition(),
+            Directives.generate_show(),
+        ])
 
     def generate_asp_problem(self) -> str:
         facts = self.__generate_facts()
         choices = Rules.__generate_choices()
         normals = Rules.__generate_normals()
         constraints = self.__generate_constraints()
-        penalties = self.__generate_penalties()
+        penalties = Rules.__generate_penalties()
+        directives = Rules.__generate_directives()
 
         return "\n\n".join([
             facts,
@@ -306,7 +331,7 @@ class Rules:
             normals,
             constraints,
             penalties,
-            f"#show {ClP.ASSIGNED_SLOT}/3.",
+            directives,
         ])
 
 

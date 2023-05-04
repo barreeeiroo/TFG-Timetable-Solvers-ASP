@@ -16,6 +16,10 @@ class ClingoVariables:
     ROOM = "R"
     ROOM_TYPE = "RT"
     ROOM_CAPACITY = "RC"
+    PENALTY_NAME = "PN"
+    PENALTY_COST = "PC"
+    PENALTY_VALUE = "PV"
+    PENALTY_PRIORITY = "PP"
 
 
 class ClingoPredicates:
@@ -31,6 +35,9 @@ class ClingoPredicates:
     NO_TIMESLOT_OVERLAP_IN_SESSIONS = "noTimeslotOverlapInSessions"
     BREAK_SESSION_TIMESLOT = "breakSessionTimeslot"
     USED_ROOM = "usedRoom"
+    UNDESIRABLE_TIMESLOT = "undesirableTimeslot"
+
+    PENALTY = "penalty"
 
     @staticmethod
     def scheduled_session(timeslot: str, session: str) -> str:
@@ -71,6 +78,14 @@ class ClingoPredicates:
     @staticmethod
     def contiguous_timeslot(ct: Union[int, str]):
         return f"{ClingoPredicates.CONTIGUOUS_TIMESLOT}({ct})"
+
+    @staticmethod
+    def undesirable_timeslot(timeslot: Union[str, int], penalty: Union[str, int]):
+        return f"{ClingoPredicates.UNDESIRABLE_TIMESLOT}({timeslot},{penalty})"
+
+    @staticmethod
+    def penalty(name: str, cost: Union[str, int], value: Union[str, int], priority: Union[str, int]):
+        return f"{ClingoPredicates.PENALTY}({name},{cost},{value},{priority})"
 
 
 class ClingoNaming:
