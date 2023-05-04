@@ -285,12 +285,20 @@ class Rules2:
                     slot_ids.append(offset + slot_id)
         return slot_ids
 
-    def generate_undesirable_slots(self, penalty_amount: int = 10) -> List[str]:
+    def generate_undesirable_slots(self) -> List[str]:
         statements = []
         assigned_slot = ClP.assigned_slot(ClV.TIMESLOT, ClV.ANY, ClV.ANY)
-        for blocked_slot in self.__get_slot_ids_per_type(SlotType.UNDESIRABLE):
-            penalty = f"{ClV.TIMESLOT} == {blocked_slot}.[{penalty_amount},{ClV.TIMESLOT}]"
-            statements.append(f":~ {assigned_slot}, {penalty}")
+
+        undesirable_penalties = {
+            SlotType.UNDESIRABLE_1: 10,
+            SlotType.UNDESIRABLE_2: 20,
+            SlotType.UNDESIRABLE_5: 50,
+        }
+
+        for slot_type, penalty_amount in undesirable_penalties.values():
+            for blocked_slot in self.__get_slot_ids_per_type(slot_type):
+                penalty = f"{ClV.TIMESLOT} == {blocked_slot}.[{penalty_amount},{ClV.TIMESLOT}]"
+                statements.append(f":~ {assigned_slot}, {penalty}")
         return statements
 
     def generate_blocked_slots(self) -> List[str]:

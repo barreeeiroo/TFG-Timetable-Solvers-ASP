@@ -30,7 +30,7 @@ def local_execution(input_file_path_raw: str):
     output = solver.solve()
 
     with open(input_file_path.parent / 'output.json', 'w') as f:
-        f.write(output.json(exclude_none=True) + "\n")
+        f.write(output.json(by_alias=True, exclude_none=True) + "\n")
 
 
 if __name__ == "__main__":

@@ -31,7 +31,7 @@ def save_output_object(execution_uuid: str, output: Output) -> str:
     print(f"Storing object {object_key} in bucket {__SOLVERS_BUCKET}")
 
     s3.put_object(
-        Body=output.json(exclude_none=True),
+        Body=output.json(by_alias=True, exclude_none=True),
         Bucket=__SOLVERS_BUCKET,
         Key=object_key
     )

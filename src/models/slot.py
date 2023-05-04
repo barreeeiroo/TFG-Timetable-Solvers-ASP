@@ -8,7 +8,9 @@ from models.timeframe import Timeframe
 
 class SlotType(str, Enum):
     AVAILABLE = "available"
-    UNDESIRABLE = "undesirable"
+    UNDESIRABLE_1 = "undesirable1"
+    UNDESIRABLE_2 = "undesirable2"
+    UNDESIRABLE_5 = "undesirable5"
     # Or SCHEDULED
     BLOCKED = "blocked"
 

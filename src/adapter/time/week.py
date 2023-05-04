@@ -60,7 +60,9 @@ class Week:
             for slot in day_slots:
                 if slot.slot_type == SlotType.BLOCKED:
                     continue
-                if undesirable and slot.slot_type != SlotType.UNDESIRABLE:
+                if undesirable and slot.slot_type not in [
+                    SlotType.UNDESIRABLE_1, SlotType.UNDESIRABLE_2, SlotType.UNDESIRABLE_5
+                ]:
                     continue
                 print(f"{calendar.day_name[day - 1]}: {slot}")
 
