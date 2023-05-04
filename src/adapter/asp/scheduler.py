@@ -7,6 +7,7 @@ from models.dto.output import Output
 from models.schedule import ScheduleUnit
 from models.solver import Solver
 from sdk.aws_s3 import save_txt_file
+from utils.env_utils import is_short_execution_environment
 
 
 class AspSolver(Solver):
@@ -20,11 +21,17 @@ class AspSolver(Solver):
         else:
             print(asp_problem)
 
-        answers = solve(inline=asp_problem, use_clingo_module=False)
+        answers = solve(
+            inline=asp_problem,
+            use_clingo_module=False,
+            time_limit=60 * (13 if is_short_execution_environment() else 58),
+        )
         solution = None
         for answer, optimization, optimality, answer_number in answers.with_answer_number:
+            # Keep retrieving answers till timeout
             solution = answer
-            break
+            if not optimality:
+                print(f"Found solution #{answer_number} with {optimization} penalty")
 
         if solution is None:
             raise RuntimeError("Could not generate schedule; a valid solution could not be returned")

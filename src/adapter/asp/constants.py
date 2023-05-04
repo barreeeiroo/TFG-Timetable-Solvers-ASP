@@ -31,8 +31,6 @@ class ClingoPredicates:
     NO_TIMESLOT_OVERLAP_IN_SESSIONS = "noTimeslotOverlapInSessions"
     BREAK_SESSION_TIMESLOT = "breakSessionTimeslot"
     USED_ROOM = "usedRoom"
-    BLOCKED_SLOT = "blockedSlot"
-    UNDESIRABLE_SLOT = "undesirableSlot"
 
     @staticmethod
     def scheduled_session(timeslot: str, session: str) -> str:
@@ -43,7 +41,7 @@ class ClingoPredicates:
         return f"{ClingoPredicates.SCHEDULED_SESSION_CHAIN}({session},{timeslot},{contiguous_timeslot})"
 
     @staticmethod
-    def assigned_slot(timeslot: str, session: str, room: str) -> str:
+    def assigned_slot(timeslot: Union[str, int], session: str, room: str) -> str:
         return f"{ClingoPredicates.ASSIGNED_SLOT}({timeslot},{session},{room})"
 
     @staticmethod

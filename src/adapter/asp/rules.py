@@ -127,9 +127,8 @@ class ConstraintRules:
 
         statements = []
         for blocked_slot in blocked_slots:
-            stmt = f"{ClP.BLOCKED_SLOT} :- {ClP.assigned_slot(str(blocked_slot), ClV.ANY, ClV.ANY)}."
+            stmt = f":- {ClP.assigned_slot(str(blocked_slot), ClV.ANY, ClV.ANY)}."
             statements.append(stmt)
-        statements.append(f":- {ClP.BLOCKED_SLOT}.")
         return statements
 
     @staticmethod
@@ -225,7 +224,7 @@ class PenaltyRules:
             SlotType.UNDESIRABLE_5: SlotPenalties.UNDESIRABLE_5,
         }
 
-        for slot_type, penalty_amount in undesirable_penalties.values():
+        for slot_type, penalty_amount in undesirable_penalties.items():
             for blocked_slot in week.get_slot_ids_per_type(slot_type):
                 penalty = f"{ClV.TIMESLOT} == {blocked_slot}.[{penalty_amount},{ClV.TIMESLOT}]"
                 statements.append(f":~ {assigned_slot}, {penalty}")
@@ -299,12 +298,14 @@ class Rules:
         choices = Rules.__generate_choices()
         normals = Rules.__generate_normals()
         constraints = self.__generate_constraints()
+        penalties = self.__generate_penalties()
 
         return "\n\n".join([
             facts,
             choices,
             normals,
             constraints,
+            penalties,
             f"#show {ClP.ASSIGNED_SLOT}/3.",
         ])
 
