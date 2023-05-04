@@ -52,7 +52,7 @@ class Week:
     def get_slot_ids_per_type(self, desired_slot_type: SlotType) -> List[int]:
         slot_ids: List[int] = []
         for week_day, slots in self.slots.items():
-            offset = week_day * self.get_slots_per_day_count()
+            offset = (week_day - 1) * self.get_slots_per_day_count()
             for slot_id, slot in enumerate(slots):
                 if slot.slot_type == desired_slot_type:
                     slot_ids.append(offset + slot_id)

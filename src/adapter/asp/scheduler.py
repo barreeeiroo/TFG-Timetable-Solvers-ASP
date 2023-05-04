@@ -1,3 +1,4 @@
+from aws_lambda_powertools import Logger
 from clyngor import solve
 
 from adapter.asp.constants import ClingoNaming as ClN
@@ -8,6 +9,8 @@ from models.schedule import ScheduleUnit
 from models.solver import Solver
 from sdk.aws_s3 import save_txt_file
 from utils.env_utils import is_short_execution_environment
+
+logger = Logger()
 
 
 class AspSolver(Solver):
@@ -31,7 +34,10 @@ class AspSolver(Solver):
             # Keep retrieving answers till timeout
             solution = answer
             if not optimality:
-                print(f"Found solution #{answer_number} with {optimization} penalty")
+                if self._execution_uuid is not None:
+                    logger.info(f"Found solution #{answer_number} with {optimization} penalty")
+                else:
+                    print(f"Found solution #{answer_number} with {optimization} penalty")
 
         if solution is None:
             raise RuntimeError("Could not generate schedule; a valid solution could not be returned")

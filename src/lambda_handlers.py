@@ -17,9 +17,8 @@ def event_handler(event: dict, context: LambdaContext):
     execution_uuid = execution_id.split(":")[-1]
     logger.info(f"Execution UUID: {execution_uuid}")
 
+    logger.info("Reading INPUT")
     input_data = get_input_object(execution_uuid)
-    logger.info("Received INPUT")
-    logger.info(input_data)
 
     logger.info("Creating ASP Solver")
     solver = AspSolver(input_data.sessions, input_data.rooms, input_data.settings)
