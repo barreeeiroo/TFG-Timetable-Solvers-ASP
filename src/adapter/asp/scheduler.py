@@ -24,13 +24,14 @@ class AspSolver(Solver):
         else:
             print(asp_problem)
 
-        answers = solve(
+        models = solve(
             inline=asp_problem,
             use_clingo_module=False,
+            stats=True,
             time_limit=60 * (13 if is_short_execution_environment() else 58),
         )
         solution = None
-        for answer, optimization, optimality, answer_number in answers.with_answer_number:
+        for answer, optimization, optimality, answer_number in models.with_answer_number:
             # Keep retrieving answers till timeout
             solution = answer
             if not optimality:
@@ -44,20 +45,28 @@ class AspSolver(Solver):
 
         if self._execution_uuid is not None:
             assigned_slot_lines = [f"{timeslot}\t{clingo_session}\t{clingo_room}\n"
-                                   for variable, (timeslot, clingo_session, clingo_room) in solution
-                                   if variable == ClP.ASSIGNED_SLOT]
+                                   for predicate, (timeslot, clingo_session, clingo_room) in solution
+                                   if predicate == ClP.ASSIGNED_SLOT]
             save_txt_file(self._execution_uuid, "asp_solution", "".join(assigned_slot_lines))
 
-            optimization_lines = [f"{variable}\t\t{name}\t{cost}\t{value}\t{priority}\n"
-                                  for variable, (name, cost, value, priority) in solution
-                                  if variable in (ClP.PENALTY, ClP.BONUS,)]
+            optimization_lines = [f"{predicate}\t\t{name}\t{cost}\t{value}\t{priority}\n"
+                                  for predicate, (name, cost, value, priority) in solution
+                                  if predicate in (ClP.PENALTY, ClP.BONUS,)]
             save_txt_file(self._execution_uuid, "asp_optimization", "".join(optimization_lines))
+
+            statistics_lines = [f"{key}\t{value}\n"
+                                for key, value in models.statistics.items()]
+            save_txt_file(self._execution_uuid, "asp_statistics", "".join(statistics_lines))
         else:
             print("---")
             print(solution)
 
         output = Output()
-        for _, (timeslot, clingo_session, clingo_room) in solution:
+        for predicate, variables in solution:
+            if predicate != ClP.ASSIGNED_SLOT:
+                continue
+
+            timeslot, clingo_session, clingo_room = variables
             session_hex, room_hex = ClN.get_id_from_clingo(clingo_session), ClN.get_id_from_clingo(clingo_room)
             output.timetable.append(ScheduleUnit(
                 slot=week.get_slot_by_number(timeslot - 1),
