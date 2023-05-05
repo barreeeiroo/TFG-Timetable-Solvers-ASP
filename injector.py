@@ -25,8 +25,9 @@ def create():
                 'code': row[1],
                 'name': row[2],
                 'period': maps[row[4]],
-                'shortName': row[3],
             }
+            if row[3]:
+                course['shortName'] = row[3]
             x = requests.post(url, headers=headers, json=course)
             print(x.text)
 
