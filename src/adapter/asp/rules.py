@@ -1,7 +1,7 @@
 from typing import List
 
 from adapter.asp.constants import ClingoNaming as ClN, ClingoPredicates as ClP, ClingoVariables as ClV
-from adapter.asp.penalties import PenaltyNames, SlotPenalties
+from adapter.asp.penalties import PenaltyNames, PenaltyPriorities, SlotPenalties
 from adapter.time.week import Week
 from models.dto.input import Room, Session
 from models.slot import SlotType
@@ -229,11 +229,26 @@ class ConstraintRules:
 
 class PenaltyRules:
     @staticmethod
-    def avoid_undesirable_timeslots() -> str:
-        penalty = ClP.penalty(PenaltyNames.UNDESIRABLE_TIMESLOT, ClV.PENALTY_COST, 1, 0)
-        undesirable_timeslot = ClP.undesirable_timeslot(ClV.TIMESLOT, ClV.PENALTY_COST)
-        assigned_slot = ClP.assigned_slot(ClV.TIMESLOT, ClV.ANY, ClV.ANY)
-        return f"{penalty} :- {assigned_slot}, {undesirable_timeslot}."
+    def avoid_undesirable_timeslots() -> List[str]:
+        priorities = {
+            PenaltyNames.UNDESIRABLE_TIMESLOT_1: (
+                PenaltyPriorities.UNDESIRABLE_TIMESLOT_1, SlotPenalties.UNDESIRABLE_1
+            ),
+            PenaltyNames.UNDESIRABLE_TIMESLOT_2: (
+                PenaltyPriorities.UNDESIRABLE_TIMESLOT_2, SlotPenalties.UNDESIRABLE_2
+            ),
+            PenaltyNames.UNDESIRABLE_TIMESLOT_5: (
+                PenaltyPriorities.UNDESIRABLE_TIMESLOT_5, SlotPenalties.UNDESIRABLE_5
+            ),
+        }
+
+        statements = []
+        for name, (prio, cost) in priorities.items():
+            penalty = ClP.penalty(name, ClV.PENALTY_COST, ClV.TIMESLOT, prio)
+            undesirable_timeslot = ClP.undesirable_timeslot(ClV.TIMESLOT, ClV.PENALTY_COST)
+            assigned_slot = ClP.assigned_slot(ClV.TIMESLOT, ClV.ANY, ClV.ANY)
+            statements.append(f"{penalty} :- {assigned_slot}, {undesirable_timeslot}, {ClV.PENALTY_COST} == {cost}.")
+        return statements
 
 
 class Directives:
@@ -306,9 +321,11 @@ class Rules:
 
     @staticmethod
     def __generate_penalties() -> str:
-        return "\n".join([
-            PenaltyRules.avoid_undesirable_timeslots(),
-        ])
+        statements = []
+
+        statements.extend(PenaltyRules.avoid_undesirable_timeslots())
+
+        return "\n".join(statements)
 
     @staticmethod
     def __generate_directives() -> str:
