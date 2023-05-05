@@ -102,3 +102,122 @@ Year,Code,Name,Short Name,Semester,Degree
 1,G4121108,Adquisición e procesamento de sinal,,2SG,G4121P01
 1,G4121109,Lóxica,,2SG,G4121P01
 1,G4121110,Xestión de organizacións,,2SG,G4121P01
+1,P4191101,Arquitecturas de altas prestacións,,1SG,P4191P01
+1,P4191102,Programación paralela,,1SG,P4191P01
+1,P4191103,Programación de arquitecturas heteroxéneas,,1SG,P4191P01
+1,P4191104,Infraestruturas de altas prestacións,,1SG,P4191P01
+1,P4191105,Taller de proxectos,,2SG,P4191P01
+1,P4191201,Ferramentas para HPC,,1SG,P4191P01
+1,P4191202,HPC na nube,,1SG,P4191P01
+1,P4191203,Programación paralela avanzada,,2SG,P4191P01
+1,P4191204,Análise de datos con HPC,,2SG,P4191P01
+1,P4191106,Prácticas profesionais,,PEG,P4191P01
+1,P4191107,Traballo fin de máster,,TFG,P4191P01
+1,P4013101,Procesos ambientais e economía circular,,1SG,P4013P01
+1,P4013201,Calidade de augas,,1SG,P4013P01
+1,P4013202,Solos e medio ambiente,,1SG,P4013P01
+1,P4013203,Medio ambiente atmosférico,,1SG,P4013P01
+1,P4013204,Ecotoxicoloxía,,1SG,P4013P01
+1,P4013205,Proxectos de enxeñaría ambiental,,1SG,P4013P01
+1,P4013206,Modelización ambiental,,1SG,P4013P01
+1,P4013102,Sistemas de xestión e avaliación do impacto ambiental,,1SG,P4013P01
+1,P4013103,Deseño ecolóxico de procesos e produtos,,1SG,P4013P01
+1,P4013207,Tecnoloxías limpas,,1SG,P4013P01
+1,P4013208,Aplicación de SIX na análise territorial,,1SG,P4013P01
+1,P4013104,Enxeñaría para o tratamento de augas,,2SG,P4013P01
+1,P4013105,Tecnoloxías de tratamento de residuos,,2SG,P4013P01
+1,P4013106,Experimentación en enxeñaría ambiental,,2SG,P4013P01
+1,P4013107,Instrumentación e monitorización ambiental,,2SG,P4013P01
+1,P4013209,Simulación e deseño avanzado de EDAR,,2SG,P4013P01
+1,P4013210,Tecnoloxías de tratamento de solos contaminados,,2SG,P4013P01
+1,P4013211,Experimentación en solos e residuos,,2SG,P4013P01
+1,P4013108,Creación e xestión de empresas,,2SG,P4013P01
+1,P4013109,Habilidades de dirección,,2SG,P4013P01
+1,P4013212,Gobernanza ambiental institucións e RSC,,2SG,P4013P01
+1,P4013213,Dereito ambiental,,2SG,P4013P01
+2,P4013110,Traballo fin de máster,,TFG,P4013P01
+2,P4013111,Prácticas externas,,PEG,P4013P01
+2,P4013214,Retos emerxentes no tratamiento de augas,,1SG,P4013P01
+2,P4013215,Tratamento de efluentes gaseosos,,1SG,P4013P01
+2,P4013216,Análise e minería de datos ambientais,,1SG,P4013P01
+2,P4013217,Xestion de sistemas naturais,,1SG,P4013P01
+1,P4141101,Biocatálise,,1SG,P4141P01
+1,P4141102,Bioenxeñaría,,1SG,P4141P01
+1,P4141103,Bioprocesos,,1SG,P4141P01
+1,P4141104,Modelización mediante fenómenos de Transporte,,1SG,P4141P01
+1,P4141105,Análise e xestión de riscos industriais,,1SG,P4141P01
+1,P4141106,Simulación con métodos numéricos,,1SG,P4141P01
+1,P4141107,Enerxética industrial,,1SG,P4141P01
+1,P4141108,Deseño conceptual de procesos,,1SG,P4141P01
+1,P4141109,Habilidades directivas,,2SG,P4141P01
+1,P4141110,Xestión empresarial,,2SG,P4141P01
+1,P4141111,Creación de empresas,,2SG,P4141P01
+1,P4141112,Dirección de Proxectos de Enxeñaría,,2SG,P4141P01
+1,P4141113,Planificación da investigación,,2SG,P4141P01
+1,P4141201,Tecnoloxías para a valorización da biomasa,,2SG,P4141P01
+1,P4141202,Enerxía e contaminación atmosférica,,2SG,P4141P01
+1,P4141203,Xestión do ciclo de vida de produtos e procesos,,2SG,P4141P01
+1,P4141204,Indicadores e metodoloxías de sustentabilidade corporativa,,2SG,P4141P01
+1,P4141205,Reoloxía de Biopolímeros,,2SG,P4141P01
+1,P4141206,Líquidos iónicos en procesos químicos e bioprocesos,,2SG,P4141P01
+1,P4141207,Modelización termodinámica e cinética de procesos de secado,,2SG,P4141P01
+1,P4141208,Ecoprocesos para o tratamento de augas,,2SG,P4141P01
+1,P4141209,Tecnoloxías innovadoras para o tratamento de efluentes,,2SG,P4141P01
+1,P4141210,Técnicas e metodoloxías en laboratorios de I+D,,2SG,P4141P01
+2,P4141114,Prácticas en empresa,,1SG,P4141P01
+2,P4141115,Traballo fin de máster,,TFG,P4141P01
+1,P4251101,Fundamentos de IA,,1SG,P4251P01
+1,P4251102,Enxeñaría de Datos,,1SG,P4251P01
+1,P4251103,Razoamento e Planificación,,1SG,P4251P01
+1,P4251104,IA Explicable e Confiable,,2SG,P4251P01
+1,P4251105,Sistemas Multiaxente,,2SG,P4251P01
+2,P4251121,Aspectos computacionais da Ciencia Cognitiva,,1SG,P4251P01
+1,P4251122,Coñecemento e Razoamento con Incerteza,,2SG,P4251P01
+1,P4251106,Comprensión da Linguaxe Natural,,1SG,P4251P01
+1,P4251107,Modelado da Linguaxe,,2SG,P4251P01
+1,P4251123,Intelixencia Web e Tecnoloxías Semánticas,,2SG,P4251P01
+2,P4251124,Minaría de Textos,,1SG,P4251P01
+1,P4251108,Aprendizaxe Automática I,,1SG,P4251P01
+1,P4251109,Aprendizaxe Profunda,,2SG,P4251P01
+1,P4251125,Aprendizaxe Automática II,,2SG,P4251P01
+1,P4251126,Computación Evolutiva,,2SG,P4251P01
+2,P4251127,IA en Contornos Big Data,,1SG,P4251P01
+1,P4251110,Visión por Computador I,,1SG,P4251P01
+1,P4251128,Visión por Computador II,,2SG,P4251P01
+1,P4251129,Robótica Intelixente I,,1SG,P4251P01
+1,P4251130,Robótica Intelixente II,,2SG,P4251P01
+1,P4251111,Xestión de Proxectos de IA,,2SG,P4251P01
+2,P4251131,IA en Saúde,,1SG,P4251P01
+2,P4251132,IoT intelixente,,1SG,P4251P01
+2,P4251133,Ciberseguridade Intelixente,,1SG,P4251P01
+1,P4251134,Minaría de procesos,,2SG,P4251P01
+1,P4251135,Sistemas Intelixentes de Tempo Real,,2SG,P4251P01
+2,P4251136,Temas Emerxentes e Emprendemento en IA,,1SG,P4251P01
+2,P4251112,Prácticas Externas,,PEG,P4251P01
+2,P4251113,Traballo Fin de Máster,,TFG,P4251P01
+1,P4181101,Bases de datos a grande escala,,1SG,P4181P01
+1,P4181102,Tecnoloxías de xestión de información non estruturada,,1SG,P4181P01
+1,P4181103,Tecnoloxías de computación para datos masivos,,1SG,P4181P01
+1,P4181104,Internet das cousas no contexto de Big Data,,2SG,P4181P01
+1,P4181105,Aprendizaxe Estatística,,1SG,P4181P01
+1,P4181106,Minería de datos,,2SG,P4181P01
+1,P4181107,Visualización de datos,,1SG,P4181P01
+1,P4181108,Intelixencia de negocio,,1SG,P4181P01
+1,P4181109,Aplicacións e casos de uso empresarial,,2SG,P4181P01
+1,P4181110,Traballo fin de máster,,TFG,P4181P01
+1,P4231101,Fundamentos de procesado e análise de imaxe,,1SG,P4231P01
+1,P4231102,Procesado e análise de imaxe avanzados,,2SG,P4231P01
+1,P4231201,Modelado e recoñecemento tridimensional,,2SG,P4231P01
+1,P4231103,Descrición e modelado de imaxe,,1SG,P4231P01
+1,P4231104,Recoñecemento visual,,2SG,P4231P01
+1,P4231202,Recoñecemento de accións humanas,,2SG,P4231P01
+1,P4231105,Fundamentos de aprendizaxe automática para visión por computador,,1SG,P4231P01
+1,P4231106,Aprendizaxe automática avanzada para visión por computador,,2SG,P4231P01
+1,P4231107,Instrumentación e procesamento para visión artificial,,1SG,P4231P01
+1,P4231203,Fotogrametría e visión robótica,,2SG,P4231P01
+1,P4231204,Visión artificial en tempo real,,2SG,P4231P01
+1,P4231108,Instrumentación e procesamento para aplicacións biomédicas,,1SG,P4231P01
+1,P4231205,Análise de imaxes biomédicas,,2SG,P4231P01
+1,P4231206,Biometría,,2SG,P4231P01
+2,P4231110,Prácticas en empresas,,PEG,P4231P01
+2,P4231109,Traballo fin de máster,,TFG,P4231P01
