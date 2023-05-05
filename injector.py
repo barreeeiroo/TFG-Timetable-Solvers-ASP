@@ -94,7 +94,7 @@ def include():
         reader = csv.reader(csvfile, delimiter=',')
         next(reader)
         for row in reader:
-            url = 'https://api.horarios.barreiro.xyz/degree/include-course/G4012P01'
+            url = f'https://api.horarios.barreiro.xyz/degree/include-course/{row[5]}'
             course = {
                 'course': row[1],
                 'year': int(row[0]),
