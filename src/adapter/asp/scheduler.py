@@ -28,7 +28,7 @@ class AspSolver(Solver):
             inline=asp_problem,
             use_clingo_module=False,
             stats=True,
-            time_limit=int(60 * (15.5 if is_short_execution_environment() else 58)),
+            time_limit=int(60 * (14.5 if is_short_execution_environment() else 58)),
         )
         solution = None
         for answer, optimization, optimality, answer_number in models.with_answer_number:
