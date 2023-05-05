@@ -238,11 +238,11 @@ class OptimizationRules:
 
         statements = []
         for prio, cost in priorities:
-            assigned_slot = ClP.assigned_slot(ClV.TIMESLOT, ClV.SESSION, ClV.ROOM)
-            penalty = ClP.penalty(PenaltyNames.UNDESIRABLE_TIMESLOT, ClV.PENALTY_COST, assigned_slot, prio)
+            scheduled_session = ClP.scheduled_session(ClV.TIMESLOT, ClV.SESSION)
+            penalty = ClP.penalty(PenaltyNames.UNDESIRABLE_TIMESLOT, ClV.PENALTY_COST, scheduled_session, prio)
             undesirable_timeslot = ClP.undesirable_timeslot(ClV.TIMESLOT, ClV.PENALTY_COST)
             penalty_cost = f"{ClV.PENALTY_COST} == {cost}"
-            statements.append(f"{penalty} :- {assigned_slot}, {undesirable_timeslot}, {penalty_cost}.")
+            statements.append(f"{penalty} :- {scheduled_session}, {undesirable_timeslot}, {penalty_cost}.")
         return statements
 
 
