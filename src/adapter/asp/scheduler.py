@@ -44,13 +44,13 @@ class AspSolver(Solver):
             raise RuntimeError("Could not generate schedule; a valid solution could not be returned")
 
         if self._execution_uuid is not None:
-            assigned_slot_lines = [f"{timeslot}\t{clingo_session}\t{clingo_room}\n"
-                                   for predicate, (timeslot, clingo_session, clingo_room) in solution
+            assigned_slot_lines = [f"{variables[0]}\t{variables[1]}\t{variables[2]}\n"
+                                   for predicate, variables in solution
                                    if predicate == ClP.ASSIGNED_SLOT]
             save_txt_file(self._execution_uuid, "asp_solution", "".join(assigned_slot_lines))
 
-            optimization_lines = [f"{predicate}\t\t{name}\t{cost}\t{value}\t{priority}\n"
-                                  for predicate, (name, cost, value, priority) in solution
+            optimization_lines = [f"{predicate}\t\t{variables[0]}\t{variables[1]}\t{variables[2]}\t{variables[3]}\n"
+                                  for predicate, variables in solution
                                   if predicate in (ClP.PENALTY, ClP.BONUS,)]
             save_txt_file(self._execution_uuid, "asp_optimization", "".join(optimization_lines))
 
