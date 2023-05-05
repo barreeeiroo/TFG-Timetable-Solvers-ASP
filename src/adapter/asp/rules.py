@@ -240,8 +240,10 @@ class OptimizationRules:
         for prio, cost in priorities:
             penalty = ClP.penalty(PenaltyNames.UNDESIRABLE_TIMESLOT, ClV.PENALTY_COST, ClV.TIMESLOT, prio)
             undesirable_timeslot = ClP.undesirable_timeslot(ClV.TIMESLOT, ClV.PENALTY_COST)
-            assigned_slot = ClP.assigned_slot(ClV.TIMESLOT, ClV.ANY, ClV.ANY)
-            statements.append(f"{penalty} :- {assigned_slot}, {undesirable_timeslot}, {ClV.PENALTY_COST} == {cost}.")
+            # TODO: Switch to assignedSlot and make PENALTY_VALUE "T_SESSION_ROOM"
+            scheduled_session = ClP.scheduled_session(ClV.TIMESLOT, ClV.ANY)
+            penalty_cost = f"{ClV.PENALTY_COST} == {cost}"
+            statements.append(f"{penalty} :- {scheduled_session}, {undesirable_timeslot}, {penalty_cost}.")
         return statements
 
 
