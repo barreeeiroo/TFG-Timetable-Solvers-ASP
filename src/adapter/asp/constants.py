@@ -46,7 +46,7 @@ class ClingoPredicates:
     BONUS = "bonus"
 
     @staticmethod
-    def scheduled_session(timeslot: str, session: str) -> str:
+    def scheduled_session(timeslot: Union[int, str], session: str) -> str:
         return f"{ClingoPredicates.SCHEDULED_SESSION}({timeslot},{session})"
 
     @staticmethod

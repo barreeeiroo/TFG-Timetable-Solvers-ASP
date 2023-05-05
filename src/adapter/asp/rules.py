@@ -142,7 +142,7 @@ class ConstraintRules:
 
         statements = []
         for blocked_slot in blocked_slots:
-            stmt = f":- {ClP.assigned_slot(str(blocked_slot), ClV.ANY, ClV.ANY)}."
+            stmt = f":- {ClP.scheduled_session(blocked_slot, ClV.ANY)}."
             statements.append(stmt)
         return statements
 
