@@ -1,7 +1,7 @@
 from aws_lambda_powertools import Logger
 from clyngor import solve
 
-from adapter.asp.constants import ClingoNaming as ClN
+from adapter.asp.constants import ClingoNaming as ClN, ClingoPredicates as ClP
 from adapter.asp.rules import Rules
 from adapter.time.week import Week
 from models.dto.output import Output
@@ -43,9 +43,15 @@ class AspSolver(Solver):
             raise RuntimeError("Could not generate schedule; a valid solution could not be returned")
 
         if self._execution_uuid is not None:
-            lines = [f"{timeslot}\t{clingo_session}\t{clingo_room}\n"
-                     for _, (timeslot, clingo_session, clingo_room) in solution]
-            save_txt_file(self._execution_uuid, "asp_solution", "".join(lines))
+            assigned_slot_lines = [f"{timeslot}\t{clingo_session}\t{clingo_room}\n"
+                                   for variable, (timeslot, clingo_session, clingo_room) in solution
+                                   if variable == ClP.ASSIGNED_SLOT]
+            save_txt_file(self._execution_uuid, "asp_solution", "".join(assigned_slot_lines))
+
+            optimization_lines = [f"{variable}\t\t{name}\t{cost}\t{value}\t{priority}\n"
+                                  for variable, (name, cost, value, priority) in solution
+                                  if variable in (ClP.PENALTY, ClP.BONUS,)]
+            save_txt_file(self._execution_uuid, "asp_optimization", "".join(optimization_lines))
         else:
             print("---")
             print(solution)

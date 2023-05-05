@@ -16,10 +16,15 @@ class ClingoVariables:
     ROOM = "R"
     ROOM_TYPE = "RT"
     ROOM_CAPACITY = "RC"
+
     PENALTY_NAME = "PN"
     PENALTY_COST = "PC"
     PENALTY_VALUE = "PV"
     PENALTY_PRIORITY = "PP"
+    BONUS_NAME = "BN"
+    BONUS_COST = "BC"
+    BONUS_VALUE = "BV"
+    BONUS_PRIORITY = "BP"
 
 
 class ClingoPredicates:
@@ -38,6 +43,7 @@ class ClingoPredicates:
     UNDESIRABLE_TIMESLOT = "undesirableTimeslot"
 
     PENALTY = "penalty"
+    BONUS = "bonus"
 
     @staticmethod
     def scheduled_session(timeslot: str, session: str) -> str:
@@ -86,6 +92,10 @@ class ClingoPredicates:
     @staticmethod
     def penalty(name: str, cost: Union[str, int], value: Union[str, int], priority: Union[str, int]):
         return f"{ClingoPredicates.PENALTY}({name},{cost},{value},{priority})"
+
+    @staticmethod
+    def bonus(name: str, cost: Union[str, int], value: Union[str, int], priority: Union[str, int]):
+        return f"{ClingoPredicates.BONUS}({name},{cost},{value},{priority})"
 
 
 class ClingoNaming:

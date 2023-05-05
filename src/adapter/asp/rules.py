@@ -1,7 +1,7 @@
 from typing import List
 
 from adapter.asp.constants import ClingoNaming as ClN, ClingoPredicates as ClP, ClingoVariables as ClV
-from adapter.asp.penalties import PenaltyNames, PenaltyPriorities, SlotPenalties
+from adapter.asp.optimizations import OptimizationPriorities, PenaltyCosts, PenaltyNames
 from adapter.time.week import Week
 from models.dto.input import Room, Session
 from models.slot import SlotType
@@ -19,9 +19,9 @@ class FactRules:
     @staticmethod
     def generate_undesirable_timeslots(week: Week) -> List[str]:
         undesirable_penalties = {
-            SlotType.UNDESIRABLE_1: SlotPenalties.UNDESIRABLE_1,
-            SlotType.UNDESIRABLE_2: SlotPenalties.UNDESIRABLE_2,
-            SlotType.UNDESIRABLE_5: SlotPenalties.UNDESIRABLE_5,
+            SlotType.UNDESIRABLE_1: PenaltyCosts.UNDESIRABLE_TIMESLOT_1,
+            SlotType.UNDESIRABLE_2: PenaltyCosts.UNDESIRABLE_TIMESLOT_2,
+            SlotType.UNDESIRABLE_5: PenaltyCosts.UNDESIRABLE_TIMESLOT_5,
         }
 
         statements = []
@@ -227,24 +227,18 @@ class ConstraintRules:
         return statements
 
 
-class PenaltyRules:
+class OptimizationRules:
     @staticmethod
-    def avoid_undesirable_timeslots() -> List[str]:
-        priorities = {
-            PenaltyNames.UNDESIRABLE_TIMESLOT_1: (
-                PenaltyPriorities.UNDESIRABLE_TIMESLOT_1, SlotPenalties.UNDESIRABLE_1
-            ),
-            PenaltyNames.UNDESIRABLE_TIMESLOT_2: (
-                PenaltyPriorities.UNDESIRABLE_TIMESLOT_2, SlotPenalties.UNDESIRABLE_2
-            ),
-            PenaltyNames.UNDESIRABLE_TIMESLOT_5: (
-                PenaltyPriorities.UNDESIRABLE_TIMESLOT_5, SlotPenalties.UNDESIRABLE_5
-            ),
-        }
+    def penalize_undesirable_timeslots() -> List[str]:
+        priorities = [
+            (OptimizationPriorities.UNDESIRABLE_TIMESLOT_1, PenaltyCosts.UNDESIRABLE_TIMESLOT_1,),
+            (OptimizationPriorities.UNDESIRABLE_TIMESLOT_2, PenaltyCosts.UNDESIRABLE_TIMESLOT_2,),
+            (OptimizationPriorities.UNDESIRABLE_TIMESLOT_5, PenaltyCosts.UNDESIRABLE_TIMESLOT_5,),
+        ]
 
         statements = []
-        for name, (prio, cost) in priorities.items():
-            penalty = ClP.penalty(name, ClV.PENALTY_COST, ClV.TIMESLOT, prio)
+        for prio, cost in priorities:
+            penalty = ClP.penalty(PenaltyNames.UNDESIRABLE_TIMESLOT, ClV.PENALTY_COST, ClV.TIMESLOT, prio)
             undesirable_timeslot = ClP.undesirable_timeslot(ClV.TIMESLOT, ClV.PENALTY_COST)
             assigned_slot = ClP.assigned_slot(ClV.TIMESLOT, ClV.ANY, ClV.ANY)
             statements.append(f"{penalty} :- {assigned_slot}, {undesirable_timeslot}, {ClV.PENALTY_COST} == {cost}.")
@@ -254,13 +248,23 @@ class PenaltyRules:
 class Directives:
     @staticmethod
     def generate_penalty_definition() -> str:
-        penalty_calc = f"{ClV.PENALTY_COST}@{ClV.PENALTY_PRIORITY},{ClV.PENALTY_VALUE},{ClV.PENALTY_NAME}"
+        penalty_calc = f"{ClV.PENALTY_COST}@{ClV.PENALTY_PRIORITY},{ClV.PENALTY_NAME},{ClV.PENALTY_VALUE}"
         penalty = ClP.penalty(ClV.PENALTY_NAME, ClV.PENALTY_COST, ClV.PENALTY_VALUE, ClV.PENALTY_PRIORITY)
         return f"#minimize {{ {penalty_calc} : {penalty} }}."
 
     @staticmethod
-    def generate_show() -> str:
-        return f"#show {ClP.ASSIGNED_SLOT}/3."
+    def generate_bonus_definition() -> str:
+        bonus_calc = f"{ClV.BONUS_COST}@{ClV.BONUS_PRIORITY},{ClV.BONUS_NAME},{ClV.BONUS_VALUE}"
+        bonus = ClP.bonus(ClV.BONUS_NAME, ClV.BONUS_COST, ClV.BONUS_VALUE, ClV.BONUS_PRIORITY)
+        return f"#maximize {{ {bonus_calc} : {bonus} }}."
+
+    @staticmethod
+    def generate_show() -> List[str]:
+        return [
+            f"#show {ClP.ASSIGNED_SLOT}/3.",
+            f"#show {ClP.PENALTY}/4.",
+            f"#show {ClP.BONUS}/4.",
+        ]
 
 
 class Rules:
@@ -320,26 +324,30 @@ class Rules:
         return "\n".join(statements)
 
     @staticmethod
-    def __generate_penalties() -> str:
+    def __generate_optimizations() -> str:
         statements = []
 
-        statements.extend(PenaltyRules.avoid_undesirable_timeslots())
+        statements.extend(OptimizationRules.penalize_undesirable_timeslots())
 
         return "\n".join(statements)
 
     @staticmethod
     def __generate_directives() -> str:
-        return "\n".join([
+        statements = [
             Directives.generate_penalty_definition(),
-            Directives.generate_show(),
-        ])
+            Directives.generate_bonus_definition(),
+        ]
+
+        statements.extend(Directives.generate_show())
+
+        return "\n".join(statements)
 
     def generate_asp_problem(self) -> str:
         facts = self.__generate_facts()
         choices = Rules.__generate_choices()
         normals = Rules.__generate_normals()
         constraints = self.__generate_constraints()
-        penalties = Rules.__generate_penalties()
+        optimizations = Rules.__generate_optimizations()
         directives = Rules.__generate_directives()
 
         return "\n\n".join([
@@ -347,7 +355,7 @@ class Rules:
             choices,
             normals,
             constraints,
-            penalties,
+            optimizations,
             directives,
         ])
 
