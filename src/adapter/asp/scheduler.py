@@ -49,7 +49,7 @@ class AspSolver(Solver):
                                    if predicate == ClP.ASSIGNED_SLOT]
             save_txt_file(self._execution_uuid, "asp_solution", "".join(assigned_slot_lines))
 
-            optimization_lines = [f"{predicate}\t\t{variables[0]}\t{variables[1]}\t{variables[2]}\t{variables[3]}\n"
+            optimization_lines = [f"{predicate}\t\t{variables[0]}\t{variables[1]}\t{variables[2]}\n"
                                   for predicate, variables in solution
                                   if predicate in (ClP.PENALTY, ClP.BONUS,)]
             save_txt_file(self._execution_uuid, "asp_optimization", "".join(optimization_lines))
