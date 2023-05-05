@@ -17,6 +17,12 @@ class FactRules:
         return f"{ClP.contiguous_timeslot('1;-1')}."
 
     @staticmethod
+    def generate_blocked_timeslots(week: Week) -> str:
+        ids = [str(slot) for slot in week.get_slot_ids_per_type(SlotType.BLOCKED)]
+        blocked_timeslot = ClP.blocked_timeslot(";".join(ids))
+        return f"{blocked_timeslot}."
+
+    @staticmethod
     def generate_undesirable_timeslots(week: Week) -> List[str]:
         undesirable_penalties = {
             SlotType.UNDESIRABLE_1: PenaltyCosts.UNDESIRABLE_TIMESLOT_1,
@@ -135,16 +141,10 @@ class NormalRules:
 
 class ConstraintRules:
     @staticmethod
-    def exclude_blocked_timeslots(week: Week) -> List[str]:
-        blocked_slots: List[int] = week.get_slot_ids_per_type(SlotType.BLOCKED)
-        if not blocked_slots:
-            return []
-
-        statements = []
-        for blocked_slot in blocked_slots:
-            stmt = f":- {ClP.scheduled_session(blocked_slot, ClV.ANY)}."
-            statements.append(stmt)
-        return statements
+    def exclude_blocked_timeslots() -> str:
+        scheduled_session = ClP.scheduled_session(ClV.TIMESLOT, ClV.ANY)
+        blocked_timeslot = ClP.blocked_timeslot(ClV.TIMESLOT)
+        return f":- {scheduled_session}, {blocked_timeslot}."
 
     @staticmethod
     def exclude_more_than_one_session_in_same_room_and_timeslot() -> str:
@@ -279,6 +279,7 @@ class Rules:
         statements: List[str] = [
             FactRules.generate_timeslot(self.week.get_total_slot_count()),
             FactRules.contiguous_timeslots(),
+            FactRules.generate_blocked_timeslots(self.week),
         ]
         statements.extend(FactRules.generate_undesirable_timeslots(self.week))
         statements.extend(FactRules.generate_day_breaks(self.week))
@@ -306,24 +307,17 @@ class Rules:
 
         return "\n".join(statements)
 
-    def __generate_constraints(self) -> str:
-        statements = []
-
-        statements.extend(ConstraintRules.exclude_blocked_timeslots(self.week))
-
-        statements.extend([
+    @staticmethod
+    def __generate_constraints() -> str:
+        return "\n".join([
+            ConstraintRules.exclude_blocked_timeslots(),
             ConstraintRules.exclude_more_than_one_session_in_same_room_and_timeslot(),
             ConstraintRules.exclude_same_session_in_different_room(),
             ConstraintRules.exclude_sessions_scheduled_in_same_overlapping_timeslot(),
             ConstraintRules.exclude_sessions_scheduled_in_different_days(),
-            ConstraintRules.exclude_sessions_scheduled_in_non_contiguous_timeslots(),
             ConstraintRules.exclude_sessions_scheduled_in_non_contiguous_timeslots_alt(),
             ConstraintRules.exclude_sessions_which_are_isolated_from_other(),
         ])
-
-        statements.extend(ConstraintRules.exclude_sessions_which_are_isolated_from_other_alt(self.sessions, self.week))
-
-        return "\n".join(statements)
 
     @staticmethod
     def __generate_optimizations() -> str:
@@ -348,7 +342,7 @@ class Rules:
         facts = self.__generate_facts()
         choices = Rules.__generate_choices()
         normals = Rules.__generate_normals()
-        constraints = self.__generate_constraints()
+        constraints = Rules.__generate_constraints()
         optimizations = Rules.__generate_optimizations()
         directives = Rules.__generate_directives()
 
