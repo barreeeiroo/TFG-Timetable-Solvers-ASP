@@ -1,7 +1,7 @@
 from typing import List
 
 from adapter.asp.constants import ClingoNaming as ClN, ClingoPredicates as ClP, ClingoVariables as ClV
-from adapter.asp.optimizations import OptimizationPriorities, PenaltyCosts, PenaltyNames
+from adapter.asp.optimizations import BonusCosts, BonusNames, OptimizationPriorities, PenaltyCosts, PenaltyNames
 from adapter.time.week import Week
 from models.dto.input import Room, Session
 from models.slot import SlotType
@@ -244,14 +244,20 @@ class ConstraintRules:
 
         return statements
 
+    @staticmethod
+    def exclude_rooms_which_are_not_allowed_for_session() -> str:
+        assigned_slot = ClP.assigned_slot(ClV.ANY, ClV.SESSION, ClV.ROOM)
+        disallowed_room = ClP.disallowed_room_for_session(ClV.SESSION, ClV.ROOM)
+        return f":- {assigned_slot}, {disallowed_room}."
+
 
 class OptimizationRules:
     @staticmethod
     def penalize_undesirable_timeslots() -> List[str]:
         priorities = [
-            (OptimizationPriorities.UNDESIRABLE_TIMESLOT_1, PenaltyCosts.UNDESIRABLE_TIMESLOT_1,),
-            (OptimizationPriorities.UNDESIRABLE_TIMESLOT_2, PenaltyCosts.UNDESIRABLE_TIMESLOT_2,),
-            (OptimizationPriorities.UNDESIRABLE_TIMESLOT_5, PenaltyCosts.UNDESIRABLE_TIMESLOT_5,),
+            (OptimizationPriorities.PENALTY__UNDESIRABLE_TIMESLOT_1, PenaltyCosts.UNDESIRABLE_TIMESLOT_1,),
+            (OptimizationPriorities.PENALTY__UNDESIRABLE_TIMESLOT_2, PenaltyCosts.UNDESIRABLE_TIMESLOT_2,),
+            (OptimizationPriorities.PENALTY__UNDESIRABLE_TIMESLOT_5, PenaltyCosts.UNDESIRABLE_TIMESLOT_5,),
         ]
 
         statements = []
@@ -262,6 +268,26 @@ class OptimizationRules:
             penalty_cost = f"{ClV.PENALTY_COST} == {cost}"
             statements.append(f"{penalty} :- {scheduled_session}, {undesirable_timeslot}, {penalty_cost}.")
         return statements
+
+    @staticmethod
+    def apply_room_preferences_in_sessions() -> List[str]:
+        assigned_slot = ClP.assigned_slot(ClV.ANY, ClV.SESSION, ClV.ROOM)
+
+        penalty = ClP.penalty(PenaltyNames.AVOID_ROOM_FOR_SESSION,
+                              PenaltyCosts.AVOID_ROOM_FOR_SESSION,
+                              ClV.SESSION,
+                              OptimizationPriorities.PENALTY__AVOID_ROOM_FOR_SESSION)
+        penalized_room = ClP.penalized_room_for_session(ClV.SESSION, ClV.ROOM)
+        avoid_statement = f"{penalty} :- {assigned_slot}, {penalized_room}."
+
+        bonus = ClP.bonus(BonusNames.PREFER_ROOM_FOR_SESSION,
+                          BonusCosts.PREFER_ROOM_FOR_SESSION,
+                          ClV.SESSION,
+                          OptimizationPriorities.BONUS__PREFER_ROOM_FOR_SESSION)
+        preferred_room = ClP.preferred_room_for_session(ClV.SESSION, ClV.ROOM)
+        prefer_statement = f"{bonus} :- {assigned_slot}, {preferred_room}."
+
+        return [avoid_statement, prefer_statement]
 
 
 class Directives:
@@ -335,6 +361,7 @@ class Rules:
             ConstraintRules.exclude_sessions_scheduled_in_different_days(),
             ConstraintRules.exclude_sessions_scheduled_in_non_contiguous_timeslots_alt(),
             ConstraintRules.exclude_sessions_which_are_isolated_from_other(),
+            ConstraintRules.exclude_rooms_which_are_not_allowed_for_session(),
         ])
 
     @staticmethod
@@ -342,6 +369,7 @@ class Rules:
         statements = []
 
         statements.extend(OptimizationRules.penalize_undesirable_timeslots())
+        statements.extend(OptimizationRules.apply_room_preferences_in_sessions())
 
         return "\n".join(statements)
 
