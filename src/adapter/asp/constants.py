@@ -42,6 +42,9 @@ class ClingoPredicates:
     USED_ROOM = "usedRoom"
     BLOCKED_TIMESLOT = "blockedTimeslot"
     UNDESIRABLE_TIMESLOT = "undesirableTimeslot"
+    DISALLOWED_ROOM_FOR_SESSION = "disallowedRoomForSession"
+    PREFERRED_ROOM_FOR_SESSION = "preferredRoomForSession"
+    PENALIZED_ROOM_FOR_SESSION = "penalizedRoomForSession"
 
     PENALTY = "penalty"
     BONUS = "bonus"
@@ -95,6 +98,18 @@ class ClingoPredicates:
         return f"{ClingoPredicates.UNDESIRABLE_TIMESLOT}({timeslot},{penalty})"
 
     @staticmethod
+    def disallowed_room_for_session(session: str, room: str):
+        return f"{ClingoPredicates.DISALLOWED_ROOM_FOR_SESSION}({session},{room})"
+
+    @staticmethod
+    def penalized_room_for_session(session: str, room: str):
+        return f"{ClingoPredicates.PENALIZED_ROOM_FOR_SESSION}({session},{room})"
+
+    @staticmethod
+    def preferred_room_for_session(session: str, room: str):
+        return f"{ClingoPredicates.PREFERRED_ROOM_FOR_SESSION}({session},{room})"
+
+    @staticmethod
     def penalty(name: str, cost: Union[str, int], value: Union[str, int], priority: Union[str, int]):
         return f"{ClingoPredicates.PENALTY}({name},{cost},{value},{priority})"
 
@@ -109,7 +124,9 @@ class ClingoNaming:
     SESSION_TYPE = "st"
 
     @staticmethod
-    def room_to_clingo(room: Room) -> str:
+    def room_to_clingo(room: Union[Room, UUID]) -> str:
+        if isinstance(room, UUID):
+            return f"{ClingoNaming.ROOM}_{room.hex}"
         return f"{ClingoNaming.ROOM}_{room.id.hex}"
 
     @staticmethod

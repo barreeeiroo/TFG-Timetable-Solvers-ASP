@@ -93,6 +93,24 @@ class FactRules:
                     statements.append(statement)
         return statements
 
+    @staticmethod
+    def generate_room_preferences_for_sessions(sessions: List[Session]) -> List[str]:
+        statements: List[str] = []
+        for session in sessions:
+            clingo_session = ClN.session_to_clingo(session)
+
+            for disallowed_room_uuid in session.constraints.rooms_preferences.disallowed_rooms:
+                clingo_room = ClN.room_to_clingo(disallowed_room_uuid)
+                statements.append(f"{ClP.disallowed_room_for_session(clingo_session, clingo_room)}.")
+            for penalized_room_uuid in session.constraints.rooms_preferences.penalized_rooms:
+                clingo_room = ClN.room_to_clingo(penalized_room_uuid)
+                statements.append(f"{ClP.penalized_room_for_session(clingo_session, clingo_room)}.")
+            for preferred_room_uuid in session.constraints.rooms_preferences.preferred_rooms:
+                clingo_room = ClN.room_to_clingo(preferred_room_uuid)
+                statements.append(f"{ClP.preferred_room_for_session(clingo_session, clingo_room)}.")
+
+        return statements
+
 
 class ChoiceRules:
     @staticmethod
@@ -288,6 +306,7 @@ class Rules:
 
         statements.extend(FactRules.generate_sessions(self.sessions, self.week))
         statements.extend(FactRules.generate_no_overlapping_sessions(self.sessions))
+        statements.extend(FactRules.generate_room_preferences_for_sessions(self.sessions))
 
         return "\n".join(statements)
 
