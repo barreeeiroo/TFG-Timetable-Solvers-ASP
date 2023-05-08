@@ -13,8 +13,6 @@ class RoomConstraints(BaseModel):
     capacity: int
     session_types: List[str] = Field(alias="sessionTypes")
 
-    # TODO: This is not yet available...
-    preferred_session_types: Optional[List[str]] = Field(alias="preferredSessionTypes", default=None)
     distances_in_minutes: Dict[str, float] = Field(alias="distancesInMinutes", default_factory=dict)
 
 

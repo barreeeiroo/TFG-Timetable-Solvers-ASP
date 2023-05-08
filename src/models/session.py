@@ -26,6 +26,7 @@ class SessionConstraints(BaseModel):
     duration: timedelta
 
     cannot_conflict_in_time: List[UUID4] = Field(alias="cannotConflictInTime", default_factory=list)
+    avoid_conflict_in_time: List[UUID4] = Field(alias="avoidConflictInTime", default_factory=list)
     rooms_preferences: SessionRoomPreferences = Field(alias="roomsPreferences", default=SessionRoomPreferences())
     # TODO: This is not yet available...
     preferred_slots: Optional[List[Timeframe]] = Field(alias="preferredSlots", default=None)
