@@ -31,7 +31,7 @@ class PenaltyCosts(int, Enum):
 
 class BonusNames(str, Enum):
     PREFER_ROOM_FOR_SESSION = '"PreferRoomForSession"'
-    PREFER_TIMESLOT_FOR_SESSION = '"PreferRoomForSession"'
+    PREFER_TIMESLOT_FOR_SESSION = '"PreferTimeslotForSession"'
 
 
 class BonusCosts(int, Enum):
