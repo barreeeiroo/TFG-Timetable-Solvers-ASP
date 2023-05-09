@@ -46,6 +46,9 @@ class ClingoPredicates:
     DISALLOWED_ROOM_FOR_SESSION = "disallowedRoomForSession"
     PREFERRED_ROOM_FOR_SESSION = "preferredRoomForSession"
     PENALIZED_ROOM_FOR_SESSION = "penalizedRoomForSession"
+    DISALLOWED_TIMESLOT_FOR_SESSION = "disallowedTimeslotForSession"
+    PREFERRED_TIMESLOT_FOR_SESSION = "preferredTimeslotForSession"
+    PENALIZED_TIMESLOT_FOR_SESSION = "penalizedTimeslotForSession"
 
     PENALTY = "penalty"
     BONUS = "bonus"
@@ -113,6 +116,18 @@ class ClingoPredicates:
     @staticmethod
     def preferred_room_for_session(session: str, room: str):
         return f"{ClingoPredicates.PREFERRED_ROOM_FOR_SESSION}({session},{room})"
+
+    @staticmethod
+    def disallowed_timeslot_for_session(session: str, timeslot: Union[str, int]):
+        return f"{ClingoPredicates.DISALLOWED_TIMESLOT_FOR_SESSION}({session},{timeslot})"
+
+    @staticmethod
+    def penalized_timeslot_for_session(session: str, timeslot: Union[str, int]):
+        return f"{ClingoPredicates.PENALIZED_TIMESLOT_FOR_SESSION}({session},{timeslot})"
+
+    @staticmethod
+    def preferred_timeslot_for_session(session: str, timeslot: Union[str, int]):
+        return f"{ClingoPredicates.PREFERRED_TIMESLOT_FOR_SESSION}({session},{timeslot})"
 
     @staticmethod
     def penalty(name: str, cost: Union[str, int], value: Union[str, int], priority: Union[str, int]):

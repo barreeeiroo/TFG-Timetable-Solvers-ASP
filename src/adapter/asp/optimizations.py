@@ -6,15 +6,18 @@ class OptimizationPriorities(int, Enum):
     PENALTY__UNDESIRABLE_TIMESLOT_2 = 5
     PENALTY__UNDESIRABLE_TIMESLOT_1 = 4
     PENALTY__AVOID_ROOM_FOR_SESSION = 3
+    PENALTY__AVOID_TIMESLOT_FOR_SESSION = 3
     PENALTY__AVOID_SESSION_OVERLAP = 2
 
     BONUS__PREFER_ROOM_FOR_SESSION = 1
+    BONUS__PREFER_TIMESLOT_FOR_SESSION = 1
 
 
 class PenaltyNames(str, Enum):
     UNDESIRABLE_TIMESLOT = '"UndesirableTimeslot"'
-    AVOID_ROOM_FOR_SESSION = '"AvoidRoomForDegree"'
+    AVOID_ROOM_FOR_SESSION = '"AvoidRoomForSession"'
     AVOID_SESSION_OVERLAP = '"AvoidSessionOverlap"'
+    AVOID_TIMESLOT_FOR_SESSION = '"AvoidTimeslotForSession"'
 
 
 class PenaltyCosts(int, Enum):
@@ -23,11 +26,14 @@ class PenaltyCosts(int, Enum):
     UNDESIRABLE_TIMESLOT_5 = 50
     AVOID_ROOM_FOR_SESSION = 15
     AVOID_SESSION_OVERLAP = 15
+    AVOID_TIMESLOT_FOR_SESSION = 20
 
 
 class BonusNames(str, Enum):
     PREFER_ROOM_FOR_SESSION = '"PreferRoomForSession"'
+    PREFER_TIMESLOT_FOR_SESSION = '"PreferRoomForSession"'
 
 
 class BonusCosts(int, Enum):
     PREFER_ROOM_FOR_SESSION = 15
+    PREFER_TIMESLOT_FOR_SESSION = 20

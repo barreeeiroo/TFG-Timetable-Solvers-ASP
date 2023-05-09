@@ -41,7 +41,7 @@ class AspSolver(Solver):
                     print(f"Found solution #{answer_number} with {optimization} penalty")
 
         if solution is None:
-            raise RuntimeError("Could not generate schedule; a valid solution could not be returned")
+            raise RuntimeError("Could not generate schedule; a valid solution could not be returned.")
 
         if self._execution_uuid is not None:
             assigned_slot_lines = [f"{variables[0]}\t{variables[1]}\t{variables[2]}\n"

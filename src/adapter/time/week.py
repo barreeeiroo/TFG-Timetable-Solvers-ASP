@@ -49,6 +49,10 @@ class Week:
         day = math.floor(number / slots_per_day)
         return self.slots[day + 1][number - slots_per_day * day]
 
+    def get_slot_id(self, slot: Slot) -> int:
+        day_slots = self.slots[slot.week_day]
+        return (slot.week_day - 1) * self.get_slots_per_day_count() + day_slots.index(slot) + 1
+
     def get_slot_ids_per_type(self, desired_slot_type: SlotType) -> List[int]:
         slot_ids: List[int] = []
         for week_day, slots in self.slots.items():
@@ -57,6 +61,10 @@ class Week:
                 if slot.slot_type == desired_slot_type:
                     slot_ids.append(offset + slot_id)
         return slot_ids
+
+    @property
+    def slot_duration(self) -> timedelta:
+        return self.__slot_duration
 
     def print_available_slots(self):
         self.__print_slots()

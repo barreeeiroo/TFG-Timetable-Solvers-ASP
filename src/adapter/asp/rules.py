@@ -4,7 +4,8 @@ from adapter.asp.constants import ClingoNaming as ClN, ClingoPredicates as ClP, 
 from adapter.asp.optimizations import BonusCosts, BonusNames, OptimizationPriorities, PenaltyCosts, PenaltyNames
 from adapter.time.week import Week
 from models.dto.input import Room, Session
-from models.slot import SlotType
+from models.slot import Slot, SlotType
+from utils.slot_utils import generate_sub_slots
 
 
 class FactRules:
@@ -122,6 +123,28 @@ class FactRules:
             for preferred_room_uuid in session.constraints.rooms_preferences.preferred_rooms:
                 clingo_room = ClN.room_to_clingo(preferred_room_uuid)
                 statements.append(f"{ClP.preferred_room_for_session(clingo_session, clingo_room)}.")
+
+        return statements
+
+    @staticmethod
+    def generate_timeslot_preferences_for_sessions(sessions: List[Session], week: Week) -> List[str]:
+        statements: List[str] = []
+
+        def find_subslot_ids(slot: Slot) -> List[int]:
+            return [week.get_slot_id(subslot) for subslot in generate_sub_slots(slot, week.slot_duration)]
+
+        for session in sessions:
+            clingo_session = ClN.session_to_clingo(session)
+
+            for disallowed_slots in session.constraints.timeslots_preferences.disallowed_slots:
+                for subslot_id in find_subslot_ids(disallowed_slots):
+                    statements.append(f"{ClP.disallowed_timeslot_for_session(clingo_session, subslot_id)}.")
+            for penalized_slots in session.constraints.timeslots_preferences.penalized_slots:
+                for subslot_id in find_subslot_ids(penalized_slots):
+                    statements.append(f"{ClP.penalized_timeslot_for_session(clingo_session, subslot_id)}.")
+            for preferred_slots in session.constraints.timeslots_preferences.preferred_slots:
+                for subslot_id in find_subslot_ids(preferred_slots):
+                    statements.append(f"{ClP.preferred_timeslot_for_session(clingo_session, subslot_id)}.")
 
         return statements
 
@@ -264,6 +287,12 @@ class ConstraintRules:
         disallowed_room = ClP.disallowed_room_for_session(ClV.SESSION, ClV.ROOM)
         return f":- {disallowed_room}, {assigned_slot}."
 
+    @staticmethod
+    def exclude_timeslots_which_are_not_allowed_for_session() -> str:
+        scheduled_session = ClP.scheduled_session(ClV.TIMESLOT, ClV.SESSION)
+        disallowed_timeslot = ClP.disallowed_timeslot_for_session(ClV.SESSION, ClV.TIMESLOT)
+        return f":- {disallowed_timeslot}, {scheduled_session}."
+
 
 class OptimizationRules:
     @staticmethod
@@ -314,6 +343,26 @@ class OptimizationRules:
         no_overlap = ClP.no_timeslot_overlap_in_sessions(f"{ClV.SESSION}1", f"{ClV.SESSION}2")
         return f"{penalty} :- {no_overlap}, {scheduled_session_one}, {scheduled_session_two}."
 
+    @staticmethod
+    def apply_timeslot_preferences_in_sessions() -> List[str]:
+        scheduled_session = ClP.scheduled_session(ClV.TIMESLOT, ClV.SESSION)
+
+        penalty = ClP.penalty(PenaltyNames.AVOID_TIMESLOT_FOR_SESSION,
+                              PenaltyCosts.AVOID_TIMESLOT_FOR_SESSION,
+                              ClV.SESSION,
+                              OptimizationPriorities.PENALTY__AVOID_TIMESLOT_FOR_SESSION)
+        penalized_timeslot = ClP.penalized_timeslot_for_session(ClV.SESSION, ClV.TIMESLOT)
+        avoid_statement = f"{penalty} :- {penalized_timeslot}, {scheduled_session}."
+
+        bonus = ClP.bonus(BonusNames.PREFER_TIMESLOT_FOR_SESSION,
+                          BonusCosts.PREFER_TIMESLOT_FOR_SESSION,
+                          ClV.SESSION,
+                          OptimizationPriorities.BONUS__PREFER_TIMESLOT_FOR_SESSION)
+        preferred_timeslot = ClP.preferred_timeslot_for_session(ClV.SESSION, ClV.TIMESLOT)
+        prefer_statement = f"{bonus} :- {preferred_timeslot}, {scheduled_session}."
+
+        return [avoid_statement, prefer_statement]
+
 
 class Directives:
     @staticmethod
@@ -359,6 +408,7 @@ class Rules:
         statements.extend(FactRules.generate_no_overlapping_sessions(self.sessions))
         statements.extend(FactRules.generate_avoid_overlapping_sessions(self.sessions))
         statements.extend(FactRules.generate_room_preferences_for_sessions(self.sessions))
+        statements.extend(FactRules.generate_timeslot_preferences_for_sessions(self.sessions, self.week))
 
         return "\n".join(statements)
 
@@ -397,6 +447,7 @@ class Rules:
         statements.extend(OptimizationRules.penalize_undesirable_timeslots())
         statements.extend(OptimizationRules.apply_room_preferences_in_sessions())
         statements.append(OptimizationRules.penalize_overlapping_sessions())
+        statements.extend(OptimizationRules.apply_timeslot_preferences_in_sessions())
 
         return "\n".join(statements)
 
@@ -427,16 +478,3 @@ class Rules:
             optimizations,
             directives,
         ])
-
-
-class Rules2:
-    def __init__(self, week: Week, sessions: List[Session], rooms: List[Room]):
-        self.__week = week
-        self.__sessions = sessions
-        self.__rooms = rooms
-
-    def generate_penalized_room_types(self, penality_amount: int = 45) -> str:
-        assert self
-        used_room = ClP.used_room(ClV.TIMESLOT, ClV.ROOM, ClV.ROOM_TYPE, ClV.SESSION_TYPE)
-        condition = f"{ClV.ROOM_TYPE} != {ClV.SESSION_TYPE}"
-        return f":~ {used_room}, {condition}.[{penality_amount},{ClV.TIMESLOT}]"
