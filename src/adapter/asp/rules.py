@@ -94,6 +94,20 @@ class FactRules:
         return statements
 
     @staticmethod
+    def generate_avoid_overlapping_sessions(sessions: List[Session]) -> List[str]:
+        statements: List[str] = []
+        for session in sessions:
+            for no_overlapping_session_uuid in session.constraints.avoid_conflict_in_time:
+                session1, session2 = sorted((
+                    ClN.session_to_clingo(session),
+                    ClN.session_to_clingo(no_overlapping_session_uuid),
+                ))
+                statement = f"{ClP.avoid_timeslot_overlap_in_sessions(session1, session2)}."
+                if statement not in statements:
+                    statements.append(statement)
+        return statements
+
+    @staticmethod
     def generate_room_preferences_for_sessions(sessions: List[Session]) -> List[str]:
         statements: List[str] = []
         for session in sessions:
@@ -289,6 +303,17 @@ class OptimizationRules:
 
         return [avoid_statement, prefer_statement]
 
+    @staticmethod
+    def penalize_overlapping_sessions() -> str:
+        penalty = ClP.penalty(PenaltyNames.AVOID_SESSION_OVERLAP,
+                              PenaltyCosts.AVOID_SESSION_OVERLAP,
+                              f"{ClV.SESSION}1",
+                              OptimizationPriorities.PENALTY__AVOID_SESSION_OVERLAP)
+        scheduled_session_one = ClP.scheduled_session(ClV.TIMESLOT, f"{ClV.SESSION}1")
+        scheduled_session_two = ClP.scheduled_session(ClV.TIMESLOT, f"{ClV.SESSION}2")
+        no_overlap = ClP.no_timeslot_overlap_in_sessions(f"{ClV.SESSION}1", f"{ClV.SESSION}2")
+        return f"{penalty} :- {scheduled_session_one}, {scheduled_session_two}, {no_overlap}."
+
 
 class Directives:
     @staticmethod
@@ -332,6 +357,7 @@ class Rules:
 
         statements.extend(FactRules.generate_sessions(self.sessions, self.week))
         statements.extend(FactRules.generate_no_overlapping_sessions(self.sessions))
+        statements.extend(FactRules.generate_avoid_overlapping_sessions(self.sessions))
         statements.extend(FactRules.generate_room_preferences_for_sessions(self.sessions))
 
         return "\n".join(statements)
@@ -370,6 +396,7 @@ class Rules:
 
         statements.extend(OptimizationRules.penalize_undesirable_timeslots())
         statements.extend(OptimizationRules.apply_room_preferences_in_sessions())
+        statements.append(OptimizationRules.penalize_overlapping_sessions())
 
         return "\n".join(statements)
 
