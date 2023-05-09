@@ -176,7 +176,7 @@ class ConstraintRules:
     def exclude_blocked_timeslots() -> str:
         scheduled_session = ClP.scheduled_session(ClV.TIMESLOT, ClV.ANY)
         blocked_timeslot = ClP.blocked_timeslot(ClV.TIMESLOT)
-        return f":- {scheduled_session}, {blocked_timeslot}."
+        return f":- {blocked_timeslot}, {scheduled_session}."
 
     @staticmethod
     def exclude_more_than_one_session_in_same_room_and_timeslot() -> str:
@@ -197,14 +197,14 @@ class ConstraintRules:
         scheduled_session_one = ClP.scheduled_session(ClV.TIMESLOT, f"{ClV.SESSION}1")
         scheduled_session_two = ClP.scheduled_session(ClV.TIMESLOT, f"{ClV.SESSION}2")
         no_overlap = ClP.no_timeslot_overlap_in_sessions(f"{ClV.SESSION}1", f"{ClV.SESSION}2")
-        return f":- {scheduled_session_one}, {scheduled_session_two}, {no_overlap}."
+        return f":- {no_overlap}, {scheduled_session_one}, {scheduled_session_two}."
 
     @staticmethod
     def exclude_sessions_scheduled_in_different_days() -> str:
         scheduled_session_one = ClP.scheduled_session(f"{ClV.TIMESLOT}1", ClV.SESSION)
         scheduled_session_two = ClP.scheduled_session(f"{ClV.TIMESLOT}2", ClV.SESSION)
-        no_overlap = ClP.break_session_timeslot(f"{ClV.TIMESLOT}1", f"{ClV.TIMESLOT}2")
-        return f":- {scheduled_session_one}, {scheduled_session_two}, {no_overlap}."
+        break_session = ClP.break_session_timeslot(f"{ClV.TIMESLOT}1", f"{ClV.TIMESLOT}2")
+        return f":- {break_session}, {scheduled_session_one}, {scheduled_session_two}."
 
     @staticmethod
     def exclude_sessions_scheduled_in_non_contiguous_timeslots() -> str:
@@ -262,7 +262,7 @@ class ConstraintRules:
     def exclude_rooms_which_are_not_allowed_for_session() -> str:
         assigned_slot = ClP.assigned_slot(ClV.ANY, ClV.SESSION, ClV.ROOM)
         disallowed_room = ClP.disallowed_room_for_session(ClV.SESSION, ClV.ROOM)
-        return f":- {assigned_slot}, {disallowed_room}."
+        return f":- {disallowed_room}, {assigned_slot}."
 
 
 class OptimizationRules:
@@ -280,7 +280,7 @@ class OptimizationRules:
             penalty = ClP.penalty(PenaltyNames.UNDESIRABLE_TIMESLOT, ClV.PENALTY_COST, ClV.SESSION, prio)
             undesirable_timeslot = ClP.undesirable_timeslot(ClV.TIMESLOT, ClV.PENALTY_COST)
             penalty_cost = f"{ClV.PENALTY_COST} == {cost}"
-            statements.append(f"{penalty} :- {scheduled_session}, {undesirable_timeslot}, {penalty_cost}.")
+            statements.append(f"{penalty} :- {undesirable_timeslot}, {scheduled_session}, {penalty_cost}.")
         return statements
 
     @staticmethod
@@ -292,14 +292,14 @@ class OptimizationRules:
                               ClV.SESSION,
                               OptimizationPriorities.PENALTY__AVOID_ROOM_FOR_SESSION)
         penalized_room = ClP.penalized_room_for_session(ClV.SESSION, ClV.ROOM)
-        avoid_statement = f"{penalty} :- {assigned_slot}, {penalized_room}."
+        avoid_statement = f"{penalty} :- {penalized_room}, {assigned_slot}."
 
         bonus = ClP.bonus(BonusNames.PREFER_ROOM_FOR_SESSION,
                           BonusCosts.PREFER_ROOM_FOR_SESSION,
                           ClV.SESSION,
                           OptimizationPriorities.BONUS__PREFER_ROOM_FOR_SESSION)
         preferred_room = ClP.preferred_room_for_session(ClV.SESSION, ClV.ROOM)
-        prefer_statement = f"{bonus} :- {assigned_slot}, {preferred_room}."
+        prefer_statement = f"{bonus} :- {preferred_room}, {assigned_slot}."
 
         return [avoid_statement, prefer_statement]
 
@@ -312,7 +312,7 @@ class OptimizationRules:
         scheduled_session_one = ClP.scheduled_session(ClV.TIMESLOT, f"{ClV.SESSION}1")
         scheduled_session_two = ClP.scheduled_session(ClV.TIMESLOT, f"{ClV.SESSION}2")
         no_overlap = ClP.no_timeslot_overlap_in_sessions(f"{ClV.SESSION}1", f"{ClV.SESSION}2")
-        return f"{penalty} :- {scheduled_session_one}, {scheduled_session_two}, {no_overlap}."
+        return f"{penalty} :- {no_overlap}, {scheduled_session_one}, {scheduled_session_two}."
 
 
 class Directives:
