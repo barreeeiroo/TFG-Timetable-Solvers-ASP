@@ -36,7 +36,9 @@ class AspSolver(Solver):
             solution = answer
             if not optimality:
                 if self._execution_uuid is not None:
-                    logger.info(f"Found solution #{answer_number} with {optimization} penalty")
+                    logger.info(f"Found solution #{answer_number} with {optimization} penalty", extra={
+                        "execution": self._execution_uuid,
+                    })
                 else:
                     print(f"Found solution #{answer_number} with {optimization} penalty")
 
