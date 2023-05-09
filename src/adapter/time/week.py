@@ -59,7 +59,7 @@ class Week:
             offset = (week_day - 1) * self.get_slots_per_day_count()
             for slot_id, slot in enumerate(slots):
                 if slot.slot_type == desired_slot_type:
-                    slot_ids.append(offset + slot_id)
+                    slot_ids.append(offset + slot_id + 1)
         return slot_ids
 
     @property
