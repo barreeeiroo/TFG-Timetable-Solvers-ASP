@@ -1,11 +1,11 @@
-from typing import Dict, List
+from typing import List
 
 from adapter.asp.constants import ClingoNaming as ClN, ClingoPredicates as ClP, ClingoVariables as ClV
 from adapter.asp.optimizations import BonusCosts, BonusNames, OptimizationPriorities, PenaltyCosts, PenaltyNames
 from adapter.time.week import Week
 from models.dto.input import Room, Session
 from models.slot import Slot, SlotType
-from utils.slot_utils import generate_slot_groups, generate_sub_slots
+from utils.slot_utils import generate_sub_slots
 
 
 class FactRules:
@@ -19,9 +19,8 @@ class FactRules:
 
     @staticmethod
     def generate_blocked_timeslots(week: Week) -> str:
-        ids: List[int] = [slot for slot in week.get_slot_ids_per_type(SlotType.BLOCKED)]
-        groups: str = generate_slot_groups(ids)
-        blocked_timeslot = ClP.blocked_timeslot(groups)
+        ids = [str(slot) for slot in week.get_slot_ids_per_type(SlotType.BLOCKED)]
+        blocked_timeslot = ClP.blocked_timeslot(";".join(ids))
         return f"{blocked_timeslot}."
 
     @staticmethod
@@ -34,10 +33,9 @@ class FactRules:
 
         statements = []
         for slot_type, penalty_amount in undesirable_penalties.items():
-            ids: List[int] = [slot for slot in week.get_slot_ids_per_type(slot_type)]
-            groups: str = generate_slot_groups(ids)
-            undesirable_timeslot = ClP.undesirable_timeslot(groups, penalty_amount)
-            statements.append(f"{undesirable_timeslot}.")
+            for slot in week.get_slot_ids_per_type(slot_type):
+                undesirable_timeslot = ClP.undesirable_timeslot(slot, penalty_amount)
+                statements.append(f"{undesirable_timeslot}.")
         return statements
 
     @staticmethod
@@ -84,40 +82,30 @@ class FactRules:
 
     @staticmethod
     def generate_no_overlapping_sessions(sessions: List[Session]) -> List[str]:
-        no_overlaps: Dict[str, List[str]] = {}
+        statements: List[str] = []
         for session in sessions:
             for no_overlapping_session_uuid in session.constraints.cannot_conflict_in_time:
                 session1, session2 = sorted((
                     ClN.session_to_clingo(session),
                     ClN.session_to_clingo(no_overlapping_session_uuid),
                 ))
-                if session1 not in no_overlaps:
-                    no_overlaps[session1] = []
-                if session2 not in no_overlaps[session1]:
-                    no_overlaps[session1].append(session2)
-
-        statements: List[str] = []
-        for session1, sessions2 in no_overlaps.items():
-            statements.append(f"{ClP.no_timeslot_overlap_in_sessions(session1, ';'.join(sessions2))}.")
+                statement = f"{ClP.no_timeslot_overlap_in_sessions(session1, session2)}."
+                if statement not in statements:
+                    statements.append(statement)
         return statements
 
     @staticmethod
     def generate_avoid_overlapping_sessions(sessions: List[Session]) -> List[str]:
-        avoid_overlaps: Dict[str, List[str]] = {}
+        statements: List[str] = []
         for session in sessions:
             for no_overlapping_session_uuid in session.constraints.avoid_conflict_in_time:
                 session1, session2 = sorted((
                     ClN.session_to_clingo(session),
                     ClN.session_to_clingo(no_overlapping_session_uuid),
                 ))
-                if session1 not in avoid_overlaps:
-                    avoid_overlaps[session1] = []
-                if session2 not in avoid_overlaps[session1]:
-                    avoid_overlaps[session1].append(session2)
-
-        statements: List[str] = []
-        for session1, sessions2 in avoid_overlaps.items():
-            statements.append(f"{ClP.avoid_timeslot_overlap_in_sessions(session1, ';'.join(sessions2))}.")
+                statement = f"{ClP.avoid_timeslot_overlap_in_sessions(session1, session2)}."
+                if statement not in statements:
+                    statements.append(statement)
         return statements
 
     @staticmethod
@@ -126,26 +114,15 @@ class FactRules:
         for session in sessions:
             clingo_session = ClN.session_to_clingo(session)
 
-            disallowed_rooms: List[str] = []
             for disallowed_room_uuid in session.constraints.rooms_preferences.disallowed_rooms:
                 clingo_room = ClN.room_to_clingo(disallowed_room_uuid)
-                disallowed_rooms.append(clingo_room)
-            if len(disallowed_rooms) > 0:
-                statements.append(f"{ClP.disallowed_room_for_session(clingo_session, ';'.join(disallowed_rooms))}.")
-
-            penalized_rooms: List[str] = []
+                statements.append(f"{ClP.disallowed_room_for_session(clingo_session, clingo_room)}.")
             for penalized_room_uuid in session.constraints.rooms_preferences.penalized_rooms:
                 clingo_room = ClN.room_to_clingo(penalized_room_uuid)
-                penalized_rooms.append(clingo_room)
-            if len(penalized_rooms) > 0:
-                statements.append(f"{ClP.penalized_room_for_session(clingo_session, ';'.join(penalized_rooms))}.")
-
-            preferred_rooms: List[str] = []
+                statements.append(f"{ClP.penalized_room_for_session(clingo_session, clingo_room)}.")
             for preferred_room_uuid in session.constraints.rooms_preferences.preferred_rooms:
                 clingo_room = ClN.room_to_clingo(preferred_room_uuid)
-                preferred_rooms.append(clingo_room)
-            if len(preferred_rooms) > 0:
-                statements.append(f"{ClP.preferred_room_for_session(clingo_session, ';'.join(preferred_rooms))}.")
+                statements.append(f"{ClP.preferred_room_for_session(clingo_session, clingo_room)}.")
 
         return statements
 
@@ -159,29 +136,15 @@ class FactRules:
         for session in sessions:
             clingo_session = ClN.session_to_clingo(session)
 
-            disallowed_groups: List[str] = []
             for disallowed_slots in session.constraints.timeslots_preferences.disallowed_slots:
-                ids: List[int] = find_subslot_ids(disallowed_slots)
-                disallowed_groups.append(generate_slot_groups(ids))
-            if len(disallowed_groups) > 0:
-                disallowed_timeslot = ClP.disallowed_timeslot_for_session(clingo_session, ';'.join(disallowed_groups))
-                statements.append(f"{disallowed_timeslot}.")
-
-            penalized_groups: List[str] = []
+                for subslot_id in find_subslot_ids(disallowed_slots):
+                    statements.append(f"{ClP.disallowed_timeslot_for_session(clingo_session, subslot_id)}.")
             for penalized_slots in session.constraints.timeslots_preferences.penalized_slots:
-                ids: List[int] = find_subslot_ids(penalized_slots)
-                penalized_groups.append(generate_slot_groups(ids))
-            if len(penalized_groups) > 0:
-                penalized_timeslot = ClP.penalized_timeslot_for_session(clingo_session, ';'.join(penalized_groups))
-                statements.append(f"{penalized_timeslot}.")
-
-            preferred_groups: List[str] = []
+                for subslot_id in find_subslot_ids(penalized_slots):
+                    statements.append(f"{ClP.penalized_timeslot_for_session(clingo_session, subslot_id)}.")
             for preferred_slots in session.constraints.timeslots_preferences.preferred_slots:
-                ids: List[int] = find_subslot_ids(preferred_slots)
-                preferred_groups.append(generate_slot_groups(ids))
-            if len(preferred_groups) > 0:
-                preferred_timeslot = ClP.preferred_timeslot_for_session(clingo_session, ';'.join(preferred_groups))
-                statements.append(f"{preferred_timeslot}.")
+                for subslot_id in find_subslot_ids(preferred_slots):
+                    statements.append(f"{ClP.preferred_timeslot_for_session(clingo_session, subslot_id)}.")
 
         return statements
 
