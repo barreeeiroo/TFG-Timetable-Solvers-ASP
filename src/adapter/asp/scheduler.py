@@ -42,9 +42,10 @@ class AspSolver(Solver):
                 else:
                     print(f"Found solution #{answer_number} with {optimization} penalty")
 
-        statistics_lines = [f"{key}\t{value}\n"
-                            for key, value in models.statistics.items()]
-        save_txt_file(self._execution_uuid, "asp_statistics", "".join(statistics_lines))
+        if self._execution_uuid is not None:
+            statistics_lines = [f"{key}\t{value}\n"
+                                for key, value in models.statistics.items()]
+            save_txt_file(self._execution_uuid, "asp_statistics", "".join(statistics_lines))
 
         if solution is None:
             raise RuntimeError("Could not generate schedule; a valid solution could not be returned.")
