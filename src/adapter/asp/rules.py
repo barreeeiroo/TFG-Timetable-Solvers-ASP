@@ -477,4 +477,4 @@ class Rules:
             constraints,
             optimizations,
             directives,
-        ])
+        ]) + "\n"
