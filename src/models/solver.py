@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from pathlib import Path
 from typing import List, Optional
 
 from models.dto.output import Output
@@ -13,9 +14,13 @@ class Solver(ABC):
         self._rooms = rooms
         self._settings = settings
         self._execution_uuid: Optional[str] = None
+        self._local_dir: Optional[Path] = None
 
     def with_execution_uuid(self, execution_uuid: str):
         self._execution_uuid = execution_uuid
+
+    def with_local_working_directory(self, working_directory: Path):
+        self._local_dir = working_directory
 
     def _find_session_by_hex(self, uuid_hex: str) -> Session:
         return next(session for session in self._sessions if session.id.hex == uuid_hex)

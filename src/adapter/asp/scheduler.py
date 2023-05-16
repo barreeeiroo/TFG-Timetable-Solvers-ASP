@@ -8,6 +8,7 @@ from models.dto.output import Output
 from models.schedule import ScheduleUnit
 from models.solver import Solver
 from sdk.aws_s3 import save_txt_file
+from sdk.local_fs import save_local_txt_file
 from utils.env_utils import is_short_execution_environment
 
 logger = Logger()
@@ -21,6 +22,8 @@ class AspSolver(Solver):
 
         if self._execution_uuid is not None:
             save_txt_file(self._execution_uuid, "asp_problem", asp_problem)
+        elif self._local_dir is not None:
+            save_local_txt_file(self._local_dir, "asp_problem", asp_problem)
         else:
             print(asp_problem)
 
@@ -35,31 +38,33 @@ class AspSolver(Solver):
             # Keep retrieving answers till timeout
             solution = answer
             if not optimality:
+                text = f"Found solution #{answer_number} with {optimization} penalty"
                 if self._execution_uuid is not None:
-                    logger.info(f"Found solution #{answer_number} with {optimization} penalty", extra={
-                        "execution": self._execution_uuid,
-                    })
+                    logger.info(text, extra={"execution": self._execution_uuid})
                 else:
-                    print(f"Found solution #{answer_number} with {optimization} penalty")
+                    print(text)
 
+        statistics_lines = [f"{key}\t{value}\n" for key, value in models.statistics.items()]
         if self._execution_uuid is not None:
-            statistics_lines = [f"{key}\t{value}\n"
-                                for key, value in models.statistics.items()]
             save_txt_file(self._execution_uuid, "asp_statistics", "".join(statistics_lines))
+        elif self._local_dir is not None:
+            save_local_txt_file(self._local_dir, "asp_statistics", "".join(statistics_lines))
 
         if solution is None:
             raise RuntimeError("Could not generate schedule; a valid solution could not be returned.")
 
-        if self._execution_uuid is not None:
-            assigned_slot_lines = [f"{variables[0]}\t{variables[1]}\t{variables[2]}\n"
-                                   for predicate, variables in solution
-                                   if predicate == ClP.ASSIGNED_SLOT]
-            save_txt_file(self._execution_uuid, "asp_solution", "".join(assigned_slot_lines))
+        assigned_slot_lines = [f"{variables[0]}\t{variables[1]}\t{variables[2]}\n"
+                               for predicate, variables in solution if predicate == ClP.ASSIGNED_SLOT]
+        optimization_lines = [f"{predicate}\t\t{variables[0]}\t{variables[1]}\t{variables[2]}\n"
+                              for predicate, variables in solution if predicate in (ClP.PENALTY, ClP.BONUS,)]
 
-            optimization_lines = [f"{predicate}\t\t{variables[0]}\t{variables[1]}\t{variables[2]}\n"
-                                  for predicate, variables in solution
-                                  if predicate in (ClP.PENALTY, ClP.BONUS,)]
+        if self._execution_uuid is not None:
+            save_txt_file(self._execution_uuid, "asp_solution", "".join(assigned_slot_lines))
             save_txt_file(self._execution_uuid, "asp_optimization", "".join(optimization_lines))
+
+        elif self._local_dir is not None:
+            save_local_txt_file(self._local_dir, "asp_solution", "".join(assigned_slot_lines))
+            save_local_txt_file(self._local_dir, "asp_optimization", "".join(optimization_lines))
 
         else:
             print("---")

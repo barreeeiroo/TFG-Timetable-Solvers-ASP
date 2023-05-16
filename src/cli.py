@@ -1,10 +1,9 @@
 import argparse
-import json
 from pathlib import Path
 
 from adapter.asp.scheduler import AspSolver
-from models.dto.input import SolverInput
 from sdk.aws_s3 import get_input_object, save_output_object
+from sdk.local_fs import get_local_input_object, save_local_output_object
 
 
 def aws_execution(execution_arn: str):
@@ -18,19 +17,18 @@ def aws_execution(execution_arn: str):
     output = solver.solve()
 
     object_key = save_output_object(execution_uuid, output)
+    print(f"File saved in S3: {object_key}")
 
 
-def local_execution(input_file_path_raw: str):
-    input_file_path = Path(input_file_path_raw)
-    with open(input_file_path) as f:
-        data = json.loads(f.read())
-    input_data = SolverInput.parse_obj(data)
+def local_execution(working_directory_path_raw: str):
+    working_directory_path = Path(working_directory_path_raw)
+    input_data = get_local_input_object(working_directory_path)
 
     solver = AspSolver(input_data.sessions, input_data.rooms, input_data.settings)
+    solver.with_local_working_directory(working_directory_path)
     output = solver.solve()
 
-    with open(input_file_path.parent / 'output.json', 'w') as f:
-        f.write(output.json(by_alias=True, exclude_none=True) + "\n")
+    save_local_output_object(working_directory_path, output)
 
 
 if __name__ == "__main__":
@@ -40,12 +38,12 @@ if __name__ == "__main__":
 
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('-e', '--executionArn', type=str, help="AWS State Machine Execution ARN")
-    group.add_argument('-f', '--inputFile', type=str, help="input.json file path")
+    group.add_argument('-f', '--workDir', type=str, help="Local working directory with input.json file")
     args = parser.parse_args()
 
     if args.executionArn:
         aws_execution(args.executionArn)
-    elif args.inputFile:
-        local_execution(args.inputFile)
+    elif args.workDir:
+        local_execution(args.workDir)
     else:
         raise NotImplementedError("Unknown Invocation")
