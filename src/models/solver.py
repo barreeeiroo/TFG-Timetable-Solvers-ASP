@@ -15,12 +15,16 @@ class Solver(ABC):
         self._settings = settings
         self._execution_uuid: Optional[str] = None
         self._local_dir: Optional[Path] = None
+        self._timeout: Optional[int] = None
 
     def with_execution_uuid(self, execution_uuid: str):
         self._execution_uuid = execution_uuid
 
     def with_local_working_directory(self, working_directory: Path):
         self._local_dir = working_directory
+
+    def with_timeout(self, timeout: int):
+        self._timeout = timeout
 
     def _find_session_by_hex(self, uuid_hex: str) -> Session:
         return next(session for session in self._sessions if session.id.hex == uuid_hex)
