@@ -2,7 +2,7 @@ import calendar
 import math
 from collections import defaultdict
 from datetime import timedelta
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 from models.settings import Settings
 from models.slot import Slot, SlotType
@@ -52,6 +52,18 @@ class Week:
     def get_slot_id(self, slot: Slot) -> int:
         day_slots = self.slots[slot.week_day]
         return (slot.week_day - 1) * self.get_slots_per_day_count() + day_slots.index(slot) + 1
+
+    def get_day_breaks(self) -> List[Tuple[int, int]]:
+        total_slots = self.get_total_slot_count()
+        slots_per_day = self.get_slots_per_day_count()
+        num_days = int(total_slots / slots_per_day)
+
+        day_breaks: List[Tuple[int, int]] = []
+        for i in range(1, num_days):
+            day_end = slots_per_day * i
+            next_day_start = day_end + 1
+            day_breaks.append((day_end, next_day_start,))
+        return day_breaks
 
     def get_slot_ids_per_type(self, desired_slot_type: SlotType) -> List[int]:
         slot_ids: List[int] = []

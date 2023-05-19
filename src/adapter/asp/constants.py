@@ -9,7 +9,6 @@ class ClingoVariables:
     ANY = "_"
 
     TIMESLOT = "T"
-    CONTIGUOUS_TIMESLOT = "CT"
     SESSION = "S"
     SESSION_TYPE = "ST"
     SESSION_DURATION = "H"
@@ -29,7 +28,6 @@ class ClingoVariables:
 
 class ClingoPredicates:
     TIMESLOT = "timeslot"
-    CONTIGUOUS_TIMESLOT = "ct"
     ROOM = "room"
     ROOM_TYPE = "roomType"
     SESSION = "session"
@@ -39,8 +37,6 @@ class ClingoPredicates:
     ASSIGNED_ROOM = "assignedRoom"
     NO_TIMESLOT_OVERLAP_IN_SESSIONS = "noTimeslotOverlapInSessions"
     AVOID_TIMESLOT_OVERLAP_IN_SESSIONS = "avoidTimeslotOverlapInSessions"
-    BREAK_SESSION_TIMESLOT = "breakSessionTimeslot"
-    USED_ROOM = "usedRoom"
     UNDESIRABLE_TIMESLOT = "undesirableTimeslot"
     DISALLOWED_ROOM_FOR_SESSION = "disallowedRoomForSession"
     PREFERRED_ROOM_FOR_SESSION = "preferredRoomForSession"
@@ -73,10 +69,6 @@ class ClingoPredicates:
         return f"{ClingoPredicates.AVOID_TIMESLOT_OVERLAP_IN_SESSIONS}({session1},{session2})"
 
     @staticmethod
-    def break_session_timeslot(timeslot1: Union[int, str], timeslot2: Union[int, str]):
-        return f"{ClingoPredicates.BREAK_SESSION_TIMESLOT}({timeslot1},{timeslot2})"
-
-    @staticmethod
     def timeslot(timeslot: str) -> str:
         return f"{ClingoPredicates.TIMESLOT}({timeslot})"
 
@@ -91,10 +83,6 @@ class ClingoPredicates:
     @staticmethod
     def session(session: str, session_type: str, session_duration: int):
         return f"{ClingoPredicates.SESSION}({session},{session_type},{session_duration})"
-
-    @staticmethod
-    def contiguous_timeslot(ct: Union[int, str]):
-        return f"{ClingoPredicates.CONTIGUOUS_TIMESLOT}({ct})"
 
     @staticmethod
     def undesirable_timeslot(timeslot: Union[str, int], penalty: Union[str, int]):

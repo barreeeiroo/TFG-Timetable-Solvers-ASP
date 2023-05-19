@@ -5,7 +5,7 @@ from adapter.asp.optimizations import BonusCosts, BonusNames, OptimizationPriori
 from adapter.time.week import Week
 from models.dto.input import Room, Session
 from models.slot import Slot, SlotType
-from utils.slot_utils import generate_slot_groups, generate_sub_slots
+from utils.slot_utils import generate_slot_groups, generate_slot_groups_raw, generate_sub_slots
 
 
 class FactRules:
@@ -15,10 +15,6 @@ class FactRules:
         blocked_slots = week.get_slot_ids_per_type(SlotType.BLOCKED)
         slots = [i for i in range(1, total_slot_count + 1) if i not in blocked_slots]
         return f"{ClP.timeslot(generate_slot_groups(slots))}."
-
-    @staticmethod
-    def contiguous_timeslots() -> str:
-        return f"{ClP.contiguous_timeslot('1;-1')}."
 
     @staticmethod
     def generate_undesirable_timeslots(week: Week) -> List[str]:
@@ -33,20 +29,6 @@ class FactRules:
             for slot in week.get_slot_ids_per_type(slot_type):
                 undesirable_timeslot = ClP.undesirable_timeslot(slot, penalty_amount)
                 statements.append(f"{undesirable_timeslot}.")
-        return statements
-
-    @staticmethod
-    def generate_day_breaks(week: Week) -> List[str]:
-        total_slots = week.get_total_slot_count()
-        slots_per_day = week.get_slots_per_day_count()
-        num_days = int(total_slots / slots_per_day)
-
-        statements: List[str] = []
-        for i in range(1, num_days):
-            day_end = slots_per_day * i
-            next_day_start = day_end + 1
-            statement = ClP.break_session_timeslot(day_end, next_day_start)
-            statements.append(f"{statement}.")
         return statements
 
     @staticmethod
@@ -150,7 +132,11 @@ class ChoiceRules:
     @staticmethod
     def generate_assigned_timeslots(week: Week) -> str:
         assigned_timeslot = ClP.assigned_timeslot(ClV.TIMESLOT, ClV.SESSION)
-        timeslot_generator = f"T = 1..{week.get_total_slot_count()}-{ClV.SESSION_DURATION}+1"
+        blocked_slots = week.get_slot_ids_per_type(SlotType.BLOCKED)
+        slots = [i for i in range(1, week.get_total_slot_count() + 1) if i not in blocked_slots]
+        slot_ranges = generate_slot_groups_raw(slots, [first for first, _ in week.get_day_breaks()])
+        formulas = [f'{slot_range}-{ClV.SESSION_DURATION}+1' for slot_range in slot_ranges]
+        timeslot_generator = f"T = ({';'.join(formulas)})"
         head = f"1 {{ {assigned_timeslot} : {timeslot_generator} }} 1"
 
         session = ClP.session(ClV.SESSION, ClV.ANY, ClV.SESSION_DURATION)
@@ -199,13 +185,6 @@ class ConstraintRules:
         scheduled_session_two = ClP.scheduled_session(ClV.TIMESLOT, f"{ClV.SESSION}2", ClV.ANY)
         no_overlap = ClP.no_timeslot_overlap_in_sessions(f"{ClV.SESSION}1", f"{ClV.SESSION}2")
         return f":- {no_overlap}, {scheduled_session_one}, {scheduled_session_two}."
-
-    @staticmethod
-    def exclude_sessions_assigned_in_different_days() -> str:
-        scheduled_session_one = ClP.assigned_timeslot(f"{ClV.TIMESLOT}1", ClV.SESSION)
-        scheduled_session_two = ClP.assigned_timeslot(f"{ClV.TIMESLOT}2", ClV.SESSION)
-        break_session = ClP.break_session_timeslot(f"{ClV.TIMESLOT}1", f"{ClV.TIMESLOT}2")
-        return f":- {break_session}, {scheduled_session_one}, {scheduled_session_two}."
 
     @staticmethod
     def exclude_timeslots_which_are_not_allowed_for_session() -> str:
@@ -321,10 +300,8 @@ class Rules:
     def __generate_facts(self) -> str:
         statements: List[str] = [
             FactRules.generate_timeslot(self.week),
-            FactRules.contiguous_timeslots(),
         ]
         statements.extend(FactRules.generate_undesirable_timeslots(self.week))
-        statements.extend(FactRules.generate_day_breaks(self.week))
 
         statements.extend(FactRules.generate_rooms(self.rooms))
         statements.extend(FactRules.generate_room_types(self.rooms))
@@ -355,7 +332,6 @@ class Rules:
         return "\n".join([
             ConstraintRules.exclude_more_than_one_session_in_same_room_and_timeslot(),
             ConstraintRules.exclude_sessions_assigned_in_same_overlapping_timeslot(),
-            ConstraintRules.exclude_sessions_assigned_in_different_days(),
             ConstraintRules.exclude_timeslots_which_are_not_allowed_for_session(),
             ConstraintRules.exclude_rooms_which_are_not_allowed_for_session(),
         ])
