@@ -41,7 +41,6 @@ class ClingoPredicates:
     AVOID_TIMESLOT_OVERLAP_IN_SESSIONS = "avoidTimeslotOverlapInSessions"
     BREAK_SESSION_TIMESLOT = "breakSessionTimeslot"
     USED_ROOM = "usedRoom"
-    BLOCKED_TIMESLOT = "blockedTimeslot"
     UNDESIRABLE_TIMESLOT = "undesirableTimeslot"
     DISALLOWED_ROOM_FOR_SESSION = "disallowedRoomForSession"
     PREFERRED_ROOM_FOR_SESSION = "preferredRoomForSession"
@@ -96,10 +95,6 @@ class ClingoPredicates:
     @staticmethod
     def contiguous_timeslot(ct: Union[int, str]):
         return f"{ClingoPredicates.CONTIGUOUS_TIMESLOT}({ct})"
-
-    @staticmethod
-    def blocked_timeslot(timeslot: Union[str, int]):
-        return f"{ClingoPredicates.BLOCKED_TIMESLOT}({timeslot})"
 
     @staticmethod
     def undesirable_timeslot(timeslot: Union[str, int], penalty: Union[str, int]):
