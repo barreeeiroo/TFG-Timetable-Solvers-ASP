@@ -59,17 +59,17 @@ class AspSolver(Solver):
         if solution is None:
             raise RuntimeError("Could not generate schedule; a valid solution could not be returned.")
 
-        assigned_slot_lines = [f"{variables[0]}\t{variables[1]}\t{variables[2]}\n"
-                               for predicate, variables in solution if predicate == ClP.ASSIGNED_SLOT]
+        scheduled_sessions = [f"{variables[0]}\t{variables[1]}\t{variables[2]}\n"
+                              for predicate, variables in solution if predicate == ClP.SCHEDULED_SESSION]
         optimization_lines = [f"{predicate}\t\t{variables[0]}\t{variables[1]}\t{variables[2]}\n"
                               for predicate, variables in solution if predicate in (ClP.PENALTY, ClP.BONUS,)]
 
         if self._execution_uuid is not None:
-            save_txt_file(self._execution_uuid, "asp_solution", "".join(assigned_slot_lines))
+            save_txt_file(self._execution_uuid, "asp_solution", "".join(scheduled_sessions))
             save_txt_file(self._execution_uuid, "asp_optimization", "".join(optimization_lines))
 
         elif self._local_dir is not None:
-            save_local_txt_file(self._local_dir, "asp_solution", "".join(assigned_slot_lines))
+            save_local_txt_file(self._local_dir, "asp_solution", "".join(scheduled_sessions))
             save_local_txt_file(self._local_dir, "asp_optimization", "".join(optimization_lines))
 
         else:
@@ -78,7 +78,7 @@ class AspSolver(Solver):
 
         output = Output()
         for predicate, variables in solution:
-            if predicate != ClP.ASSIGNED_SLOT:
+            if predicate != ClP.SCHEDULED_SESSION:
                 continue
 
             timeslot, clingo_session, clingo_room = variables

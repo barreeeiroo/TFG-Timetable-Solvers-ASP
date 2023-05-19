@@ -151,165 +151,82 @@ class FactRules:
 
 class ChoiceRules:
     @staticmethod
-    def generate_scheduled_sessions() -> str:
-        assigned_slot = ClP.scheduled_session(ClV.TIMESLOT, ClV.SESSION)
-        timeslot = ClP.timeslot(ClV.TIMESLOT)
-        session = ClP.session(ClV.SESSION, ClV.ANY, ClV.SESSION_DURATION)
-
-        head = f"{ClV.SESSION_DURATION} {{ {assigned_slot} : {timeslot} }} {ClV.SESSION_DURATION}"
-        return f"{head} :- {session}."
-
-    @staticmethod
-    def generate_scheduled_sessions_alt(week: Week) -> str:
-        scheduled_session_seed = ClP.scheduled_session_seed(ClV.TIMESLOT, ClV.SESSION, ClV.SESSION_DURATION)
+    def generate_assigned_timeslots(week: Week) -> str:
+        assigned_timeslot = ClP.assigned_timeslot(ClV.TIMESLOT, ClV.SESSION)
         timeslot_generator = f"T = 1..{week.get_total_slot_count()}-{ClV.SESSION_DURATION}+1"
+        head = f"1 {{ {assigned_timeslot} : {timeslot_generator} }} 1"
+
         session = ClP.session(ClV.SESSION, ClV.ANY, ClV.SESSION_DURATION)
 
-        head = f"1 {{ {scheduled_session_seed} : {timeslot_generator} }} 1"
         return f"{head} :- {session}."
 
     @staticmethod
-    def generate_assigned_slots() -> str:
-        assigned_slot = ClP.assigned_slot(ClV.TIMESLOT, ClV.SESSION, ClV.ROOM)
+    def generate_assigned_rooms() -> str:
+        assigned_room = ClP.assigned_room(ClV.ROOM, ClV.SESSION)
         room_type = ClP.room_type(ClV.ROOM, ClV.SESSION_TYPE)
-        head = f"1 {{ {assigned_slot} : {room_type} }} 1"
+        head = f"1 {{ {assigned_room} : {room_type} }} 1"
 
-        scheduled_session = ClP.scheduled_session(ClV.TIMESLOT, ClV.SESSION)
         session = ClP.session(ClV.SESSION, ClV.SESSION_TYPE, ClV.ANY)
-        body = f"{scheduled_session}, {session}"
-        return f"{head} :- {body}."
+
+        return f"{head} :- {session}."
 
 
 class NormalRules:
     @staticmethod
-    def generate_scheduled_session() -> str:
+    def generate_scheduled_sessions() -> str:
         scheduled_session = ClP.scheduled_session(
             f"{ClV.TIMESLOT}..{ClV.TIMESLOT}+{ClV.SESSION_DURATION}-1",
-            ClV.SESSION
+            ClV.SESSION,
+            ClV.ROOM
         )
-        scheduled_session_seed = ClP.scheduled_session_seed(ClV.TIMESLOT, ClV.SESSION, ClV.SESSION_DURATION)
-        return f"{scheduled_session} :- {scheduled_session_seed}."
 
-    @staticmethod
-    def generate_scheduled_session_chains() -> List[str]:
-        def first_normal_rule() -> str:
-            scheduled_chain = ClP.scheduled_session_chain(ClV.SESSION, ClV.TIMESLOT, ClV.CONTIGUOUS_TIMESLOT)
-            scheduled_session = ClP.scheduled_session(ClV.TIMESLOT, ClV.SESSION)
-            timeslot = ClP.timeslot(f"{ClV.TIMESLOT}+{ClV.CONTIGUOUS_TIMESLOT}")
-            contiguous_timeslot = ClP.contiguous_timeslot(ClV.CONTIGUOUS_TIMESLOT)
-            return f"{scheduled_chain} :- {scheduled_session}, {timeslot}, {contiguous_timeslot}."
+        session = ClP.session(ClV.SESSION, ClV.ANY, ClV.SESSION_DURATION)
+        assigned_timeslot = ClP.assigned_timeslot(ClV.TIMESLOT, ClV.SESSION)
+        assigned_room = ClP.assigned_room(ClV.ROOM, ClV.SESSION)
+        body = f"{session}, {assigned_timeslot}, {assigned_room}"
 
-        def second_normal_rule() -> str:
-            scheduled_chain_left = ClP.scheduled_session_chain(ClV.SESSION, f"{ClV.TIMESLOT}+{ClV.CONTIGUOUS_TIMESLOT}",
-                                                               ClV.CONTIGUOUS_TIMESLOT)
-            scheduled_chain_right = ClP.scheduled_session_chain(ClV.SESSION, ClV.TIMESLOT, ClV.CONTIGUOUS_TIMESLOT)
-            timeslot = ClP.timeslot(f"{ClV.TIMESLOT}+{ClV.CONTIGUOUS_TIMESLOT}")
-            return f"{scheduled_chain_left} :- {scheduled_chain_right}, {timeslot}."
-
-        return [
-            first_normal_rule(),
-            second_normal_rule(),
-        ]
+        return f"{scheduled_session} :- {body}."
 
 
 class ConstraintRules:
     @staticmethod
     def exclude_blocked_timeslots() -> str:
-        scheduled_session = ClP.scheduled_session(ClV.TIMESLOT, ClV.ANY)
+        assigned_timeslot = ClP.scheduled_session(ClV.TIMESLOT, ClV.ANY, ClV.ANY)
         blocked_timeslot = ClP.blocked_timeslot(ClV.TIMESLOT)
-        return f":- {blocked_timeslot}, {scheduled_session}."
+        return f":- {blocked_timeslot}, {assigned_timeslot}."
 
     @staticmethod
     def exclude_more_than_one_session_in_same_room_and_timeslot() -> str:
-        assigned_slot = ClP.assigned_slot(ClV.TIMESLOT, ClV.SESSION, ClV.ROOM)
-        session = ClP.session(ClV.SESSION, ClV.ANY, ClV.ANY)
-        choice = f"not {{ {assigned_slot} : {session} }} 1"
-        return f":- {choice}, {ClP.room(ClV.ROOM, ClV.ANY)}, {ClP.timeslot(ClV.TIMESLOT)}."
+        scheduled_session = ClP.scheduled_session(ClV.TIMESLOT, ClV.ANY, ClV.ROOM)
+        room = ClP.room(ClV.ROOM, ClV.ANY)
+        timeslot = ClP.timeslot(ClV.TIMESLOT)
+        return f":- not {{ {scheduled_session} }} 1, {room}, {timeslot}."
 
     @staticmethod
-    def exclude_same_session_in_different_room() -> str:
-        assigned_slot_one = ClP.assigned_slot(ClV.ANY, ClV.SESSION, f'{ClV.ROOM}1')
-        assigned_slot_two = ClP.assigned_slot(ClV.ANY, ClV.SESSION, f'{ClV.ROOM}2')
-        condition = f"{ClV.ROOM}1 != {ClV.ROOM}2"
-        return f":- {assigned_slot_one}, {assigned_slot_two}, {condition}."
-
-    @staticmethod
-    def exclude_sessions_scheduled_in_same_overlapping_timeslot() -> str:
-        scheduled_session_one = ClP.scheduled_session(ClV.TIMESLOT, f"{ClV.SESSION}1")
-        scheduled_session_two = ClP.scheduled_session(ClV.TIMESLOT, f"{ClV.SESSION}2")
+    def exclude_sessions_assigned_in_same_overlapping_timeslot() -> str:
+        scheduled_session_one = ClP.scheduled_session(ClV.TIMESLOT, f"{ClV.SESSION}1", ClV.ANY)
+        scheduled_session_two = ClP.scheduled_session(ClV.TIMESLOT, f"{ClV.SESSION}2", ClV.ANY)
         no_overlap = ClP.no_timeslot_overlap_in_sessions(f"{ClV.SESSION}1", f"{ClV.SESSION}2")
         return f":- {no_overlap}, {scheduled_session_one}, {scheduled_session_two}."
 
     @staticmethod
-    def exclude_sessions_scheduled_in_different_days() -> str:
-        scheduled_session_one = ClP.scheduled_session(f"{ClV.TIMESLOT}1", ClV.SESSION)
-        scheduled_session_two = ClP.scheduled_session(f"{ClV.TIMESLOT}2", ClV.SESSION)
+    def exclude_sessions_assigned_in_different_days() -> str:
+        scheduled_session_one = ClP.assigned_timeslot(f"{ClV.TIMESLOT}1", ClV.SESSION)
+        scheduled_session_two = ClP.assigned_timeslot(f"{ClV.TIMESLOT}2", ClV.SESSION)
         break_session = ClP.break_session_timeslot(f"{ClV.TIMESLOT}1", f"{ClV.TIMESLOT}2")
         return f":- {break_session}, {scheduled_session_one}, {scheduled_session_two}."
 
     @staticmethod
-    def exclude_sessions_scheduled_in_non_contiguous_timeslots() -> str:
-        scheduled_session_one = ClP.scheduled_session(f"{ClV.TIMESLOT}1", ClV.SESSION)
-        scheduled_session_two = ClP.scheduled_session(f"{ClV.TIMESLOT}2", ClV.SESSION)
-        scheduled_sessions = f"{scheduled_session_one}, {scheduled_session_two}"
-
-        comparison = f"{ClV.TIMESLOT}1 + 1 < {ClV.TIMESLOT}2"
-
-        contiguousness_rule = f"{ClV.TIMESLOT}1+1..{ClV.TIMESLOT}2-1"
-        contiguous_sessions = f"{ClP.scheduled_session(ClV.TIMESLOT, ClV.SESSION)} : T = {contiguousness_rule}"
-
-        # Too costly, avoid...
-        return f"% :- {scheduled_sessions}, {comparison}, not {contiguous_sessions}."
-
-    @staticmethod
-    def exclude_sessions_scheduled_in_non_contiguous_timeslots_alt() -> str:
-        scheduled_chain_one = ClP.scheduled_session_chain(ClV.SESSION, ClV.TIMESLOT, -1)
-        scheduled_session = ClP.scheduled_session(ClV.TIMESLOT, ClV.SESSION)
-        scheduled_chain_two = ClP.scheduled_session_chain(ClV.SESSION, ClV.TIMESLOT, 1)
-
-        return f":- {scheduled_chain_one}, not {scheduled_session}, {scheduled_chain_two}."
-
-    @staticmethod
-    def exclude_sessions_which_are_isolated_from_other() -> str:
-        scheduled_session = ClP.scheduled_session(ClV.TIMESLOT, ClV.SESSION)
-
-        scheduled_session_one = ClP.scheduled_session(f"{ClV.TIMESLOT}-1", ClV.SESSION)
-        scheduled_session_two = ClP.scheduled_session(f"{ClV.TIMESLOT}+1", ClV.SESSION)
-        excluded_sessions = f"not {scheduled_session_one}, not {scheduled_session_two}"
-
-        single_slot_session = f"{ClP.session(ClV.SESSION, ClV.ANY, ClV.SESSION_DURATION)}, {ClV.SESSION_DURATION} > 1"
-
-        return f":- {scheduled_session}, {excluded_sessions}, {single_slot_session}."
-
-    @staticmethod
-    def exclude_sessions_which_are_isolated_from_other_alt(sessions: List[Session], week: Week) -> List[str]:
-        max_slots = max([week.get_slots_count_for_timedelta(session.constraints.duration) for session in sessions])
-
-        statements = []
-        for i in range(1, max_slots):
-            scheduled_session = ClP.scheduled_session(ClV.TIMESLOT, ClV.SESSION)
-
-            excluded_session_one = ClP.scheduled_session(f"{ClV.TIMESLOT}+{i}", ClV.SESSION)
-            excluded_session_two = ClP.scheduled_session(f"{ClV.TIMESLOT}-{i}", ClV.SESSION)
-
-            base_statement = f"{scheduled_session}, not {excluded_session_one}, not {excluded_session_two}"
-            session_slot = f"{ClP.session(ClV.SESSION, ClV.ANY, ClV.SESSION_DURATION)}, {ClV.SESSION_DURATION} > {i}"
-            # See exclude_sessions_which_are_isolated_from_other
-            statements.append(f"% :- {base_statement}, {session_slot}.")
-
-        return statements
+    def exclude_timeslots_which_are_not_allowed_for_session() -> str:
+        assigned_timeslot = ClP.assigned_timeslot(ClV.TIMESLOT, ClV.SESSION)
+        disallowed_timeslot = ClP.disallowed_timeslot_for_session(ClV.SESSION, ClV.TIMESLOT)
+        return f":- {disallowed_timeslot}, {assigned_timeslot}."
 
     @staticmethod
     def exclude_rooms_which_are_not_allowed_for_session() -> str:
-        assigned_slot = ClP.assigned_slot(ClV.ANY, ClV.SESSION, ClV.ROOM)
+        assigned_room = ClP.assigned_room(ClV.ROOM, ClV.SESSION)
         disallowed_room = ClP.disallowed_room_for_session(ClV.SESSION, ClV.ROOM)
-        return f":- {disallowed_room}, {assigned_slot}."
-
-    @staticmethod
-    def exclude_timeslots_which_are_not_allowed_for_session() -> str:
-        scheduled_session = ClP.scheduled_session(ClV.TIMESLOT, ClV.SESSION)
-        disallowed_timeslot = ClP.disallowed_timeslot_for_session(ClV.SESSION, ClV.TIMESLOT)
-        return f":- {disallowed_timeslot}, {scheduled_session}."
+        return f":- {disallowed_room}, {assigned_room}."
 
 
 class OptimizationRules:
@@ -323,7 +240,7 @@ class OptimizationRules:
 
         statements = []
         for prio, cost in priorities:
-            scheduled_session = ClP.scheduled_session(ClV.TIMESLOT, ClV.SESSION)
+            scheduled_session = ClP.scheduled_session(ClV.TIMESLOT, ClV.SESSION, ClV.ANY)
             penalty = ClP.penalty(PenaltyNames.UNDESIRABLE_TIMESLOT, ClV.PENALTY_COST, ClV.SESSION, prio)
             undesirable_timeslot = ClP.undesirable_timeslot(ClV.TIMESLOT, ClV.PENALTY_COST)
             penalty_cost = f"{ClV.PENALTY_COST} == {cost}"
@@ -332,21 +249,21 @@ class OptimizationRules:
 
     @staticmethod
     def apply_room_preferences_in_sessions() -> List[str]:
-        assigned_slot = ClP.assigned_slot(ClV.ANY, ClV.SESSION, ClV.ROOM)
+        assigned_room = ClP.assigned_room(ClV.ROOM, ClV.SESSION)
 
         penalty = ClP.penalty(PenaltyNames.AVOID_ROOM_FOR_SESSION,
                               PenaltyCosts.AVOID_ROOM_FOR_SESSION,
                               ClV.SESSION,
                               OptimizationPriorities.PENALTY__AVOID_ROOM_FOR_SESSION)
         penalized_room = ClP.penalized_room_for_session(ClV.SESSION, ClV.ROOM)
-        avoid_statement = f"{penalty} :- {penalized_room}, {assigned_slot}."
+        avoid_statement = f"{penalty} :- {penalized_room}, {assigned_room}."
 
         bonus = ClP.bonus(BonusNames.PREFER_ROOM_FOR_SESSION,
                           BonusCosts.PREFER_ROOM_FOR_SESSION,
                           ClV.SESSION,
                           OptimizationPriorities.BONUS__PREFER_ROOM_FOR_SESSION)
         preferred_room = ClP.preferred_room_for_session(ClV.SESSION, ClV.ROOM)
-        prefer_statement = f"{bonus} :- {preferred_room}, {assigned_slot}."
+        prefer_statement = f"{bonus} :- {preferred_room}, {assigned_room}."
 
         return [avoid_statement, prefer_statement]
 
@@ -356,14 +273,14 @@ class OptimizationRules:
                               PenaltyCosts.AVOID_SESSION_OVERLAP,
                               f"{ClV.SESSION}1",
                               OptimizationPriorities.PENALTY__AVOID_SESSION_OVERLAP)
-        scheduled_session_one = ClP.scheduled_session(ClV.TIMESLOT, f"{ClV.SESSION}1")
-        scheduled_session_two = ClP.scheduled_session(ClV.TIMESLOT, f"{ClV.SESSION}2")
+        scheduled_session_one = ClP.scheduled_session(ClV.TIMESLOT, f"{ClV.SESSION}1", ClV.ANY)
+        scheduled_session_two = ClP.scheduled_session(ClV.TIMESLOT, f"{ClV.SESSION}2", ClV.ANY)
         avoid_overlap = ClP.avoid_timeslot_overlap_in_sessions(f"{ClV.SESSION}1", f"{ClV.SESSION}2")
         return f"{penalty} :- {avoid_overlap}, {scheduled_session_one}, {scheduled_session_two}."
 
     @staticmethod
     def apply_timeslot_preferences_in_sessions() -> List[str]:
-        scheduled_session = ClP.scheduled_session(ClV.TIMESLOT, ClV.SESSION)
+        scheduled_session = ClP.scheduled_session(ClV.TIMESLOT, ClV.SESSION, ClV.ANY)
 
         penalty = ClP.penalty(PenaltyNames.AVOID_TIMESLOT_FOR_SESSION,
                               PenaltyCosts.AVOID_TIMESLOT_FOR_SESSION,
@@ -398,7 +315,7 @@ class Directives:
     @staticmethod
     def generate_show() -> List[str]:
         return [
-            f"#show {ClP.ASSIGNED_SLOT}/3.",
+            f"#show {ClP.SCHEDULED_SESSION}/3.",
             f"#show {ClP.PENALTY}/4.",
             f"#show {ClP.BONUS}/4.",
         ]
@@ -433,31 +350,24 @@ class Rules:
     @staticmethod
     def __generate_choices(week: Week) -> str:
         return "\n".join([
-            # ChoiceRules.generate_scheduled_sessions(),
-            ChoiceRules.generate_scheduled_sessions_alt(week),
-            ChoiceRules.generate_assigned_slots(),
+            ChoiceRules.generate_assigned_timeslots(week),
+            ChoiceRules.generate_assigned_rooms(),
         ])
 
     @staticmethod
     def __generate_normals() -> str:
-        statements = [
-            NormalRules.generate_scheduled_session(),
-        ]
-
-        # statements.extend(NormalRules.generate_scheduled_session_chains())
-
-        return "\n".join(statements)
+        return "\n".join([
+            NormalRules.generate_scheduled_sessions(),
+        ])
 
     @staticmethod
     def __generate_constraints() -> str:
         return "\n".join([
             ConstraintRules.exclude_blocked_timeslots(),
             ConstraintRules.exclude_more_than_one_session_in_same_room_and_timeslot(),
-            ConstraintRules.exclude_same_session_in_different_room(),
-            ConstraintRules.exclude_sessions_scheduled_in_same_overlapping_timeslot(),
-            ConstraintRules.exclude_sessions_scheduled_in_different_days(),
-            # ConstraintRules.exclude_sessions_scheduled_in_non_contiguous_timeslots_alt(),
-            # ConstraintRules.exclude_sessions_which_are_isolated_from_other(),
+            ConstraintRules.exclude_sessions_assigned_in_same_overlapping_timeslot(),
+            ConstraintRules.exclude_sessions_assigned_in_different_days(),
+            ConstraintRules.exclude_timeslots_which_are_not_allowed_for_session(),
             ConstraintRules.exclude_rooms_which_are_not_allowed_for_session(),
         ])
 
