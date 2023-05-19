@@ -9,6 +9,7 @@ class ClingoVariables:
     ANY = "_"
 
     TIMESLOT = "T"
+    TIMESLOT_DIFFERENCE = "TD"
     SESSION = "S"
     SESSION_TYPE = "ST"
     SESSION_DURATION = "H"
@@ -37,6 +38,7 @@ class ClingoPredicates:
     ASSIGNED_ROOM = "assignedRoom"
     NO_TIMESLOT_OVERLAP_IN_SESSIONS = "noTimeslotOverlapInSessions"
     AVOID_TIMESLOT_OVERLAP_IN_SESSIONS = "avoidTimeslotOverlapInSessions"
+    TIMESLOT_DIFFERENCE = "timeslotDifference"
     UNDESIRABLE_TIMESLOT = "undesirableTimeslot"
     DISALLOWED_ROOM_FOR_SESSION = "disallowedRoomForSession"
     PREFERRED_ROOM_FOR_SESSION = "preferredRoomForSession"
@@ -61,14 +63,6 @@ class ClingoPredicates:
         return f"{ClingoPredicates.ASSIGNED_ROOM}({room},{session})"
 
     @staticmethod
-    def no_timeslot_overlap_in_sessions(session1: str, session2: str) -> str:
-        return f"{ClingoPredicates.NO_TIMESLOT_OVERLAP_IN_SESSIONS}({session1},{session2})"
-
-    @staticmethod
-    def avoid_timeslot_overlap_in_sessions(session1: str, session2: str) -> str:
-        return f"{ClingoPredicates.AVOID_TIMESLOT_OVERLAP_IN_SESSIONS}({session1},{session2})"
-
-    @staticmethod
     def timeslot(timeslot: str) -> str:
         return f"{ClingoPredicates.TIMESLOT}({timeslot})"
 
@@ -83,6 +77,18 @@ class ClingoPredicates:
     @staticmethod
     def session(session: str, session_type: str, session_duration: int):
         return f"{ClingoPredicates.SESSION}({session},{session_type},{session_duration})"
+
+    @staticmethod
+    def no_timeslot_overlap_in_sessions(session1: str, session2: str, session_duration: Union[str, int]) -> str:
+        return f"{ClingoPredicates.NO_TIMESLOT_OVERLAP_IN_SESSIONS}({session1},{session2},{session_duration})"
+
+    @staticmethod
+    def avoid_timeslot_overlap_in_sessions(session1: str, session2: str, session_duration: Union[str, int]) -> str:
+        return f"{ClingoPredicates.AVOID_TIMESLOT_OVERLAP_IN_SESSIONS}({session1},{session2},{session_duration})"
+
+    @staticmethod
+    def timeslot_difference(session1: str, session2: str, difference: Union[str, int]) -> str:
+        return f"{ClingoPredicates.TIMESLOT_DIFFERENCE}({session1},{session2},{difference})"
 
     @staticmethod
     def undesirable_timeslot(timeslot: Union[str, int], penalty: Union[str, int]):
