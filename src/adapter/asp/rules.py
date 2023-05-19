@@ -160,6 +160,15 @@ class ChoiceRules:
         return f"{head} :- {session}."
 
     @staticmethod
+    def generate_scheduled_sessions_alt(week: Week) -> str:
+        scheduled_session_seed = ClP.scheduled_session_seed(ClV.TIMESLOT, ClV.SESSION, ClV.SESSION_DURATION)
+        timeslot_generator = f"T = 1..{week.get_total_slot_count()}-{ClV.SESSION_DURATION}+1"
+        session = ClP.session(ClV.SESSION, ClV.ANY, ClV.SESSION_DURATION)
+
+        head = f"1 {{ {scheduled_session_seed} : {timeslot_generator} }} 1"
+        return f"{head} :- {session}."
+
+    @staticmethod
     def generate_assigned_slots() -> str:
         assigned_slot = ClP.assigned_slot(ClV.TIMESLOT, ClV.SESSION, ClV.ROOM)
         room_type = ClP.room_type(ClV.ROOM, ClV.SESSION_TYPE)
@@ -172,6 +181,15 @@ class ChoiceRules:
 
 
 class NormalRules:
+    @staticmethod
+    def generate_scheduled_session() -> str:
+        scheduled_session = ClP.scheduled_session(
+            f"{ClV.TIMESLOT}..{ClV.TIMESLOT}+{ClV.SESSION_DURATION}-1",
+            ClV.SESSION
+        )
+        scheduled_session_seed = ClP.scheduled_session_seed(ClV.TIMESLOT, ClV.SESSION, ClV.SESSION_DURATION)
+        return f"{scheduled_session} :- {scheduled_session_seed}."
+
     @staticmethod
     def generate_scheduled_session_chains() -> List[str]:
         def first_normal_rule() -> str:
@@ -413,17 +431,20 @@ class Rules:
         return "\n".join(statements)
 
     @staticmethod
-    def __generate_choices() -> str:
+    def __generate_choices(week: Week) -> str:
         return "\n".join([
-            ChoiceRules.generate_scheduled_sessions(),
+            # ChoiceRules.generate_scheduled_sessions(),
+            ChoiceRules.generate_scheduled_sessions_alt(week),
             ChoiceRules.generate_assigned_slots(),
         ])
 
     @staticmethod
     def __generate_normals() -> str:
-        statements = []
+        statements = [
+            NormalRules.generate_scheduled_session(),
+        ]
 
-        statements.extend(NormalRules.generate_scheduled_session_chains())
+        # statements.extend(NormalRules.generate_scheduled_session_chains())
 
         return "\n".join(statements)
 
@@ -435,8 +456,8 @@ class Rules:
             ConstraintRules.exclude_same_session_in_different_room(),
             ConstraintRules.exclude_sessions_scheduled_in_same_overlapping_timeslot(),
             ConstraintRules.exclude_sessions_scheduled_in_different_days(),
-            ConstraintRules.exclude_sessions_scheduled_in_non_contiguous_timeslots_alt(),
-            ConstraintRules.exclude_sessions_which_are_isolated_from_other(),
+            # ConstraintRules.exclude_sessions_scheduled_in_non_contiguous_timeslots_alt(),
+            # ConstraintRules.exclude_sessions_which_are_isolated_from_other(),
             ConstraintRules.exclude_rooms_which_are_not_allowed_for_session(),
         ])
 
@@ -464,7 +485,7 @@ class Rules:
 
     def generate_asp_problem(self) -> str:
         facts = self.__generate_facts()
-        choices = Rules.__generate_choices()
+        choices = Rules.__generate_choices(self.week)
         normals = Rules.__generate_normals()
         constraints = Rules.__generate_constraints()
         optimizations = Rules.__generate_optimizations()

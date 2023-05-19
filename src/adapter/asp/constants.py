@@ -35,6 +35,7 @@ class ClingoPredicates:
     SESSION = "session"
 
     ASSIGNED_SLOT = "assignedSlot"
+    SCHEDULED_SESSION_SEED = "scheduledSessionSeed"
     SCHEDULED_SESSION = "scheduledSession"
     SCHEDULED_SESSION_CHAIN = "scheduledSessionChain"
     NO_TIMESLOT_OVERLAP_IN_SESSIONS = "noTimeslotOverlapInSessions"
@@ -56,6 +57,10 @@ class ClingoPredicates:
     @staticmethod
     def scheduled_session(timeslot: Union[int, str], session: str) -> str:
         return f"{ClingoPredicates.SCHEDULED_SESSION}({timeslot},{session})"
+
+    @staticmethod
+    def scheduled_session_seed(timeslot: Union[int, str], session: str, session_duration: str) -> str:
+        return f"{ClingoPredicates.SCHEDULED_SESSION_SEED}({timeslot},{session},{session_duration})"
 
     @staticmethod
     def scheduled_session_chain(session: str, timeslot: str, contiguous_timeslot: Union[int, str]) -> str:
