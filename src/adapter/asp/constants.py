@@ -3,6 +3,7 @@ from uuid import UUID
 
 from models.room import Room
 from models.session import Session
+from models.slot import Slot
 
 
 class ClingoVariables:
@@ -152,3 +153,44 @@ class ClingoNaming:
     def get_id_from_clingo(clingo: str) -> str:
         _, data = clingo.split("_")
         return data
+
+    @staticmethod
+    def get_timeslot_for_comment(slot: Slot):
+        days = [
+            "MON",
+            "TUE",
+            "WED",
+            "THU",
+            "FRI",
+            "SAT",
+            "SUN",
+        ]
+        day = days[(slot.week_day - 1) % 7]
+        return f" % {day} | {slot.timeframe.start} - {slot.timeframe.end}"
+
+    @staticmethod
+    def get_room_for_comment(room: Room):
+        if not isinstance(room.metadata, dict):
+            return ""
+
+        if "room" not in room.metadata:
+            return ""
+        comment = room.metadata['room']
+        if "building" in room.metadata:
+            comment = f"{room.metadata['room']} | {room.metadata['building']}"
+        return f" % {comment}"
+
+    @staticmethod
+    def get_session_for_comment(session: Session):
+        if not isinstance(session.metadata, dict):
+            return ""
+
+        data = [session.constraints.session_type]
+        if "course" in session.metadata:
+            data.append(session.metadata['course'])
+        if "sessionGroup" in session.metadata:
+            data.append(session.metadata['sessionGroup'])
+        if "nGroup" in session.metadata and "nWeek" in session.metadata:
+            data.append(f"{session.metadata['nGroup']+ 1}-{session.metadata['nWeek']+ 1}")
+
+        return f" % {' | '.join(data)}"

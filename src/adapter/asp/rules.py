@@ -30,7 +30,8 @@ class FactRules:
         for slot_type, penalty_amount in undesirable_penalties.items():
             for slot in week.get_slot_ids_per_type(slot_type):
                 undesirable_timeslot = ClP.undesirable_timeslot(slot, penalty_amount)
-                statements.append(f"{undesirable_timeslot}.")
+                real_slot = week.get_slot_by_number(slot - 1)
+                statements.append(f"{undesirable_timeslot}.{ClN.get_timeslot_for_comment(real_slot)}")
         return statements
 
     @staticmethod
@@ -38,7 +39,7 @@ class FactRules:
         statements: List[str] = []
         for room in rooms:
             clingo_room = ClP.room(ClN.room_to_clingo(room), room.constraints.capacity)
-            statements.append(f"{clingo_room}.")
+            statements.append(f"{clingo_room}.{ClN.get_room_for_comment(room)}")
         return statements
 
     @staticmethod
@@ -58,7 +59,7 @@ class FactRules:
                 ClN.session_to_clingo(session), ClN.session_type_to_clingo(session.constraints.session_type),
                 week.get_slots_count_for_timedelta(session.constraints.duration)
             )
-            statements.append(f"{clingo_session}.")
+            statements.append(f"{clingo_session}.{ClN.get_session_for_comment(session)}")
         return statements
 
     @staticmethod
