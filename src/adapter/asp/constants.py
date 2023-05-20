@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Optional, Union
 from uuid import UUID
 
 from models.room import Room
@@ -10,6 +10,8 @@ class ClingoVariables:
     ANY = "_"
 
     TIMESLOT = "T"
+    TIMESLOT_RANGE_START = "TRS"
+    TIMESLOT_RANGE_END = "TRE"
     SESSION = "S"
     SESSION_TYPE = "ST"
     SESSION_DURATION = "H"
@@ -29,6 +31,7 @@ class ClingoVariables:
 
 class ClingoPredicates:
     TIMESLOT = "timeslot"
+    TIMESLOT_RANGE = "timeslotRange"
     ROOM = "room"
     ROOM_TYPE = "roomType"
     SESSION = "session"
@@ -64,6 +67,12 @@ class ClingoPredicates:
     @staticmethod
     def timeslot(timeslot: str) -> str:
         return f"{ClingoPredicates.TIMESLOT}({timeslot})"
+
+    @staticmethod
+    def timeslot_range(range_start: Union[str, int], range_end: Optional[Union[str, int]]) -> str:
+        if range_end is None:
+            return f"{ClingoPredicates.TIMESLOT_RANGE}({range_start})"
+        return f"{ClingoPredicates.TIMESLOT_RANGE}({range_start},{range_end})"
 
     @staticmethod
     def room(room: str, room_capacity: int) -> str:

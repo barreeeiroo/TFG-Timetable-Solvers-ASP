@@ -7,7 +7,7 @@ from adapter.asp.optimizations import BonusCosts, BonusNames, OptimizationPriori
 from adapter.time.week import Week
 from models.dto.input import Room, Session
 from models.slot import Slot, SlotType
-from utils.slot_utils import generate_slot_groups, generate_slot_groups_raw, generate_sub_slots
+from utils.slot_utils import generate_slot_groups, generate_sub_slots
 
 
 class FactRules:
@@ -16,7 +16,16 @@ class FactRules:
         total_slot_count = week.get_total_slot_count()
         blocked_slots = week.get_slot_ids_per_type(SlotType.BLOCKED)
         slots = [i for i in range(1, total_slot_count + 1) if i not in blocked_slots]
-        return f"{ClP.timeslot(generate_slot_groups(slots))}."
+        joined_timeslots = ";".join([f"{a}..{b}" for a, b in generate_slot_groups(slots)])
+        return f"{ClP.timeslot(joined_timeslots)}."
+
+    @staticmethod
+    def generate_timeslot_ranges(week: Week) -> str:
+        blocked_slots = week.get_slot_ids_per_type(SlotType.BLOCKED)
+        slots = [i for i in range(1, week.get_total_slot_count() + 1) if i not in blocked_slots]
+        slot_ranges = generate_slot_groups(slots, [first for first, _ in week.get_day_breaks()])
+        timeslot_ranges = ";".join([f"{a},{b}" for a, b in slot_ranges])
+        return f"{ClP.timeslot_range(timeslot_ranges, range_end=None)}."
 
     @staticmethod
     def generate_undesirable_timeslots(week: Week) -> List[str]:
@@ -145,18 +154,12 @@ class FactRules:
 
 class ChoiceRules:
     @staticmethod
-    def generate_assigned_timeslots(week: Week) -> str:
+    def generate_assigned_timeslots() -> str:
         assigned_timeslot = ClP.assigned_timeslot(ClV.TIMESLOT, ClV.SESSION)
-
-        blocked_slots = week.get_slot_ids_per_type(SlotType.BLOCKED)
-        slots = [i for i in range(1, week.get_total_slot_count() + 1) if i not in blocked_slots]
-        slot_ranges = generate_slot_groups_raw(slots, [first for first, _ in week.get_day_breaks()])
-        formulas = [f'{slot_range}-{ClV.SESSION_DURATION}+1' for slot_range in slot_ranges]
-        timeslot_generator = f"T = ({';'.join(formulas)})"
-
+        timeslot_generator = f"T = ({ClV.TIMESLOT_RANGE_START}..{ClV.TIMESLOT_RANGE_END}-{ClV.SESSION_DURATION}+1)"
+        timeslot_range = ClP.timeslot_range(ClV.TIMESLOT_RANGE_START, ClV.TIMESLOT_RANGE_END)
         disallowed_timeslot = ClP.disallowed_timeslot_for_session(ClV.SESSION, ClV.TIMESLOT)
-
-        head = f"1 {{ {assigned_timeslot} : {timeslot_generator}, not {disallowed_timeslot} }} 1"
+        head = f"1 {{ {assigned_timeslot} : {timeslot_generator}, {timeslot_range}, not {disallowed_timeslot} }} 1"
 
         session = ClP.session(ClV.SESSION, ClV.ANY, ClV.SESSION_DURATION)
 
@@ -313,6 +316,7 @@ class Rules:
     def __generate_facts(self) -> str:
         return "\n".join([
             FactRules.generate_timeslot(self.week),
+            FactRules.generate_timeslot_ranges(self.week),
             *FactRules.generate_undesirable_timeslots(self.week),
 
             *FactRules.generate_rooms(self.rooms),
@@ -326,9 +330,9 @@ class Rules:
         ])
 
     @staticmethod
-    def __generate_choices(week: Week) -> str:
+    def __generate_choices() -> str:
         return "\n".join([
-            ChoiceRules.generate_assigned_timeslots(week),
+            ChoiceRules.generate_assigned_timeslots(),
             ChoiceRules.generate_assigned_rooms(),
         ])
 
@@ -364,7 +368,7 @@ class Rules:
 
     def generate_asp_problem(self) -> str:
         facts = self.__generate_facts()
-        choices = Rules.__generate_choices(self.week)
+        choices = Rules.__generate_choices()
         normals = Rules.__generate_normals()
         constraints = Rules.__generate_constraints()
         optimizations = Rules.__generate_optimizations()

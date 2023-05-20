@@ -1,5 +1,5 @@
 from datetime import timedelta
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 from models.slot import Slot
 from models.timeframe import Timeframe
@@ -19,11 +19,7 @@ def generate_sub_slots(full_slot: Slot, slot_duration: timedelta) -> List[Slot]:
     return slots
 
 
-def generate_slot_groups(nums: List[int]) -> str:
-    return ";".join(generate_slot_groups_raw(nums))
-
-
-def generate_slot_groups_raw(nums: List[int], manual_breaks: Optional[List[int]] = None) -> List[str]:
+def generate_slot_groups(nums: List[int], manual_breaks: Optional[List[int]] = None) -> List[Tuple[int, int]]:
     nums = sorted(set(nums))
     gaps = [[s, e] for s, e in zip(nums, nums[1:]) if s + 1 < e]
     edges = iter(nums[:1] + sum(gaps, []) + nums[-1:])
@@ -34,4 +30,4 @@ def generate_slot_groups_raw(nums: List[int], manual_breaks: Optional[List[int]]
             ranges.append((a, matching_break,))
             a = matching_break + 1
         ranges.append((a, b,))
-    return [str(a) if a == b else f"{a}..{b}" for a, b in ranges]
+    return [(a, b, ) for a, b in ranges]
