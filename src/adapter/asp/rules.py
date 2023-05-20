@@ -186,15 +186,19 @@ class NormalRules:
         return f"{scheduled_session} :- {body}."
 
     @staticmethod
-    def generate_session_timeslot_differences() -> str:
+    def generate_session_timeslot_differences() -> List[str]:
+        no_overlap = ClP.no_timeslot_overlap_in_sessions(f"{ClV.SESSION}1", f"{ClV.SESSION}2", ClV.ANY)
+        avoid_overlap = ClP.avoid_timeslot_overlap_in_sessions(f"{ClV.SESSION}1", f"{ClV.SESSION}2", ClV.ANY)
         diff = f"|{ClV.TIMESLOT}1-{ClV.TIMESLOT}2|"
         timeslot_difference = ClP.timeslot_difference(f"{ClV.SESSION}1", f"{ClV.SESSION}2", diff)
 
         assigned_timeslot_one = ClP.assigned_timeslot(f"{ClV.TIMESLOT}1", f"{ClV.SESSION}1")
         assigned_timeslot_two = ClP.assigned_timeslot(f"{ClV.TIMESLOT}2", f"{ClV.SESSION}2")
-        different_session = f"{ClV.SESSION}1 != {ClV.SESSION}2"
 
-        return f"{timeslot_difference} :- {assigned_timeslot_one}, {assigned_timeslot_two}, {different_session}."
+        return [
+            f"{timeslot_difference} :- {no_overlap}, {assigned_timeslot_one}, {assigned_timeslot_two}.",
+            f"{timeslot_difference} :- {avoid_overlap}, {assigned_timeslot_one}, {assigned_timeslot_two}.",
+        ]
 
 
 class ConstraintRules:
@@ -214,9 +218,9 @@ class ConstraintRules:
 
     @staticmethod
     def exclude_timeslots_which_are_not_allowed_for_session() -> str:
-        assigned_timeslot = ClP.assigned_timeslot(ClV.TIMESLOT, ClV.SESSION)
+        scheduled_session = ClP.scheduled_session(ClV.TIMESLOT, ClV.SESSION, ClV.ANY)
         disallowed_timeslot = ClP.disallowed_timeslot_for_session(ClV.SESSION, ClV.TIMESLOT)
-        return f":- {disallowed_timeslot}, {assigned_timeslot}."
+        return f":- {disallowed_timeslot}, {scheduled_session}."
 
     @staticmethod
     def exclude_rooms_which_are_not_allowed_for_session() -> str:
@@ -352,7 +356,7 @@ class Rules:
     def __generate_normals() -> str:
         return "\n".join([
             NormalRules.generate_scheduled_sessions(),
-            NormalRules.generate_session_timeslot_differences(),
+            *NormalRules.generate_session_timeslot_differences(),
         ])
 
     @staticmethod
