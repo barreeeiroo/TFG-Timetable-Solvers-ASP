@@ -147,12 +147,16 @@ class ChoiceRules:
     @staticmethod
     def generate_assigned_timeslots(week: Week) -> str:
         assigned_timeslot = ClP.assigned_timeslot(ClV.TIMESLOT, ClV.SESSION)
+
         blocked_slots = week.get_slot_ids_per_type(SlotType.BLOCKED)
         slots = [i for i in range(1, week.get_total_slot_count() + 1) if i not in blocked_slots]
         slot_ranges = generate_slot_groups_raw(slots, [first for first, _ in week.get_day_breaks()])
         formulas = [f'{slot_range}-{ClV.SESSION_DURATION}+1' for slot_range in slot_ranges]
         timeslot_generator = f"T = ({';'.join(formulas)})"
-        head = f"1 {{ {assigned_timeslot} : {timeslot_generator} }} 1"
+
+        disallowed_timeslot = ClP.disallowed_timeslot_for_session(ClV.SESSION, ClV.TIMESLOT)
+
+        head = f"1 {{ {assigned_timeslot} : {timeslot_generator}, not {disallowed_timeslot} }} 1"
 
         session = ClP.session(ClV.SESSION, ClV.ANY, ClV.SESSION_DURATION)
 
@@ -162,7 +166,8 @@ class ChoiceRules:
     def generate_assigned_rooms() -> str:
         assigned_room = ClP.assigned_room(ClV.ROOM, ClV.SESSION)
         room_type = ClP.room_type(ClV.ROOM, ClV.SESSION_TYPE)
-        head = f"1 {{ {assigned_room} : {room_type} }} 1"
+        disallowed_room = ClP.disallowed_room_for_session(ClV.SESSION, ClV.ROOM)
+        head = f"1 {{ {assigned_room} : {room_type}, not {disallowed_room} }} 1"
 
         session = ClP.session(ClV.SESSION, ClV.SESSION_TYPE, ClV.ANY)
 
@@ -201,18 +206,6 @@ class ConstraintRules:
         no_overlap = ClP.no_timeslot_overlap_in_sessions(f"{ClV.SESSION}1", f"{ClV.SESSION}2", ClV.SESSION_DURATION)
         diff = f"|{ClV.TIMESLOT}1-{ClV.TIMESLOT}2| < {ClV.SESSION_DURATION}"
         return f":- {no_overlap}, {assigned_timeslot_one}, {assigned_timeslot_two}, {diff}."
-
-    @staticmethod
-    def exclude_timeslots_which_are_not_allowed_for_session() -> str:
-        scheduled_session = ClP.scheduled_session(ClV.TIMESLOT, ClV.SESSION, ClV.ANY)
-        disallowed_timeslot = ClP.disallowed_timeslot_for_session(ClV.SESSION, ClV.TIMESLOT)
-        return f":- {disallowed_timeslot}, {scheduled_session}."
-
-    @staticmethod
-    def exclude_rooms_which_are_not_allowed_for_session() -> str:
-        assigned_room = ClP.assigned_room(ClV.ROOM, ClV.SESSION)
-        disallowed_room = ClP.disallowed_room_for_session(ClV.SESSION, ClV.ROOM)
-        return f":- {disallowed_room}, {assigned_room}."
 
 
 class OptimizationRules:
@@ -349,8 +342,6 @@ class Rules:
     def __generate_constraints() -> str:
         return "\n".join([
             ConstraintRules.exclude_more_than_one_session_in_same_room_and_timeslot(),
-            ConstraintRules.exclude_timeslots_which_are_not_allowed_for_session(),
-            ConstraintRules.exclude_rooms_which_are_not_allowed_for_session(),
             ConstraintRules.exclude_sessions_assigned_in_same_overlapping_timeslot(),
         ])
 
