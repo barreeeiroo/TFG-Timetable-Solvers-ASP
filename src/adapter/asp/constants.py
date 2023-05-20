@@ -10,7 +10,6 @@ class ClingoVariables:
     ANY = "_"
 
     TIMESLOT = "T"
-    TIMESLOT_DIFFERENCE = "TD"
     SESSION = "S"
     SESSION_TYPE = "ST"
     SESSION_DURATION = "H"
@@ -39,7 +38,6 @@ class ClingoPredicates:
     ASSIGNED_ROOM = "assignedRoom"
     NO_TIMESLOT_OVERLAP_IN_SESSIONS = "noTimeslotOverlapInSessions"
     AVOID_TIMESLOT_OVERLAP_IN_SESSIONS = "avoidTimeslotOverlapInSessions"
-    TIMESLOT_DIFFERENCE = "timeslotDifference"
     UNDESIRABLE_TIMESLOT = "undesirableTimeslot"
     DISALLOWED_ROOM_FOR_SESSION = "disallowedRoomForSession"
     PREFERRED_ROOM_FOR_SESSION = "preferredRoomForSession"
@@ -86,10 +84,6 @@ class ClingoPredicates:
     @staticmethod
     def avoid_timeslot_overlap_in_sessions(session1: str, session2: str, session_duration: Union[str, int]) -> str:
         return f"{ClingoPredicates.AVOID_TIMESLOT_OVERLAP_IN_SESSIONS}({session1},{session2},{session_duration})"
-
-    @staticmethod
-    def timeslot_difference(session1: str, session2: str, difference: Union[str, int]) -> str:
-        return f"{ClingoPredicates.TIMESLOT_DIFFERENCE}({session1},{session2},{difference})"
 
     @staticmethod
     def undesirable_timeslot(timeslot: Union[str, int], penalty: Union[str, int]):
