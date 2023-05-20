@@ -349,9 +349,9 @@ class Rules:
     def __generate_constraints() -> str:
         return "\n".join([
             ConstraintRules.exclude_more_than_one_session_in_same_room_and_timeslot(),
-            ConstraintRules.exclude_sessions_assigned_in_same_overlapping_timeslot(),
             ConstraintRules.exclude_timeslots_which_are_not_allowed_for_session(),
             ConstraintRules.exclude_rooms_which_are_not_allowed_for_session(),
+            ConstraintRules.exclude_sessions_assigned_in_same_overlapping_timeslot(),
         ])
 
     @staticmethod
