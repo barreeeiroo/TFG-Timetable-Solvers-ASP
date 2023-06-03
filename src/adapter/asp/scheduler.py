@@ -39,7 +39,7 @@ class AspSolver(Solver):
             stats=True,
             time_limit=int(60 * time_limit),
         )
-        solution = None
+        solution, found_optimal = None, False
         for answer, optimization, optimality, answer_number in models.with_answer_number:
             # Keep retrieving answers till timeout
             solution = answer
@@ -49,12 +49,26 @@ class AspSolver(Solver):
                     logger.info(text, extra={"execution": self._execution_uuid})
                 else:
                     print(text)
+            else:
+                found_optimal = True
+
+        status = "UNKNOWN"
+        if solution is not None and not found_optimal:
+            status = "SATISFIABLE"
+        elif solution is not None and found_optimal:
+            status = "SATISFIABLE_BEST"
+        elif solution is None and models.is_unknown:
+            status = "TIMEOUT"
+        elif solution is None and models.is_unsatisfiable:
+            status = "UNSATISFIABLE"
 
         statistics_lines = [f"{key}\t{value}\n" for key, value in models.statistics.items()]
         if self._execution_uuid is not None:
             save_txt_file(self._execution_uuid, "asp_statistics", "".join(statistics_lines))
+            save_txt_file(self._execution_uuid, "asp_status", f"{status}\n")
         elif self._local_dir is not None:
             save_local_txt_file(self._local_dir, "asp_statistics", "".join(statistics_lines))
+            save_local_txt_file(self._local_dir, "asp_status", f"{status}\n")
 
         if solution is None:
             raise RuntimeError("Could not generate schedule; a valid solution could not be returned.")
