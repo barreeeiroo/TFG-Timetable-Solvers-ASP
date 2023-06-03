@@ -42,7 +42,7 @@ if __name__ == "__main__":
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('-e', '--executionArn', type=str, help="AWS State Machine Execution ARN")
     group.add_argument('-f', '--workDir', type=str, help="Local working directory with input.json file")
-    parser.add_argument('-t', '--timeout', type=int, help="Clingo will timeout after these seconds have passed")
+    parser.add_argument('-t', '--timeout', type=float, help="Clingo will timeout after these minutes have passed")
     args = parser.parse_args()
 
     if args.executionArn:
