@@ -3,7 +3,7 @@
 FROM python:3.9-slim-bullseye
 
 RUN apt-get update && apt-get install -y \
-  gringo
+  git gringo
 
 WORKDIR /app
 
