@@ -4,6 +4,7 @@ from uuid import UUID
 from models.room import Room
 from models.session import Session
 from models.slot import Slot
+from models.timeframe import Timeframe
 
 
 class ClingoVariables:
@@ -154,7 +155,17 @@ class ClingoNaming:
             "SUN",
         ]
         day = days[(slot.week_day - 1) % 7]
-        return f" % {day} | {slot.timeframe.start} - {slot.timeframe.end}"
+        return f"{day} @ {slot.timeframe.start} - {slot.timeframe.end}"
+
+    @staticmethod
+    def get_timeslot_range_for_comment(a: Slot, b: Slot):
+        return ClingoNaming.get_timeslot_for_comment(Slot(
+            week_day=a.week_day,
+            timeframe=Timeframe(
+                start=min(a.timeframe.start, b.timeframe.start),
+                end=max(a.timeframe.start, b.timeframe.start),
+            ),
+        ))
 
     @staticmethod
     def get_room_for_comment(room: Room):
@@ -169,16 +180,19 @@ class ClingoNaming:
         return f" % {comment}"
 
     @staticmethod
-    def get_session_for_comment(session: Session):
+    def get_session_for_comment(session: Session, simple: bool = False):
         if not isinstance(session.metadata, dict):
             return ""
 
         data = [session.constraints.session_type]
         if "course" in session.metadata:
-            data.append(session.metadata['course'])
+            course = session.metadata['course']
+            if simple:
+                return course
+            data.append(course)
         if "sessionGroup" in session.metadata:
             data.append(session.metadata['sessionGroup'])
         if "nGroup" in session.metadata and "nWeek" in session.metadata:
-            data.append(f"{session.metadata['nGroup']+ 1}-{session.metadata['nWeek']+ 1}")
+            data.append(f"{session.metadata['nGroup'] + 1}-{session.metadata['nWeek'] + 1}")
 
-        return f" % {' | '.join(data)}"
+        return ' | '.join(data)

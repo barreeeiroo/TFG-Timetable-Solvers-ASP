@@ -32,7 +32,7 @@ class FactRules:
             for slot in week.get_slot_ids_per_type(slot_type):
                 undesirable_timeslot = ClP.undesirable_timeslot(slot, penalty_amount)
                 real_slot = week.get_slot_by_number(slot - 1)
-                statements.append(f"{undesirable_timeslot}.{ClN.get_timeslot_for_comment(real_slot)}")
+                statements.append(f"{undesirable_timeslot}. % {ClN.get_timeslot_for_comment(real_slot)}")
         return statements
 
     @staticmethod
@@ -51,7 +51,7 @@ class FactRules:
                 ClN.session_to_clingo(session), ClN.session_type_to_clingo(session.constraints.session_type),
                 week.get_slots_count_for_timedelta(session.constraints.duration)
             )
-            statements.append(f"{clingo_session}.{ClN.get_session_for_comment(session)}")
+            statements.append(f"{clingo_session}.% {ClN.get_session_for_comment(session)}")
         return statements
 
     @staticmethod
@@ -83,7 +83,11 @@ class FactRules:
 
             for a, b in slot_ranges:
                 eligible_timeslot = ClP.eligible_timeslot_for_session(clingo_session, f"{a}..{b}")
-                statements.append(f"{eligible_timeslot}.")
+                slot_a, slot_b = week.get_slot_by_number(a - 1), week.get_slot_by_number(b - 1)
+
+                comment_timeslot = ClN.get_timeslot_range_for_comment(slot_a, slot_b)
+                comment_session = ClN.get_session_for_comment(session, simple=True)
+                statements.append(f"{eligible_timeslot}. % {comment_session} | {comment_timeslot}")
 
         return statements
 
@@ -173,13 +177,23 @@ class FactRules:
             for penalized_slots in session.constraints.timeslots_preferences.penalized_slots:
                 all_penalized_slots.extend(FactRules.__find_subslot_ids(penalized_slots, week))
             for a, b in generate_slot_groups(all_penalized_slots):
-                statements.append(f"{ClP.penalized_timeslot_for_session(clingo_session, f'{a}..{b}')}.")
+                slot_a, slot_b = week.get_slot_by_number(a - 1), week.get_slot_by_number(b - 1)
+
+                comment_timeslot = ClN.get_timeslot_range_for_comment(slot_a, slot_b)
+                comment_session = ClN.get_session_for_comment(session, simple=True)
+                comment = f"{comment_session} {comment_timeslot}"
+                statements.append(f"{ClP.penalized_timeslot_for_session(clingo_session, f'{a}..{b}')}. % {comment}")
 
             all_preferred_slots: List[int] = []
             for preferred_slots in session.constraints.timeslots_preferences.preferred_slots:
                 all_preferred_slots.extend(FactRules.__find_subslot_ids(preferred_slots, week))
             for a, b in generate_slot_groups(all_preferred_slots):
-                statements.append(f"{ClP.preferred_timeslot_for_session(clingo_session, f'{a}..{b}')}.")
+                slot_a, slot_b = week.get_slot_by_number(a - 1), week.get_slot_by_number(b - 1)
+
+                comment_timeslot = ClN.get_timeslot_range_for_comment(slot_a, slot_b)
+                comment_session = ClN.get_session_for_comment(session, simple=True)
+                comment = f"{comment_session} {comment_timeslot}"
+                statements.append(f"{ClP.preferred_timeslot_for_session(clingo_session, f'{a}..{b}')}. % {comment}")
 
         return statements
 
