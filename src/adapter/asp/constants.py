@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Union
 from uuid import UUID
 
 from models.room import Room
@@ -10,13 +10,10 @@ class ClingoVariables:
     ANY = "_"
 
     TIMESLOT = "T"
-    TIMESLOT_RANGE_START = "TRS"
-    TIMESLOT_RANGE_END = "TRE"
     SESSION = "S"
     SESSION_TYPE = "ST"
     SESSION_DURATION = "H"
     ROOM = "R"
-    ROOM_TYPE = "RT"
     ROOM_CAPACITY = "RC"
 
     PENALTY_NAME = "PN"
@@ -31,9 +28,7 @@ class ClingoVariables:
 
 class ClingoPredicates:
     TIMESLOT = "timeslot"
-    TIMESLOT_RANGE = "timeslotRange"
     ROOM = "room"
-    ROOM_TYPE = "roomType"
     SESSION = "session"
 
     SCHEDULED_SESSION = "scheduledSession"
@@ -42,10 +37,8 @@ class ClingoPredicates:
     NO_TIMESLOT_OVERLAP_IN_SESSIONS = "noTimeslotOverlapInSessions"
     AVOID_TIMESLOT_OVERLAP_IN_SESSIONS = "avoidTimeslotOverlapInSessions"
     UNDESIRABLE_TIMESLOT = "undesirableTimeslot"
-    DISALLOWED_ROOM_FOR_SESSION = "disallowedRoomForSession"
     PREFERRED_ROOM_FOR_SESSION = "preferredRoomForSession"
     PENALIZED_ROOM_FOR_SESSION = "penalizedRoomForSession"
-    DISALLOWED_TIMESLOT_FOR_SESSION = "disallowedTimeslotForSession"
     PREFERRED_TIMESLOT_FOR_SESSION = "preferredTimeslotForSession"
     PENALIZED_TIMESLOT_FOR_SESSION = "penalizedTimeslotForSession"
     ELIGIBLE_ROOM_FOR_SESSION = "eligibleRoomForSession"
@@ -71,18 +64,8 @@ class ClingoPredicates:
         return f"{ClingoPredicates.TIMESLOT}({timeslot})"
 
     @staticmethod
-    def timeslot_range(range_start: Union[str, int], range_end: Optional[Union[str, int]]) -> str:
-        if range_end is None:
-            return f"{ClingoPredicates.TIMESLOT_RANGE}({range_start})"
-        return f"{ClingoPredicates.TIMESLOT_RANGE}({range_start},{range_end})"
-
-    @staticmethod
     def room(room: str, room_capacity: int) -> str:
         return f"{ClingoPredicates.ROOM}({room},{room_capacity})"
-
-    @staticmethod
-    def room_type(room: str, room_type: str) -> str:
-        return f"{ClingoPredicates.ROOM_TYPE}({room},{room_type})"
 
     @staticmethod
     def session(session: str, session_type: str, session_duration: Union[str, int]):
@@ -101,20 +84,12 @@ class ClingoPredicates:
         return f"{ClingoPredicates.UNDESIRABLE_TIMESLOT}({timeslot},{penalty})"
 
     @staticmethod
-    def disallowed_room_for_session(session: str, room: str):
-        return f"{ClingoPredicates.DISALLOWED_ROOM_FOR_SESSION}({session},{room})"
-
-    @staticmethod
     def penalized_room_for_session(session: str, room: str):
         return f"{ClingoPredicates.PENALIZED_ROOM_FOR_SESSION}({session},{room})"
 
     @staticmethod
     def preferred_room_for_session(session: str, room: str):
         return f"{ClingoPredicates.PREFERRED_ROOM_FOR_SESSION}({session},{room})"
-
-    @staticmethod
-    def disallowed_timeslot_for_session(session: str, timeslot: Union[str, int]):
-        return f"{ClingoPredicates.DISALLOWED_TIMESLOT_FOR_SESSION}({session},{timeslot})"
 
     @staticmethod
     def penalized_timeslot_for_session(session: str, timeslot: Union[str, int]):

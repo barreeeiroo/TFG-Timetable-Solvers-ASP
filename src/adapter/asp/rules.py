@@ -20,14 +20,6 @@ class FactRules:
         return f"{ClP.timeslot(joined_timeslots)}."
 
     @staticmethod
-    def generate_timeslot_ranges(week: Week) -> str:
-        blocked_slots = week.get_slot_ids_per_type(SlotType.BLOCKED)
-        slots = [i for i in range(1, week.get_total_slot_count() + 1) if i not in blocked_slots]
-        slot_ranges = generate_slot_groups(slots, [first for first, _ in week.get_day_breaks()])
-        timeslot_ranges = ";".join([f"{a},{b}" for a, b in slot_ranges])
-        return f"{ClP.timeslot_range(timeslot_ranges, range_end=None)}."
-
-    @staticmethod
     def generate_undesirable_timeslots(week: Week) -> List[str]:
         undesirable_penalties = {
             SlotType.UNDESIRABLE_1: PenaltyCosts.UNDESIRABLE_TIMESLOT_1,
@@ -52,15 +44,6 @@ class FactRules:
         return statements
 
     @staticmethod
-    def generate_room_types(rooms: List[Room]) -> List[str]:
-        statements: List[str] = []
-        for room in rooms:
-            for session_type in room.constraints.session_types:
-                clingo_room_type = ClP.room_type(ClN.room_to_clingo(room), ClN.session_type_to_clingo(session_type))
-                statements.append(f"{clingo_room_type}.")
-        return statements
-
-    @staticmethod
     def generate_sessions(sessions: List[Session], week: Week) -> List[str]:
         statements: List[str] = []
         for session in sessions:
@@ -69,6 +52,58 @@ class FactRules:
                 week.get_slots_count_for_timedelta(session.constraints.duration)
             )
             statements.append(f"{clingo_session}.{ClN.get_session_for_comment(session)}")
+        return statements
+
+    @staticmethod
+    def __find_subslot_ids(slot: Slot, week: Week) -> List[int]:
+        return [week.get_slot_id(subslot) for subslot in generate_sub_slots(slot, week.slot_duration)]
+
+    @staticmethod
+    def generate_eligible_timeslots_for_sessions(sessions: List[Session], week: Week) -> List[str]:
+        statements: List[str] = []
+
+        blocked_slots = week.get_slot_ids_per_type(SlotType.BLOCKED)
+        common_eligible_slots = [i for i in range(1, week.get_total_slot_count() + 1) if i not in blocked_slots]
+        day_breaks = [first for first, _ in week.get_day_breaks()]
+
+        for session in sessions:
+            clingo_session = ClN.session_to_clingo(session)
+            session_eligible_slots = common_eligible_slots.copy()
+            session_slots = week.get_slots_count_for_timedelta(session.constraints.duration)
+
+            for disallowed_slots in session.constraints.timeslots_preferences.disallowed_slots:
+                for subslot_id in FactRules.__find_subslot_ids(disallowed_slots, week):
+                    if subslot_id in session_eligible_slots:
+                        session_eligible_slots.remove(subslot_id)
+
+            slot_ranges = [(a, b - session_slots + 1,)
+                           for a, b
+                           in generate_slot_groups(session_eligible_slots, day_breaks)
+                           if (abs(a - b) + 1) >= session_slots]
+
+            for a, b in slot_ranges:
+                eligible_timeslot = ClP.eligible_timeslot_for_session(clingo_session, f"{a}..{b}")
+                statements.append(f"{eligible_timeslot}.")
+
+        return statements
+
+    @staticmethod
+    def generate_eligible_rooms_for_sessions(sessions: List[Session], rooms: List[Room]) -> List[str]:
+        statements: List[str] = []
+
+        for session in sessions:
+            clingo_session = ClN.session_to_clingo(session)
+            for room in rooms:
+                clingo_room = ClN.room_to_clingo(room)
+                if session.constraints.session_type not in room.constraints.session_types:
+                    continue
+
+                if room.id in session.constraints.rooms_preferences.disallowed_rooms:
+                    continue
+
+                eligible_room = ClP.eligible_room_for_session(clingo_session, clingo_room)
+                statements.append(f"{eligible_room}.")
+
         return statements
 
     @staticmethod
@@ -114,12 +149,10 @@ class FactRules:
     @staticmethod
     def generate_room_preferences_for_sessions(sessions: List[Session]) -> List[str]:
         statements: List[str] = []
+
         for session in sessions:
             clingo_session = ClN.session_to_clingo(session)
 
-            for disallowed_room_uuid in session.constraints.rooms_preferences.disallowed_rooms:
-                clingo_room = ClN.room_to_clingo(disallowed_room_uuid)
-                statements.append(f"{ClP.disallowed_room_for_session(clingo_session, clingo_room)}.")
             for penalized_room_uuid in session.constraints.rooms_preferences.penalized_rooms:
                 clingo_room = ClN.room_to_clingo(penalized_room_uuid)
                 statements.append(f"{ClP.penalized_room_for_session(clingo_session, clingo_room)}.")
@@ -133,20 +166,14 @@ class FactRules:
     def generate_timeslot_preferences_for_sessions(sessions: List[Session], week: Week) -> List[str]:
         statements: List[str] = []
 
-        def find_subslot_ids(slot: Slot) -> List[int]:
-            return [week.get_slot_id(subslot) for subslot in generate_sub_slots(slot, week.slot_duration)]
-
         for session in sessions:
             clingo_session = ClN.session_to_clingo(session)
 
-            for disallowed_slots in session.constraints.timeslots_preferences.disallowed_slots:
-                for subslot_id in find_subslot_ids(disallowed_slots):
-                    statements.append(f"{ClP.disallowed_timeslot_for_session(clingo_session, subslot_id)}.")
             for penalized_slots in session.constraints.timeslots_preferences.penalized_slots:
-                for subslot_id in find_subslot_ids(penalized_slots):
+                for subslot_id in FactRules.__find_subslot_ids(penalized_slots, week):
                     statements.append(f"{ClP.penalized_timeslot_for_session(clingo_session, subslot_id)}.")
             for preferred_slots in session.constraints.timeslots_preferences.preferred_slots:
-                for subslot_id in find_subslot_ids(preferred_slots):
+                for subslot_id in FactRules.__find_subslot_ids(preferred_slots, week):
                     statements.append(f"{ClP.preferred_timeslot_for_session(clingo_session, subslot_id)}.")
 
         return statements
@@ -167,37 +194,12 @@ class ChoiceRules:
         assigned_room = ClP.assigned_room(ClV.ROOM, ClV.SESSION)
         eligible_room = ClP.eligible_room_for_session(ClV.SESSION, ClV.ROOM)
 
-        session = ClP.session(ClV.SESSION, ClV.SESSION_TYPE, ClV.ANY)
+        session = ClP.session(ClV.SESSION, ClV.ANY, ClV.ANY)
 
         return f"1 {{ {assigned_room} : {eligible_room} }} 1 :- {session}."
 
 
 class NormalRules:
-    @staticmethod
-    def generate_eligible_timeslots() -> str:
-        session = ClP.session(ClV.SESSION, ClV.ANY, ClV.SESSION_DURATION)
-        eligible_timeslot = ClP.eligible_timeslot_for_session(ClV.SESSION, ClV.TIMESLOT)
-        timeslot_generator = f"T = ({ClV.TIMESLOT_RANGE_START}..{ClV.TIMESLOT_RANGE_END}-{ClV.SESSION_DURATION}+1)"
-        timeslot_range = ClP.timeslot_range(ClV.TIMESLOT_RANGE_START, ClV.TIMESLOT_RANGE_END)
-        disallowed_timeslot = ClP.disallowed_timeslot_for_session(ClV.SESSION, ClV.TIMESLOT)
-
-        head = eligible_timeslot
-        body = f"{session}, {timeslot_generator}, {timeslot_range}, not {disallowed_timeslot}"
-
-        return f"{head} :- {body}."
-
-    @staticmethod
-    def generate_eligible_rooms() -> str:
-        session = ClP.session(ClV.SESSION, ClV.SESSION_TYPE, ClV.ANY)
-        eligible_room = ClP.eligible_room_for_session(ClV.SESSION, ClV.ROOM)
-        room_type = ClP.room_type(ClV.ROOM, ClV.SESSION_TYPE)
-        disallowed_room = ClP.disallowed_room_for_session(ClV.SESSION, ClV.ROOM)
-
-        head = eligible_room
-        body = f"{session}, {room_type}, not {disallowed_room}"
-
-        return f"{head} :- {body}."
-
     @staticmethod
     def generate_scheduled_sessions() -> str:
         scheduled_session = ClP.scheduled_session(
@@ -336,13 +338,13 @@ class Rules:
     def __generate_facts(self) -> str:
         return "\n".join([
             FactRules.generate_timeslot(self.week),
-            FactRules.generate_timeslot_ranges(self.week),
             *FactRules.generate_undesirable_timeslots(self.week),
 
             *FactRules.generate_rooms(self.rooms),
-            *FactRules.generate_room_types(self.rooms),
 
             *FactRules.generate_sessions(self.sessions, self.week),
+            *FactRules.generate_eligible_timeslots_for_sessions(self.sessions, self.week),
+            *FactRules.generate_eligible_rooms_for_sessions(self.sessions, self.rooms),
             *FactRules.generate_no_overlapping_sessions(self.sessions, self.week),
             *FactRules.generate_avoid_overlapping_sessions(self.sessions, self.week),
             *FactRules.generate_room_preferences_for_sessions(self.sessions),
@@ -359,8 +361,6 @@ class Rules:
     @staticmethod
     def __generate_normals() -> str:
         return "\n".join([
-            NormalRules.generate_eligible_timeslots(),
-            NormalRules.generate_eligible_rooms(),
             NormalRules.generate_scheduled_sessions(),
         ])
 
