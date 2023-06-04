@@ -48,6 +48,8 @@ class ClingoPredicates:
     DISALLOWED_TIMESLOT_FOR_SESSION = "disallowedTimeslotForSession"
     PREFERRED_TIMESLOT_FOR_SESSION = "preferredTimeslotForSession"
     PENALIZED_TIMESLOT_FOR_SESSION = "penalizedTimeslotForSession"
+    ELIGIBLE_ROOM_FOR_SESSION = "eligibleRoomForSession"
+    ELIGIBLE_TIMESLOT_FOR_SESSION = "eligibleTimeslotForSession"
 
     PENALTY = "penalty"
     BONUS = "bonus"
@@ -83,7 +85,7 @@ class ClingoPredicates:
         return f"{ClingoPredicates.ROOM_TYPE}({room},{room_type})"
 
     @staticmethod
-    def session(session: str, session_type: str, session_duration: int):
+    def session(session: str, session_type: str, session_duration: Union[str, int]):
         return f"{ClingoPredicates.SESSION}({session},{session_type},{session_duration})"
 
     @staticmethod
@@ -121,6 +123,14 @@ class ClingoPredicates:
     @staticmethod
     def preferred_timeslot_for_session(session: str, timeslot: Union[str, int]):
         return f"{ClingoPredicates.PREFERRED_TIMESLOT_FOR_SESSION}({session},{timeslot})"
+
+    @staticmethod
+    def eligible_room_for_session(session: str, room: str):
+        return f"{ClingoPredicates.ELIGIBLE_ROOM_FOR_SESSION}({session},{room})"
+
+    @staticmethod
+    def eligible_timeslot_for_session(session: str, timeslot: Union[str, int]):
+        return f"{ClingoPredicates.ELIGIBLE_TIMESLOT_FOR_SESSION}({session},{timeslot})"
 
     @staticmethod
     def penalty(name: str, cost: Union[str, int], value: Union[str, int], priority: Union[str, int]):

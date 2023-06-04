@@ -156,28 +156,48 @@ class ChoiceRules:
     @staticmethod
     def generate_assigned_timeslots() -> str:
         assigned_timeslot = ClP.assigned_timeslot(ClV.TIMESLOT, ClV.SESSION)
-        timeslot_generator = f"T = ({ClV.TIMESLOT_RANGE_START}..{ClV.TIMESLOT_RANGE_END}-{ClV.SESSION_DURATION}+1)"
-        timeslot_range = ClP.timeslot_range(ClV.TIMESLOT_RANGE_START, ClV.TIMESLOT_RANGE_END)
-        disallowed_timeslot = ClP.disallowed_timeslot_for_session(ClV.SESSION, ClV.TIMESLOT)
-        head = f"1 {{ {assigned_timeslot} : {timeslot_generator}, {timeslot_range}, not {disallowed_timeslot} }} 1"
+        eligible_timeslot = ClP.eligible_timeslot_for_session(ClV.SESSION, ClV.TIMESLOT)
 
-        session = ClP.session(ClV.SESSION, ClV.ANY, ClV.SESSION_DURATION)
+        session = ClP.session(ClV.SESSION, ClV.ANY, ClV.ANY)
 
-        return f"{head} :- {session}."
+        return f"1 {{ {assigned_timeslot} : {eligible_timeslot} }} 1 :- {session}."
 
     @staticmethod
     def generate_assigned_rooms() -> str:
         assigned_room = ClP.assigned_room(ClV.ROOM, ClV.SESSION)
-        room_type = ClP.room_type(ClV.ROOM, ClV.SESSION_TYPE)
-        disallowed_room = ClP.disallowed_room_for_session(ClV.SESSION, ClV.ROOM)
-        head = f"1 {{ {assigned_room} : {room_type}, not {disallowed_room} }} 1"
+        eligible_room = ClP.eligible_room_for_session(ClV.SESSION, ClV.ROOM)
 
         session = ClP.session(ClV.SESSION, ClV.SESSION_TYPE, ClV.ANY)
 
-        return f"{head} :- {session}."
+        return f"1 {{ {assigned_room} : {eligible_room} }} 1 :- {session}."
 
 
 class NormalRules:
+    @staticmethod
+    def generate_eligible_timeslots() -> str:
+        session = ClP.session(ClV.SESSION, ClV.ANY, ClV.SESSION_DURATION)
+        eligible_timeslot = ClP.eligible_timeslot_for_session(ClV.SESSION, ClV.TIMESLOT)
+        timeslot_generator = f"T = ({ClV.TIMESLOT_RANGE_START}..{ClV.TIMESLOT_RANGE_END}-{ClV.SESSION_DURATION}+1)"
+        timeslot_range = ClP.timeslot_range(ClV.TIMESLOT_RANGE_START, ClV.TIMESLOT_RANGE_END)
+        disallowed_timeslot = ClP.disallowed_timeslot_for_session(ClV.SESSION, ClV.TIMESLOT)
+
+        head = eligible_timeslot
+        body = f"{session}, {timeslot_generator}, {timeslot_range}, not {disallowed_timeslot}"
+
+        return f"{head} :- {body}."
+
+    @staticmethod
+    def generate_eligible_rooms() -> str:
+        session = ClP.session(ClV.SESSION, ClV.SESSION_TYPE, ClV.ANY)
+        eligible_room = ClP.eligible_room_for_session(ClV.SESSION, ClV.ROOM)
+        room_type = ClP.room_type(ClV.ROOM, ClV.SESSION_TYPE)
+        disallowed_room = ClP.disallowed_room_for_session(ClV.SESSION, ClV.ROOM)
+
+        head = eligible_room
+        body = f"{session}, {room_type}, not {disallowed_room}"
+
+        return f"{head} :- {body}."
+
     @staticmethod
     def generate_scheduled_sessions() -> str:
         scheduled_session = ClP.scheduled_session(
@@ -339,6 +359,8 @@ class Rules:
     @staticmethod
     def __generate_normals() -> str:
         return "\n".join([
+            NormalRules.generate_eligible_timeslots(),
+            NormalRules.generate_eligible_rooms(),
             NormalRules.generate_scheduled_sessions(),
         ])
 
