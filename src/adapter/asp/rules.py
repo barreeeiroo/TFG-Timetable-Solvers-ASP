@@ -169,12 +169,17 @@ class FactRules:
         for session in sessions:
             clingo_session = ClN.session_to_clingo(session)
 
+            all_penalized_slots: List[int] = []
             for penalized_slots in session.constraints.timeslots_preferences.penalized_slots:
-                for subslot_id in FactRules.__find_subslot_ids(penalized_slots, week):
-                    statements.append(f"{ClP.penalized_timeslot_for_session(clingo_session, subslot_id)}.")
+                all_penalized_slots.extend(FactRules.__find_subslot_ids(penalized_slots, week))
+            for a, b in generate_slot_groups(all_penalized_slots):
+                statements.append(f"{ClP.penalized_timeslot_for_session(clingo_session, f'{a}..{b}')}.")
+
+            all_preferred_slots: List[int] = []
             for preferred_slots in session.constraints.timeslots_preferences.preferred_slots:
-                for subslot_id in FactRules.__find_subslot_ids(preferred_slots, week):
-                    statements.append(f"{ClP.preferred_timeslot_for_session(clingo_session, subslot_id)}.")
+                all_preferred_slots.extend(FactRules.__find_subslot_ids(preferred_slots, week))
+            for a, b in generate_slot_groups(all_preferred_slots):
+                statements.append(f"{ClP.preferred_timeslot_for_session(clingo_session, f'{a}..{b}')}.")
 
         return statements
 
