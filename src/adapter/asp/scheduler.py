@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from aws_lambda_powertools import Logger
 from clyngor import solve
 
@@ -27,17 +29,41 @@ class AspSolver(Solver):
         else:
             print(asp_problem)
 
-        time_limit = 58.5
+        # 1 hour
+        time_limit = 60 * 60
         if is_short_execution_environment():
-            time_limit = 14.5
+            # 15 minutes
+            time_limit = 60 * 15
         elif self._timeout is not None:
             time_limit = self._timeout
+        time_limit = timedelta(seconds=time_limit)
+
+        # Add a 2.5% of buffer time for output file processing, between 30 seconds and 5 minutes
+        out_buffer_time = time_limit.total_seconds() * 0.025
+        if out_buffer_time < (60 * 0.5):
+            out_buffer_time = 60 * 0.5
+        elif out_buffer_time > (60 * 5.):
+            out_buffer_time = 60 * 5.
+        out_buffer_time = timedelta(seconds=out_buffer_time)
+
+        actual_timeout = time_limit - out_buffer_time
+
+        if self._execution_uuid is not None:
+            logger.info({
+                "originalTimeout": str(time_limit),
+                "outBufferTime": str(out_buffer_time),
+                "actualTimeout": str(actual_timeout),
+            }, extra={"execution": self._execution_uuid})
+        else:
+            print("Original Timeout", time_limit, "|",
+                  "Out Buffer Time", out_buffer_time, "|",
+                  "Actual Timeout", actual_timeout)
 
         models = solve(
             inline=asp_problem,
             use_clingo_module=False,
             stats=True,
-            time_limit=int(60 * time_limit),
+            time_limit=int(actual_timeout.total_seconds()),
         )
         solution, found_optimal = None, False
         for answer, optimization, optimality, answer_number in models.with_answer_number:
