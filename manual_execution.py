@@ -211,7 +211,7 @@ def main():
     args = parser.parse_args()
     if args.mode == "start":
         create_manual_execution(args.source_execution_id, args.alias)
-    if args.mode == "retarget":
+    elif args.mode == "retarget":
         retarget_manual_execution(args.source_execution_id)
     elif args.mode == "upload":
         upload_manual_execution()
