@@ -2,7 +2,7 @@ import argparse
 from pathlib import Path
 from typing import Optional
 
-from adapter.asp.scheduler import AspSolver
+from business.scheduler import AspSolver
 from sdk.aws_s3 import get_input_object, save_output_object
 from sdk.local_fs import get_local_input_object, save_local_output_object
 

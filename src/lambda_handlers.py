@@ -1,7 +1,7 @@
 from aws_lambda_powertools import Logger, Metrics, Tracer
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
-from adapter.asp.scheduler import AspSolver
+from business.scheduler import AspSolver
 from sdk.aws_s3 import get_input_object, save_output_object
 
 logger = Logger()
