@@ -118,21 +118,17 @@ class FactRules:
             ClN.session_to_clingo(session),
             ClN.session_to_clingo(other_session),
         ))
-        duration_slots = max(
-            week.get_slots_count_for_timedelta(session.constraints.duration),
-            week.get_slots_count_for_timedelta(other_session.constraints.duration),
-        )
-        return session1, session2, duration_slots
+        return session1, session2
 
     @staticmethod
     def generate_no_overlapping_sessions(sessions: List[Session], week: Week) -> List[str]:
         statements: List[str] = []
         for session in sessions:
             for no_overlapping_session_uuid in session.constraints.cannot_conflict_in_time:
-                session1, session2, duration_slots = FactRules.__generate_conflicting_pair_of_sessions(
+                session1, session2 = FactRules.__generate_conflicting_pair_of_sessions(
                     sessions, week, session, no_overlapping_session_uuid,
                 )
-                statement = f"{ClP.no_timeslot_overlap_in_sessions(session1, session2, duration_slots)}."
+                statement = f"{ClP.no_timeslot_overlap_in_sessions(session1, session2)}."
                 if statement not in statements:
                     statements.append(statement)
         return statements
@@ -142,10 +138,10 @@ class FactRules:
         statements: List[str] = []
         for session in sessions:
             for no_overlapping_session_uuid in session.constraints.avoid_conflict_in_time:
-                session1, session2, duration_slots = FactRules.__generate_conflicting_pair_of_sessions(
+                session1, session2 = FactRules.__generate_conflicting_pair_of_sessions(
                     sessions, week, session, no_overlapping_session_uuid,
                 )
-                statement = f"{ClP.avoid_timeslot_overlap_in_sessions(session1, session2, duration_slots)}."
+                statement = f"{ClP.avoid_timeslot_overlap_in_sessions(session1, session2)}."
                 if statement not in statements:
                     statements.append(statement)
         return statements
@@ -245,11 +241,10 @@ class ConstraintRules:
 
     @staticmethod
     def exclude_sessions_assigned_in_same_overlapping_timeslot() -> str:
-        assigned_timeslot_one = ClP.assigned_timeslot(f"{ClV.TIMESLOT}1", f"{ClV.SESSION}1")
-        assigned_timeslot_two = ClP.assigned_timeslot(f"{ClV.TIMESLOT}2", f"{ClV.SESSION}2")
-        no_overlap = ClP.no_timeslot_overlap_in_sessions(f"{ClV.SESSION}1", f"{ClV.SESSION}2", ClV.SESSION_DURATION)
-        diff = f"|{ClV.TIMESLOT}1-{ClV.TIMESLOT}2| < {ClV.SESSION_DURATION}"
-        return f":- {no_overlap}, {assigned_timeslot_one}, {assigned_timeslot_two}, {diff}."
+        scheduled_session_one = ClP.scheduled_session(ClV.TIMESLOT, f"{ClV.SESSION}1", ClV.ANY)
+        scheduled_session_two = ClP.scheduled_session(ClV.TIMESLOT, f"{ClV.SESSION}2", ClV.ANY)
+        no_overlap = ClP.no_timeslot_overlap_in_sessions(f"{ClV.SESSION}1", f"{ClV.SESSION}2")
+        return f":- {no_overlap}, {scheduled_session_one}, {scheduled_session_two}."
 
 
 class OptimizationRules:
@@ -297,13 +292,11 @@ class OptimizationRules:
                               f"{ClV.SESSION}1",
                               OptimizationPriorities.PENALTY__AVOID_SESSION_OVERLAP)
 
-        assigned_timeslot_one = ClP.assigned_timeslot(f"{ClV.TIMESLOT}1", f"{ClV.SESSION}1")
-        assigned_timeslot_two = ClP.assigned_timeslot(f"{ClV.TIMESLOT}2", f"{ClV.SESSION}2")
-        avoid_overlap = ClP.avoid_timeslot_overlap_in_sessions(f"{ClV.SESSION}1", f"{ClV.SESSION}2",
-                                                               ClV.SESSION_DURATION)
-        diff = f"|{ClV.TIMESLOT}1-{ClV.TIMESLOT}2| < {ClV.SESSION_DURATION}"
+        avoid_overlap = ClP.avoid_timeslot_overlap_in_sessions(f"{ClV.SESSION}1", f"{ClV.SESSION}2")
+        scheduled_session_one = ClP.scheduled_session(ClV.TIMESLOT, f"{ClV.SESSION}1", ClV.ANY)
+        scheduled_session_two = ClP.scheduled_session(ClV.TIMESLOT, f"{ClV.SESSION}2", ClV.ANY)
 
-        return f"{penalty} :- {avoid_overlap}, {assigned_timeslot_one}, {assigned_timeslot_two}, {diff}."
+        return f"{penalty} :- {avoid_overlap}, {scheduled_session_one}, {scheduled_session_two}."
 
     @staticmethod
     def apply_timeslot_preferences_in_sessions() -> List[str]:

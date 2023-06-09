@@ -73,12 +73,12 @@ class ClingoPredicates:
         return f"{ClingoPredicates.SESSION}({session},{session_type},{session_duration})"
 
     @staticmethod
-    def no_timeslot_overlap_in_sessions(session1: str, session2: str, session_duration: Union[str, int]) -> str:
-        return f"{ClingoPredicates.NO_TIMESLOT_OVERLAP_IN_SESSIONS}({session1},{session2},{session_duration})"
+    def no_timeslot_overlap_in_sessions(session1: str, session2: str) -> str:
+        return f"{ClingoPredicates.NO_TIMESLOT_OVERLAP_IN_SESSIONS}({session1},{session2})"
 
     @staticmethod
-    def avoid_timeslot_overlap_in_sessions(session1: str, session2: str, session_duration: Union[str, int]) -> str:
-        return f"{ClingoPredicates.AVOID_TIMESLOT_OVERLAP_IN_SESSIONS}({session1},{session2},{session_duration})"
+    def avoid_timeslot_overlap_in_sessions(session1: str, session2: str) -> str:
+        return f"{ClingoPredicates.AVOID_TIMESLOT_OVERLAP_IN_SESSIONS}({session1},{session2})"
 
     @staticmethod
     def undesirable_timeslot(timeslot: Union[str, int], penalty: Union[str, int]):
