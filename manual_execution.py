@@ -58,7 +58,7 @@ def api_retarget_manual_scheduler_execution(source_execution_id: str) -> Tuple[s
     data = response.json()
     if response.status_code // 200 > 2:
         raise RuntimeError(f"API Error: {data['message']}")
-    return data["executionId"], data["inputFileUrl"]
+    return source_execution_id, data["inputFileUrl"]
 
 
 def api_generate_manual_scheduler_execution_upload(execution_id: str,
