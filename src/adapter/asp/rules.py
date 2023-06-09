@@ -244,7 +244,8 @@ class ConstraintRules:
         scheduled_session_one = ClP.scheduled_session(ClV.TIMESLOT, f"{ClV.SESSION}1", ClV.ANY)
         scheduled_session_two = ClP.scheduled_session(ClV.TIMESLOT, f"{ClV.SESSION}2", ClV.ANY)
         no_overlap = ClP.no_timeslot_overlap_in_sessions(f"{ClV.SESSION}1", f"{ClV.SESSION}2")
-        return f":- {no_overlap}, {scheduled_session_one}, {scheduled_session_two}."
+        t = ClP.timeslot(ClV.TIMESLOT)
+        return f":- not {{ {scheduled_session_one}; {scheduled_session_two} }} 1, {no_overlap}, {t}."
 
 
 class OptimizationRules:
@@ -295,8 +296,9 @@ class OptimizationRules:
         avoid_overlap = ClP.avoid_timeslot_overlap_in_sessions(f"{ClV.SESSION}1", f"{ClV.SESSION}2")
         scheduled_session_one = ClP.scheduled_session(ClV.TIMESLOT, f"{ClV.SESSION}1", ClV.ANY)
         scheduled_session_two = ClP.scheduled_session(ClV.TIMESLOT, f"{ClV.SESSION}2", ClV.ANY)
+        t = ClP.timeslot(ClV.TIMESLOT)
 
-        return f"{penalty} :- {avoid_overlap}, {scheduled_session_one}, {scheduled_session_two}."
+        return f"{penalty} :- not {{ {scheduled_session_one}; {scheduled_session_two} }} 1, {avoid_overlap}, {t}."
 
     @staticmethod
     def apply_timeslot_preferences_in_sessions() -> List[str]:
