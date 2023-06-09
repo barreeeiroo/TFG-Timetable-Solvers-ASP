@@ -36,6 +36,7 @@ class SessionConstraints(BaseModel):
 
     cannot_conflict_in_time: List[UUID4] = Field(alias="cannotConflictInTime", default_factory=list)
     avoid_conflict_in_time: List[UUID4] = Field(alias="avoidConflictInTime", default_factory=list)
+    same_room_if_contiguous_in_time: List[UUID4] = Field(alias="sameRoomIfContiguousInTime", default_factory=list)
     rooms_preferences: SessionRoomPreferences = Field(alias="roomsPreferences", default=SessionRoomPreferences())
     timeslots_preferences: SessionTimeslotPreferences = Field(alias="timeslotsPreferences",
                                                               default=SessionTimeslotPreferences())

@@ -147,6 +147,19 @@ class FactRules:
         return statements
 
     @staticmethod
+    def generate_same_room_if_sessions_contiguous_in_time(sessions: List[Session], week: Week) -> List[str]:
+        statements: List[str] = []
+        for session in sessions:
+            for no_overlapping_session_uuid in session.constraints.same_room_if_contiguous_in_time:
+                session1, session2 = FactRules.__generate_conflicting_pair_of_sessions(
+                    sessions, week, session, no_overlapping_session_uuid,
+                )
+                statement = f"{ClP.same_room_if_contiguous(session1, session2)}."
+                if statement not in statements:
+                    statements.append(statement)
+        return statements
+
+    @staticmethod
     def generate_room_preferences_for_sessions(sessions: List[Session]) -> List[str]:
         statements: List[str] = []
 
@@ -246,6 +259,20 @@ class ConstraintRules:
         no_overlap = ClP.no_timeslot_overlap_in_sessions(f"{ClV.SESSION}1", f"{ClV.SESSION}2")
         t = ClP.timeslot(ClV.TIMESLOT)
         return f":- not {{ {scheduled_session_one}; {scheduled_session_two} }} 1, {no_overlap}, {t}."
+
+    @staticmethod
+    def exclude_sessions_scheduled_in_contiguous_timeslots_but_different_rooms() -> str:
+        scheduled_session_one = ClP.scheduled_session(ClV.TIMESLOT, f"{ClV.SESSION}1", f"{ClV.ROOM}1")
+        scheduled_session_two_a = ClP.scheduled_session(f"{ClV.TIMESLOT}-1", f"{ClV.SESSION}2", f"{ClV.ROOM}2")
+        scheduled_session_two_b = ClP.scheduled_session(f"{ClV.TIMESLOT}+1", f"{ClV.SESSION}2", f"{ClV.ROOM}2")
+
+        same_room = ClP.same_room_if_contiguous(f"{ClV.SESSION}1", f"{ClV.SESSION}2")
+        assigned_room_one = ClP.assigned_room(f"{ClV.ROOM}1", f"{ClV.SESSION}1")
+        assigned_room_two = ClP.assigned_room(f"{ClV.ROOM}2", f"{ClV.SESSION}2")
+        not_equal = f"{ClV.ROOM}1 != {ClV.ROOM}2"
+
+        choice = f"{{ {scheduled_session_two_a}; {scheduled_session_one}; {scheduled_session_two_b} }} 1"
+        return f":- not {choice}, {same_room}, {assigned_room_one}, {assigned_room_two}, {not_equal}."
 
 
 class OptimizationRules:
@@ -361,6 +388,7 @@ class Rules:
             *FactRules.generate_eligible_rooms_for_sessions(self.sessions, self.rooms),
             *FactRules.generate_no_overlapping_sessions(self.sessions, self.week),
             *FactRules.generate_avoid_overlapping_sessions(self.sessions, self.week),
+            *FactRules.generate_same_room_if_sessions_contiguous_in_time(self.sessions, self.week),
             *FactRules.generate_room_preferences_for_sessions(self.sessions),
             *FactRules.generate_timeslot_preferences_for_sessions(self.sessions, self.week),
         ])
@@ -383,6 +411,7 @@ class Rules:
         return "\n".join([
             ConstraintRules.exclude_more_than_one_session_in_same_room_and_timeslot(),
             ConstraintRules.exclude_sessions_assigned_in_same_overlapping_timeslot(),
+            ConstraintRules.exclude_sessions_scheduled_in_contiguous_timeslots_but_different_rooms(),
         ])
 
     @staticmethod

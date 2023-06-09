@@ -44,6 +44,7 @@ class ClingoPredicates:
     PENALIZED_TIMESLOT_FOR_SESSION = "penalizedTimeslotForSession"
     ELIGIBLE_ROOM_FOR_SESSION = "eligibleRoomForSession"
     ELIGIBLE_TIMESLOT_FOR_SESSION = "eligibleTimeslotForSession"
+    SAME_ROOM_IF_CONTIGUOUS = "sameRoomIfContiguous"
 
     PENALTY = "penalty"
     BONUS = "bonus"
@@ -107,6 +108,10 @@ class ClingoPredicates:
     @staticmethod
     def eligible_timeslot_for_session(session: str, timeslot: Union[str, int]):
         return f"{ClingoPredicates.ELIGIBLE_TIMESLOT_FOR_SESSION}({session},{timeslot})"
+
+    @staticmethod
+    def same_room_if_contiguous(session1: str, session2: str):
+        return f"{ClingoPredicates.SAME_ROOM_IF_CONTIGUOUS}({session1},{session2})"
 
     @staticmethod
     def penalty(name: str, cost: Union[str, int], value: Union[str, int], priority: Union[str, int]):
