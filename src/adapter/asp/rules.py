@@ -176,7 +176,20 @@ class FactRules:
                 session1, session2 = FactRules.__generate_conflicting_pair_of_sessions(
                     sessions, session, no_overlapping_session_uuid,
                 )
-                statement = f"{ClP.same_room_if_contiguous(session1, session2)}."
+                statement = f"{ClP.same_room_if_contiguous_sessions(session1, session2)}."
+                if statement not in statements:
+                    statements.append(statement)
+        return statements
+
+    @staticmethod
+    def generate_apply_room_distances_to_sessions(sessions: List[Session]) -> List[str]:
+        statements: List[str] = []
+        for session in sessions:
+            for no_overlapping_session_uuid in session.constraints.apply_room_distances:
+                session1, session2 = FactRules.__generate_conflicting_pair_of_sessions(
+                    sessions, session, no_overlapping_session_uuid,
+                )
+                statement = f"{ClP.apply_room_distances_to_sessions(session1, session2)}."
                 if statement not in statements:
                     statements.append(statement)
         return statements
@@ -288,7 +301,7 @@ class ConstraintRules:
         scheduled_session_two_a = ClP.scheduled_session(f"{ClV.TIMESLOT}-1", f"{ClV.SESSION}2", f"{ClV.ROOM}2")
         scheduled_session_two_b = ClP.scheduled_session(f"{ClV.TIMESLOT}+1", f"{ClV.SESSION}2", f"{ClV.ROOM}2")
 
-        same_room = ClP.same_room_if_contiguous(f"{ClV.SESSION}1", f"{ClV.SESSION}2")
+        same_room = ClP.same_room_if_contiguous_sessions(f"{ClV.SESSION}1", f"{ClV.SESSION}2")
         assigned_room_one = ClP.assigned_room(f"{ClV.ROOM}1", f"{ClV.SESSION}1")
         assigned_room_two = ClP.assigned_room(f"{ClV.ROOM}2", f"{ClV.SESSION}2")
         not_equal = f"{ClV.ROOM}1 != {ClV.ROOM}2"
@@ -412,6 +425,8 @@ class Rules:
             *FactRules.generate_no_overlapping_sessions(self.sessions),
             *FactRules.generate_avoid_overlapping_sessions(self.sessions),
             *FactRules.generate_same_room_if_sessions_contiguous_in_time(self.sessions),
+            # TODO: Pending ASP restriction...
+            *FactRules.generate_apply_room_distances_to_sessions(self.sessions),
             *FactRules.generate_room_preferences_for_sessions(self.sessions),
             *FactRules.generate_timeslot_preferences_for_sessions(self.sessions, self.week),
         ])

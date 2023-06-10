@@ -48,7 +48,8 @@ class ClingoPredicates:
     PENALIZED_ROOM_FOR_SESSION = "penalizedRoomForSession"
     PREFERRED_TIMESLOT_FOR_SESSION = "preferredTimeslotForSession"
     PENALIZED_TIMESLOT_FOR_SESSION = "penalizedTimeslotForSession"
-    SAME_ROOM_IF_CONTIGUOUS = "sameRoomIfContiguous"
+    SAME_ROOM_IF_CONTIGUOUS_SESSIONS = "sameRoomIfContiguousSessions"
+    APPLY_ROOM_DISTANCES_TO_SESSIONS = "applyRoomDistancesToSessions"
 
     PENALTY = "penalty"
     BONUS = "bonus"
@@ -119,8 +120,12 @@ class ClingoPredicates:
         return f"{ClingoPredicates.PREFERRED_TIMESLOT_FOR_SESSION}({session},{timeslot})"
 
     @staticmethod
-    def same_room_if_contiguous(session1: str, session2: str):
-        return f"{ClingoPredicates.SAME_ROOM_IF_CONTIGUOUS}({session1},{session2})"
+    def same_room_if_contiguous_sessions(session1: str, session2: str):
+        return f"{ClingoPredicates.SAME_ROOM_IF_CONTIGUOUS_SESSIONS}({session1},{session2})"
+
+    @staticmethod
+    def apply_room_distances_to_sessions(session1: str, session2: str):
+        return f"{ClingoPredicates.APPLY_ROOM_DISTANCES_TO_SESSIONS}({session1},{session2})"
 
     @staticmethod
     def penalty(name: str, cost: Union[str, int], value: Union[str, int], priority: Union[str, int]):
