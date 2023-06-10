@@ -45,21 +45,28 @@ class FactRules:
         return statements
 
     @staticmethod
+    def __generate_pair_of_rooms(rooms: List[Room], room: Room, other_room_uuid: UUID4):
+        other_room = next(room for room in rooms if room.id == other_room_uuid)
+        room1, room2 = sorted((
+            ClN.room_to_clingo(room),
+            ClN.room_to_clingo(other_room),
+        ))
+        return room1, room2
+
+    @staticmethod
     def generate_room_distances(rooms: List[Room], week: Week) -> List[str]:
         statements: List[str] = []
 
         for room in rooms:
-            for other_room_uuid, distance in room.constraints.distances_in_minutes:
-                other_room = next(room for room in rooms if room.id == other_room_uuid)
-                room1, room2 = sorted((
-                    ClN.room_to_clingo(room),
-                    ClN.room_to_clingo(other_room),
-                ))
+            for other_room_uuid, distance in room.constraints.distances_in_minutes.items():
+                if distance <= 0:
+                    continue
+                room1, room2 = FactRules.__generate_pair_of_rooms(rooms, room, UUID4(other_room_uuid))
 
                 delta = timedelta(minutes=distance)
                 timeslots = week.get_slots_count_for_timedelta_ceil(delta)
 
-                statement = ClP.room_distance(room1, room2, timeslots)
+                statement = f"{ClP.room_distance(room1, room2, timeslots)}."
                 if statement not in statements:
                     statements.append(statement)
 
