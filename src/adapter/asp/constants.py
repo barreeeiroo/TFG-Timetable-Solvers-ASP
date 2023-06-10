@@ -1,3 +1,4 @@
+from typing import Union
 from uuid import UUID
 
 from models.room import Room
@@ -49,11 +50,11 @@ class ClingoPredicates:
     BONUS = "bonus"
 
     @staticmethod
-    def scheduled_session(timeslot: int | str, session: str, room: str) -> str:
+    def scheduled_session(timeslot: Union[int, str], session: str, room: str) -> str:
         return f"{ClingoPredicates.SCHEDULED_SESSION}({timeslot},{session},{room})"
 
     @staticmethod
-    def assigned_timeslot(timeslot: str | int, session: str) -> str:
+    def assigned_timeslot(timeslot: Union[str, int], session: str) -> str:
         return f"{ClingoPredicates.ASSIGNED_TIMESLOT}({timeslot},{session})"
 
     @staticmethod
@@ -69,7 +70,7 @@ class ClingoPredicates:
         return f"{ClingoPredicates.ROOM}({room},{room_capacity})"
 
     @staticmethod
-    def session(session: str, session_type: str, session_duration: str | int):
+    def session(session: str, session_type: str, session_duration: Union[str, int]):
         return f"{ClingoPredicates.SESSION}({session},{session_type},{session_duration})"
 
     @staticmethod
@@ -81,7 +82,7 @@ class ClingoPredicates:
         return f"{ClingoPredicates.AVOID_TIMESLOT_OVERLAP_IN_SESSIONS}({session1},{session2})"
 
     @staticmethod
-    def undesirable_timeslot(timeslot: str | int, penalty: str | int):
+    def undesirable_timeslot(timeslot: Union[str, int], penalty: Union[str, int]):
         return f"{ClingoPredicates.UNDESIRABLE_TIMESLOT}({timeslot},{penalty})"
 
     @staticmethod
@@ -93,11 +94,11 @@ class ClingoPredicates:
         return f"{ClingoPredicates.PREFERRED_ROOM_FOR_SESSION}({session},{room})"
 
     @staticmethod
-    def penalized_timeslot_for_session(session: str, timeslot: str | int):
+    def penalized_timeslot_for_session(session: str, timeslot: Union[str, int]):
         return f"{ClingoPredicates.PENALIZED_TIMESLOT_FOR_SESSION}({session},{timeslot})"
 
     @staticmethod
-    def preferred_timeslot_for_session(session: str, timeslot: str | int):
+    def preferred_timeslot_for_session(session: str, timeslot: Union[str, int]):
         return f"{ClingoPredicates.PREFERRED_TIMESLOT_FOR_SESSION}({session},{timeslot})"
 
     @staticmethod
@@ -105,7 +106,7 @@ class ClingoPredicates:
         return f"{ClingoPredicates.ELIGIBLE_ROOM_FOR_SESSION}({session},{room})"
 
     @staticmethod
-    def eligible_timeslot_for_session(session: str, timeslot: str | int):
+    def eligible_timeslot_for_session(session: str, timeslot: Union[str, int]):
         return f"{ClingoPredicates.ELIGIBLE_TIMESLOT_FOR_SESSION}({session},{timeslot})"
 
     @staticmethod
@@ -113,11 +114,11 @@ class ClingoPredicates:
         return f"{ClingoPredicates.SAME_ROOM_IF_CONTIGUOUS}({session1},{session2})"
 
     @staticmethod
-    def penalty(name: str, cost: str | int, value: str | int, priority: str | int):
+    def penalty(name: str, cost: Union[str, int], value: Union[str, int], priority: Union[str, int]):
         return f"{ClingoPredicates.PENALTY}({name},{cost},{value},{priority})"
 
     @staticmethod
-    def bonus(name: str, cost: str | int, value: str | int, priority: str | int):
+    def bonus(name: str, cost: Union[str, int], value: Union[str, int], priority: Union[str, int]):
         return f"{ClingoPredicates.BONUS}({name},{cost},{value},{priority})"
 
 
@@ -127,13 +128,13 @@ class ClingoNaming:
     SESSION_TYPE = "st"
 
     @staticmethod
-    def room_to_clingo(room: Room | UUID) -> str:
+    def room_to_clingo(room: Union[Room, UUID]) -> str:
         if isinstance(room, UUID):
             return f"{ClingoNaming.ROOM}_{room.hex}"
         return f"{ClingoNaming.ROOM}_{room.id.hex}"
 
     @staticmethod
-    def session_to_clingo(session: Session | UUID) -> str:
+    def session_to_clingo(session: Union[Session, UUID]) -> str:
         if isinstance(session, UUID):
             return f"{ClingoNaming.SESSION}_{session.hex}"
         return f"{ClingoNaming.SESSION}_{session.id.hex}"
