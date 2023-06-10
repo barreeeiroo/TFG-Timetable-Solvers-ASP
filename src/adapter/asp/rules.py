@@ -1,3 +1,4 @@
+from datetime import timedelta
 from typing import List
 
 from pydantic import UUID4
@@ -41,6 +42,27 @@ class FactRules:
         for room in rooms:
             clingo_room = ClP.room(ClN.room_to_clingo(room), room.constraints.capacity)
             statements.append(f"{clingo_room}.{ClN.get_room_for_comment(room)}")
+        return statements
+
+    @staticmethod
+    def generate_room_distances(rooms: List[Room], week: Week) -> List[str]:
+        statements: List[str] = []
+
+        for room in rooms:
+            for other_room_uuid, distance in room.constraints.distances_in_minutes:
+                other_room = next(room for room in rooms if room.id == other_room_uuid)
+                room1, room2 = sorted((
+                    ClN.room_to_clingo(room),
+                    ClN.room_to_clingo(other_room),
+                ))
+
+                delta = timedelta(minutes=distance)
+                timeslots = week.get_slots_count_for_timedelta_ceil(delta)
+
+                statement = ClP.room_distance(room1, room2, timeslots)
+                if statement not in statements:
+                    statements.append(statement)
+
         return statements
 
     @staticmethod
@@ -111,7 +133,7 @@ class FactRules:
         return statements
 
     @staticmethod
-    def __generate_conflicting_pair_of_sessions(sessions: List[Session], week: Week,
+    def __generate_conflicting_pair_of_sessions(sessions: List[Session],
                                                 session: Session, no_overlapping_session_uuid: UUID4):
         other_session = next(session for session in sessions if session.id == no_overlapping_session_uuid)
         session1, session2 = sorted((
@@ -121,12 +143,12 @@ class FactRules:
         return session1, session2
 
     @staticmethod
-    def generate_no_overlapping_sessions(sessions: List[Session], week: Week) -> List[str]:
+    def generate_no_overlapping_sessions(sessions: List[Session]) -> List[str]:
         statements: List[str] = []
         for session in sessions:
             for no_overlapping_session_uuid in session.constraints.cannot_conflict_in_time:
                 session1, session2 = FactRules.__generate_conflicting_pair_of_sessions(
-                    sessions, week, session, no_overlapping_session_uuid,
+                    sessions, session, no_overlapping_session_uuid,
                 )
                 statement = f"{ClP.no_timeslot_overlap_in_sessions(session1, session2)}."
                 if statement not in statements:
@@ -134,12 +156,12 @@ class FactRules:
         return statements
 
     @staticmethod
-    def generate_avoid_overlapping_sessions(sessions: List[Session], week: Week) -> List[str]:
+    def generate_avoid_overlapping_sessions(sessions: List[Session]) -> List[str]:
         statements: List[str] = []
         for session in sessions:
             for no_overlapping_session_uuid in session.constraints.avoid_conflict_in_time:
                 session1, session2 = FactRules.__generate_conflicting_pair_of_sessions(
-                    sessions, week, session, no_overlapping_session_uuid,
+                    sessions, session, no_overlapping_session_uuid,
                 )
                 statement = f"{ClP.avoid_timeslot_overlap_in_sessions(session1, session2)}."
                 if statement not in statements:
@@ -147,12 +169,12 @@ class FactRules:
         return statements
 
     @staticmethod
-    def generate_same_room_if_sessions_contiguous_in_time(sessions: List[Session], week: Week) -> List[str]:
+    def generate_same_room_if_sessions_contiguous_in_time(sessions: List[Session]) -> List[str]:
         statements: List[str] = []
         for session in sessions:
             for no_overlapping_session_uuid in session.constraints.same_room_if_contiguous_in_time:
                 session1, session2 = FactRules.__generate_conflicting_pair_of_sessions(
-                    sessions, week, session, no_overlapping_session_uuid,
+                    sessions, session, no_overlapping_session_uuid,
                 )
                 statement = f"{ClP.same_room_if_contiguous(session1, session2)}."
                 if statement not in statements:
@@ -382,13 +404,14 @@ class Rules:
             *FactRules.generate_undesirable_timeslots(self.week),
 
             *FactRules.generate_rooms(self.rooms),
+            *FactRules.generate_room_distances(self.rooms, self.week),
 
             *FactRules.generate_sessions(self.sessions, self.week),
             *FactRules.generate_eligible_timeslots_for_sessions(self.sessions, self.week),
             *FactRules.generate_eligible_rooms_for_sessions(self.sessions, self.rooms),
-            *FactRules.generate_no_overlapping_sessions(self.sessions, self.week),
-            *FactRules.generate_avoid_overlapping_sessions(self.sessions, self.week),
-            *FactRules.generate_same_room_if_sessions_contiguous_in_time(self.sessions, self.week),
+            *FactRules.generate_no_overlapping_sessions(self.sessions),
+            *FactRules.generate_avoid_overlapping_sessions(self.sessions),
+            *FactRules.generate_same_room_if_sessions_contiguous_in_time(self.sessions),
             *FactRules.generate_room_preferences_for_sessions(self.sessions),
             *FactRules.generate_timeslot_preferences_for_sessions(self.sessions, self.week),
         ])

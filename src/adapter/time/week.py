@@ -41,6 +41,9 @@ class Week:
     def get_slots_count_for_timedelta(self, td: timedelta) -> int:
         return int(td / self.__slot_duration)
 
+    def get_slots_count_for_timedelta_ceil(self, td: timedelta) -> int:
+        return math.ceil(td / self.__slot_duration)
+
     def get_total_slot_count(self) -> int:
         return sum(map(len, self.slots.values()))
 

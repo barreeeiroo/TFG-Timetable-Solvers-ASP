@@ -32,9 +32,15 @@ class ClingoPredicates:
     ROOM = "room"
     SESSION = "session"
 
+    ROOM_DISTANCE = "roomDistance"
+
     SCHEDULED_SESSION = "scheduledSession"
     ASSIGNED_TIMESLOT = "assignedTimeslot"
     ASSIGNED_ROOM = "assignedRoom"
+
+    ELIGIBLE_ROOM_FOR_SESSION = "eligibleRoomForSession"
+    ELIGIBLE_TIMESLOT_FOR_SESSION = "eligibleTimeslotForSession"
+
     NO_TIMESLOT_OVERLAP_IN_SESSIONS = "noTimeslotOverlapInSessions"
     AVOID_TIMESLOT_OVERLAP_IN_SESSIONS = "avoidTimeslotOverlapInSessions"
     UNDESIRABLE_TIMESLOT = "undesirableTimeslot"
@@ -42,12 +48,27 @@ class ClingoPredicates:
     PENALIZED_ROOM_FOR_SESSION = "penalizedRoomForSession"
     PREFERRED_TIMESLOT_FOR_SESSION = "preferredTimeslotForSession"
     PENALIZED_TIMESLOT_FOR_SESSION = "penalizedTimeslotForSession"
-    ELIGIBLE_ROOM_FOR_SESSION = "eligibleRoomForSession"
-    ELIGIBLE_TIMESLOT_FOR_SESSION = "eligibleTimeslotForSession"
     SAME_ROOM_IF_CONTIGUOUS = "sameRoomIfContiguous"
 
     PENALTY = "penalty"
     BONUS = "bonus"
+
+    @staticmethod
+    def timeslot(timeslot: str) -> str:
+        return f"{ClingoPredicates.TIMESLOT}({timeslot})"
+
+    @staticmethod
+    def room(room: str, room_capacity: int) -> str:
+        return f"{ClingoPredicates.ROOM}({room},{room_capacity})"
+
+    @staticmethod
+    def session(session: str, session_type: str, session_duration: Union[str, int]):
+        return f"{ClingoPredicates.SESSION}({session},{session_type},{session_duration})"
+
+    @staticmethod
+    def room_distance(room1: str, room2: str, distance: Union[str, int]):
+        # Note that distance is in number of timeslots
+        return f"{ClingoPredicates.ROOM_DISTANCE}({room1},{room2},{distance})"
 
     @staticmethod
     def scheduled_session(timeslot: Union[int, str], session: str, room: str) -> str:
@@ -62,16 +83,12 @@ class ClingoPredicates:
         return f"{ClingoPredicates.ASSIGNED_ROOM}({room},{session})"
 
     @staticmethod
-    def timeslot(timeslot: str) -> str:
-        return f"{ClingoPredicates.TIMESLOT}({timeslot})"
+    def eligible_room_for_session(session: str, room: str):
+        return f"{ClingoPredicates.ELIGIBLE_ROOM_FOR_SESSION}({session},{room})"
 
     @staticmethod
-    def room(room: str, room_capacity: int) -> str:
-        return f"{ClingoPredicates.ROOM}({room},{room_capacity})"
-
-    @staticmethod
-    def session(session: str, session_type: str, session_duration: Union[str, int]):
-        return f"{ClingoPredicates.SESSION}({session},{session_type},{session_duration})"
+    def eligible_timeslot_for_session(session: str, timeslot: Union[str, int]):
+        return f"{ClingoPredicates.ELIGIBLE_TIMESLOT_FOR_SESSION}({session},{timeslot})"
 
     @staticmethod
     def no_timeslot_overlap_in_sessions(session1: str, session2: str) -> str:
@@ -100,14 +117,6 @@ class ClingoPredicates:
     @staticmethod
     def preferred_timeslot_for_session(session: str, timeslot: Union[str, int]):
         return f"{ClingoPredicates.PREFERRED_TIMESLOT_FOR_SESSION}({session},{timeslot})"
-
-    @staticmethod
-    def eligible_room_for_session(session: str, room: str):
-        return f"{ClingoPredicates.ELIGIBLE_ROOM_FOR_SESSION}({session},{room})"
-
-    @staticmethod
-    def eligible_timeslot_for_session(session: str, timeslot: Union[str, int]):
-        return f"{ClingoPredicates.ELIGIBLE_TIMESLOT_FOR_SESSION}({session},{timeslot})"
 
     @staticmethod
     def same_room_if_contiguous(session1: str, session2: str):
