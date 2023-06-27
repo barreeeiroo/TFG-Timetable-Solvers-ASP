@@ -12,7 +12,6 @@ class ClingoVariables:
 
     TIMESLOT = "T"
     SESSION = "S"
-    SESSION_TYPE = "ST"
     SESSION_DURATION = "H"
     ROOM = "R"
     ROOM_CAPACITY = "RC"
@@ -63,8 +62,8 @@ class ClingoPredicates:
         return f"{ClingoPredicates.ROOM}({room},{room_capacity})"
 
     @staticmethod
-    def session(session: str, session_type: str, session_duration: Union[str, int]):
-        return f"{ClingoPredicates.SESSION}({session},{session_type},{session_duration})"
+    def session(session: str, session_duration: Union[str, int]):
+        return f"{ClingoPredicates.SESSION}({session},{session_duration})"
 
     @staticmethod
     def room_distance(room1: str, room2: str, distance: Union[str, int]):
@@ -139,7 +138,6 @@ class ClingoPredicates:
 class ClingoNaming:
     ROOM = "room"
     SESSION = "session"
-    SESSION_TYPE = "st"
 
     @staticmethod
     def room_to_clingo(room: Union[Room, UUID]) -> str:
@@ -152,10 +150,6 @@ class ClingoNaming:
         if isinstance(session, UUID):
             return f"{ClingoNaming.SESSION}_{session.hex}"
         return f"{ClingoNaming.SESSION}_{session.id.hex}"
-
-    @staticmethod
-    def session_type_to_clingo(session_type: str) -> str:
-        return f"{ClingoNaming.SESSION_TYPE}_{session_type}"
 
     @staticmethod
     def get_id_from_clingo(clingo: str) -> str:

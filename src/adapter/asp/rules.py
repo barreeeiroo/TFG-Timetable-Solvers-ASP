@@ -77,7 +77,7 @@ class FactRules:
         statements: List[str] = []
         for session in sessions:
             clingo_session = ClP.session(
-                ClN.session_to_clingo(session), ClN.session_type_to_clingo(session.constraints.session_type),
+                ClN.session_to_clingo(session),
                 week.get_slots_count_for_timedelta(session.constraints.duration)
             )
             statements.append(f"{clingo_session}.% {ClN.get_session_for_comment(session)}")
@@ -255,7 +255,7 @@ class ChoiceRules:
         assigned_timeslot = ClP.assigned_timeslot(ClV.TIMESLOT, ClV.SESSION)
         eligible_timeslot = ClP.eligible_timeslot_for_session(ClV.SESSION, ClV.TIMESLOT)
 
-        session = ClP.session(ClV.SESSION, ClV.ANY, ClV.ANY)
+        session = ClP.session(ClV.SESSION, ClV.ANY)
 
         return f"1 {{ {assigned_timeslot} : {eligible_timeslot} }} 1 :- {session}."
 
@@ -264,7 +264,7 @@ class ChoiceRules:
         assigned_room = ClP.assigned_room(ClV.ROOM, ClV.SESSION)
         eligible_room = ClP.eligible_room_for_session(ClV.SESSION, ClV.ROOM)
 
-        session = ClP.session(ClV.SESSION, ClV.ANY, ClV.ANY)
+        session = ClP.session(ClV.SESSION, ClV.ANY)
 
         return f"1 {{ {assigned_room} : {eligible_room} }} 1 :- {session}."
 
@@ -278,7 +278,7 @@ class NormalRules:
             ClV.ROOM
         )
 
-        session = ClP.session(ClV.SESSION, ClV.ANY, ClV.SESSION_DURATION)
+        session = ClP.session(ClV.SESSION, ClV.SESSION_DURATION)
         assigned_timeslot = ClP.assigned_timeslot(ClV.TIMESLOT, ClV.SESSION)
         assigned_room = ClP.assigned_room(ClV.ROOM, ClV.SESSION)
         body = f"{session}, {assigned_timeslot}, {assigned_room}"
