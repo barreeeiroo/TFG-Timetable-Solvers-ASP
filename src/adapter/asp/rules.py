@@ -456,7 +456,8 @@ class Rules:
         return "\n".join([
             ConstraintRules.exclude_more_than_one_session_in_same_room_and_timeslot(),
             ConstraintRules.exclude_sessions_assigned_in_same_overlapping_timeslot(),
-            ConstraintRules.exclude_sessions_scheduled_in_contiguous_timeslots_but_different_rooms(),
+            # TODO...
+            # ConstraintRules.exclude_sessions_scheduled_in_contiguous_timeslots_but_different_rooms(),
         ])
 
     @staticmethod
